@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+BE+WAL:wght@100..400&family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{ 
+    font-family: "Saira", sans-serif;
+    
+  }
+
+  /* src/index.css */
+.Toastify__toast--custom {
+  background-color: #333 !important;
+  color: #fff !important;
+}
+
+.Toastify__progress-bar--custom {
+  background-color: #520f4e !important;
+}
+
+
+

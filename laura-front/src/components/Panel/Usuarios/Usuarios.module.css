@@ -1,0 +1,226 @@
+.topTd{
+    border-top: 2px solid #e59494;
+    border-bottom: 2px solid #e59494;
+    border-right: 2px solid #e59494;
+    background-color: #e59494;
+    color: white;
+    margin:0;
+    padding: 10px 35px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.topTd:first-child{
+    border-left: 2px solid #e59494;
+}
+
+.td {
+    border-bottom: 2px solid #e59494;
+    border-right: 2px solid #e59494;
+    background-color: #ffffff;
+    margin:0;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+/* .tr:hover{
+    font-weight: 500;
+} */
+
+.td:first-child{
+    border-left: 2px solid #e59494;
+}
+
+table{
+    border-spacing: 0;
+    /* margin: 0 auto; */
+}
+
+/* Clinic history */
+
+.clinicHistory{
+    display: flex;
+    flex-direction: column;
+    /* background-color: red; */
+    width: 700px;
+    justify-content: space-between;
+    text-align: justify;
+    margin: 0 auto;
+}
+
+.row{
+    display: flex; 
+    flex-direction: row;
+    gap: 100px;
+    /* margin: auto; */
+}
+
+.column{
+    max-width: 300px;
+    min-width: 300px;
+}
+
+.textarea{
+    min-width: 400px;
+    min-height: 150px;
+    max-width: 400px;
+    max-height: 150px;
+    font-size: 1.4em;
+    border-radius: 5px;
+    border: 1px solid rgb(211, 211, 211);
+}
+
+.button{
+    z-index: 2;
+    font-weight: 100;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    transition: .3s;
+    background-color: #e59494;
+    border-radius: 10px;
+    border: 0;
+    padding: 5px 20px;
+    font-size: 1.2em;
+    /* margin-left: 10px; */
+}
+
+.button:hover{
+    background-color: #c06f6f;
+    color: rgb(255, 255, 255);
+}
+
+.consentimientos{
+    /* display: flex; */
+    align-items: center;
+    gap: 90px;
+    margin: 0 auto;
+    /* justify-content: space-around; */
+}
+
+.evolucion{
+    margin: 0 auto;
+}
+
+.imgIcon{
+    width:100px
+
+}
+
+.texto{
+    margin: 0;
+}
+
+.pacientes{
+    text-align: center;
+    cursor: pointer;
+}
+
+.tabla{
+    margin: 0 auto;
+}
+
+.imageClient{
+    /* background-color: #750000; */
+    width: 200px;
+    height: 200px;
+    border-radius: 4px;
+    border: 2px solid grey;
+}
+
+.inputContainer{
+    width: 200px;
+    height: 30px;
+    margin-bottom: 30px;
+    margin: 30px auto;
+    /* margin-left: 50%; */
+    transform: translateX(-50%);
+    /* background-color: red; */
+    position: relative;
+}
+
+.textInput{
+    position: absolute;
+    color: grey;
+    margin-left: 10px;
+    transition: .3s;
+    z-index: -1;
+    margin-top: 5px;
+}
+
+.input{
+    border: 1px solid rgb(209, 209, 209);
+    height: 35px;
+    border-radius: 2px;
+    width: 180px;
+    background-color: transparent;
+    position: absolute;
+    transition: .3s;
+    padding: 0px 10px;
+    outline: 1px solid transparent;
+}
+
+.input:focus{
+    border: 1px solid orange;
+    outline: 1px solid orange;
+}
+
+.input:focus + .textInput{
+    color: orange;
+    font-size: .8em;
+    font-weight: 600;
+    transform: translateY(-15px) translateX(-5px);
+    background-color: white;
+    padding: 0px 6px;
+    z-index: 2;
+}
+
+.input:not(:placeholder-shown).input:not(:focus) + .textInput{
+    color: rgb(185, 185, 185);
+    font-size: .8em;
+    font-weight: 600;
+    transform: translateY(-15px) translateX(-5px);
+    background-color: white;
+    padding: 0px 6px;
+    z-index: 2;
+}
+
+.buttons{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    width: 200px;
+    gap: 15px;
+    flex-direction: column;
+    /* width: 200px; */
+}
+
+.textFe{
+    font-weight: 400;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Estilo personalizado para el checkbox */
+.miCheckbox {
+    /* Asegura que el checkbox no esté visible */
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+  }
+  
+  /* Estilo para la etiqueta del checkbox (puedes personalizarlo según tus preferencias) */
+  .miCheckbox + label::before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid blue; /* Color azul para el borde */
+    background-color: white;
+    vertical-align: middle;
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+  }
+  
+  /* Estilo para la etiqueta del checkbox cuando está marcado */
+  .miCheckbox:checked + label::before {
+    background-color: blue; /* Color de fondo azul cuando está marcado */
+  }

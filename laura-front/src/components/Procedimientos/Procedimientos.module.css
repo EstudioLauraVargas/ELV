@@ -1,0 +1,185 @@
+.landing{
+    background-color: #060708;
+    color: white;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.title{
+    text-align: center;
+    margin: 0 auto;
+    font-size: 4em;
+    font-style: italic;
+    margin-top: 40px;
+}
+
+.procedimiento{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.carrusel{
+    width: 300px;
+    height: fit-content;
+    background-color: transparent;
+    font-style: italic;
+}
+
+.detalles{
+    width: 700px;
+    font-family: "Quicksand";
+    font-size: 1.3em;
+    font-weight: 1000;
+}
+
+.descripcion{
+    margin: 0;
+    margin-bottom: 50px;
+}
+
+.button{
+    width: 270px;
+    height: 75px;
+    border: 0;
+    background-color: #facdd4;
+    border-radius: 30px;
+    color: white;
+    font-size: 1.3em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-style: italic;
+    cursor: pointer;
+}
+
+.button2{
+    background-color: transparent;
+    width: 270px;
+    height: 75px;
+    border: 0;
+    border-radius: 30px;
+    color: white;
+    font-size: 1.3em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-style: italic;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.button2:hover{
+    color: #facdd4;
+}
+
+.buttons{
+    display: flex;
+    gap: 20px;
+}
+
+/* VIEW 5 */
+
+.view5{
+    height: fit-content;
+    padding-bottom: 43px;
+    color: white;
+}
+
+.container{
+    display: flex;
+  flex-direction: column; /* Apila las filas verticalmente */
+  align-items: center;
+}
+
+.noLink{
+    text-decoration: none;
+}
+
+.box{
+    width: 250px;
+  height: 250px;
+  background-color: #ffffff;
+  margin: 50px;
+  border-radius: 50%;
+  box-shadow: 0 0 60px 10px #e59595;
+  transition: .3s;
+  object-fit: cover;
+}
+
+.box:hover{
+    box-shadow: 0 0 100px 10px #e59595;
+    scale: 1.1; 
+    cursor: pointer;
+}
+
+.fila{
+    display: flex;
+}
+
+.title3{
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 4em;
+    width: 50vw;
+    margin: 0 auto;
+    font-weight: 700;
+    line-height: 100px;
+    font-style: italic;
+    text-align: center;
+}
+
+.navBar{
+    margin: 30px;
+    color: white;
+    z-index: 101;
+    height: 60px;
+}
+
+@media screen and (max-width:1000px){
+    .fila{
+        flex-direction: column;
+    }
+    .landing{
+        height: fit-content;
+    }
+    .view5{
+        height: fit-content;
+    }
+    .procedimiento{
+        height: fit-content;
+        padding-bottom: 100px;
+        flex-direction: column;
+    }
+    .title3{
+        width: auto;
+    }
+    .view5{
+        height: fit-content;
+    }
+}
+
+@media screen and (max-width:650px){
+    .title{
+        font-size: 2.5em;
+    }
+    .detalles{
+        width: fit-content;
+        padding: 0px 40px;
+    }
+    .buttons{
+        flex-direction: column;
+    }
+    .button{
+        margin: 0 auto;
+    }
+    .title3{
+        font-size: 2em;
+    }
+    .navBar{
+        height: 40px;
+    }
+}
