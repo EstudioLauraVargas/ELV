@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY;
 
 const generateToken = (user) => {
-  return jwt.sign({ uid: user.uid }, secretKey, { expiresIn: '1h' });
+  return jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
 };
 
 const verifyToken = (req, res, next) => {
@@ -10,7 +10,6 @@ const verifyToken = (req, res, next) => {
   if (!token) {
     return res.status(403).json({ message: 'No token provided' });
   }
-
   try {
     const decoded = jwt.verify(token, secretKey);
     req.user = decoded;
