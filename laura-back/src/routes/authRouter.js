@@ -1,20 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
-const { generateToken } = require("../middleware/auth");
-const userController = require("../controllers/Signin");
+const createUser = require("../controllers/Users/createUser");
+const authUser = require("../controllers/Users/authUser");
 
 
-router.post("/signup", userController.signup);
+router.post("/signup", createUser);
 
-
-router.post("/signin", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.status(401).json({ message: info.message });
-    const token = generateToken(user);
-    res.status(200).json({ token, user });
-  })(req, res, next);
-});
+router.post("/signin", authUser);
 
 module.exports = router;

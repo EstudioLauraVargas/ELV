@@ -20,6 +20,9 @@ module.exports = (sequelize) => {
       lastName: {
         type: DataTypes.STRING,
       },
+      phone: {
+        type: DataTypes.STRING,
+      },
       sex: {
         type: DataTypes.ENUM('F', 'M', 'X'),
       },
@@ -42,11 +45,7 @@ module.exports = (sequelize) => {
       birthDate: {
         type: DataTypes.DATEONLY,
       },
-      active: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
+
     },
     {
       paranoid: true,

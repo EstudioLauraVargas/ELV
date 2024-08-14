@@ -1,207 +1,184 @@
-// src/components/Register/Register.jsx
-import { useState } from "react";
-import { useAuth } from "../../../AuthContext";
-import { useNavigate } from "react-router-dom";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore"; 
-import { db } from "../../../firebaseConfig";
+// eslint-disable-next-line no-unused-vars
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../../../Redux/Actions/actions';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [document, setDocument] = useState("");
-  const [documentType, setDocumentType] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [profilePic, setProfilePic] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [error, setError] = useState("");
-  const { register } = useAuth();
-  const navigate = useNavigate();
-  const storage = getStorage();
+  const [formData, setFormData] = useState({
+    name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    document: '',
+    documentType:'',
+    phone: '',
+    role: 'visitor', 
+    sex: '',
+    birthDate:''
+  });
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); 
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo } = userRegister;
 
-  const validatePassword = () => {
-    if (password !== confirmPassword) {
-      return "Las contraseñas no coinciden.";
-    }
-    return null;
+  
+  const loggedInUserInfo = useSelector((state) => state.userLogin.userInfo);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
-  const handleProfilePicChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProfilePic(file);
-      setPreview(URL.createObjectURL(file));
-    }
-  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
-    const passwordError = validatePassword();
-    if (passwordError) {
-      setError(passwordError);
-      return;
-    }
-    try {
-      const userCredential = await register(email, password);
-      const user = userCredential.user;
-  
-      let profilePicURL = "";
-      if (profilePic) {
-        const storageRef = ref(storage, `profilePics/${user.uid}`);
-        await uploadBytes(storageRef, profilePic);
-        profilePicURL = await getDownloadURL(storageRef);
+    console.log('Form Data:', formData); 
+    dispatch(registerUser(formData)).then(() => {
+      if (loggedInUserInfo && loggedInUserInfo.role === 'admin') {
+        navigate('/');
+      } else {
+        navigate('/login');
       }
-  
-      await setDoc(doc(db, "users", user.uid), {
-        name,
-        lastName,
-        document,
-        documentType,
-        email,
-        birthDate,
-        profilePicURL
-      });
-  
-      navigate("/");
-    } catch (err) {
-      setError(err.message);
-    }
+    });
   };
-  
 
   return (
-    
-    <div className="min-h-screen flex items-center p-8 justify-center bg-gray-900">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg text-center items-center shadow-md w-full md:w-96">
-        <div>
-          <h1 className="text-2xl mb-5 ">Accede a los Cursos</h1>
-        </div>
-        {error && <p>{error}</p>}
-        <div className="relative flex flex-col p-8 items-center">
-            {preview ? (
-              <div className="relative">
-                <img
-                  src={preview}
-                  alt="Profile Preview"
-                  className="w-24 h-24 rounded-full object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => setPreview(null)}
-                  className="absolute top-0 right-0 bg-violet-800 text-white rounded-full p-1"
-                >
-                  &times;
-                </button>
-              </div>
-            ) : (
-              <label className="cursor-pointer mt-2 flex flex-col items-center bg-violet-800 text-white rounded-lg px-4 py-2 hover:bg-violet-600 transition">
-                Escoge Tu Foto de Perfil
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleProfilePicChange}
-                  accept="image/*"
-                  required
-                />
-              </label>
-            )}
-          </div>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="relative">
-            
+        <h2 className="text-2xl font-bold mb-4 text-center">Registro de Cliente</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Nombre</label>
             <input
               type="text"
-              className="border border-gray-200 w-full outline-none py-1 px-4 rounded-lg"
-              value={name}
-              placeholder="Tu Nombre"
-              onChange={(e) => setName(e.target.value)}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
           </div>
-          <div className="relative">
-            
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Apellido</label>
             <input
-              className="border border-gray-200 w-full outline-none py-1 px-4 rounded-lg"
-              placeholder="Tu Apellido"
               type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
           </div>
-          <div className="relative">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Número de Documento</label>
+            <input
+              type="text"
+              name="document"
+              value={formData.document}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Tipo de Documento</label>
             <select
-            className="border border-gray-200 w-full outline-none py-1 px-4 rounded-lg"
-              value={documentType}
-              onChange={(e) => setDocumentType(e.target.value)}
-              required
+              name="documentType"
+              value={formData.documentType}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
             >
-              <option value="">Tipo de Documento</option>
-              <option value="CC">CC</option>
-              <option value="CE">CE</option>
+              <option value="">Seleccione</option>
+              <option value="Cedula">CC</option>
               <option value="NIT">NIT</option>
+              <option value="Otro">X</option>
             </select>
           </div>
-          <div className="relative">
-            
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Teléfono</label>
             <input
-            className="border border-gray-200 w-full outline-none py-1 px-4 rounded-lg"
               type="text"
-              value={document}
-              onChange={(e) => setDocument(e.target.value)}
-              placeholder="Tu Número de documento"
-              required
-            />
-          </div>
-          <div className="relative">
-            <input
-            className="border border-gray-200 w-full outline-none py-1 px-4 rounded-lg"
-            placeholder="Tu Correo Electrónico"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="relative">
-            <input
-              className="border border-gray-200 w-full outline-none py-1 px-4 rounded-lg"
-              type="date"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              placeholder="Fecha de Nacimiento"
-              required
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
             />
           </div>
           <div>
-            <input
-            className="border border-gray-200 w-full outline-none py-1 px-4 rounded-lg"
-              type="password"
-              placeholder="Escoge tu Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <label className="block text-sm font-medium text-gray-700">Género</label>
+            <select
+              name="sex"
+              value={formData.sex}
+              onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            >
+              <option value="">Seleccione</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="O">X</option>
+            </select>
           </div>
-          <div>
-            <input
-            className="border border-gray-200 w-full outline-none py-1 px-4 rounded-lg"
-              type="password"
-              placeholder="Repite tu Contraseña"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-          <button className=" mt-6 bg-violet-800 text-gray-400 uppercase w-full py-2 px-6 rounded-lg hover:scale-105 transition-all"
-          type="submit">Registrate</button>
-          </div>
+          <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Fecha</label>
+          <input
+            type="date"
+            name="birthDate"
+            value={formData.birthDate}
+            onChange={handleChange}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            required
+          />
+        </div>
+          {loggedInUserInfo && loggedInUserInfo.role === 'admin' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Rol</label>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              >
+                <option value="client">Usuario</option>
+                <option value="admin">Administrador</option>
+              </select>
+            </div>
+          )}
+          <button
+            type="submit"
+            className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+            disabled={loading}
+          >
+            {loading ? 'Registrando...' : 'Registrar'}
+          </button>
+          {error && <div className="text-red-500 mt-2">{error}</div>}
         </form>
+        {userInfo && <div className="text-green-500 mt-2">Registro exitoso!</div>}
       </div>
     </div>
   );
