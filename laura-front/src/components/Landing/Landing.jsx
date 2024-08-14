@@ -16,7 +16,7 @@ const Landing = () => {
         <div className={style.landing}>
             <img className={style.navBar} src={logolaura} />
             <div className={style.view1}>
-                <img className={style.imgAbsoluta} />
+               
                 <div className={style.fondo}></div>
                 <div className={style.info}>
                     <p className={style.title}>realzamos tu belleza</p>
@@ -25,14 +25,13 @@ const Landing = () => {
                         confianza a través de tratamientos especializados y personalizados.</p>
                         <a target="_blank" className={style.noLink} href="https://wa.me/573502142355"><button className={style.button}>Saber mas</button></a>
                 </div>
-                <div className={style.image}>
-                    <img className={style.img2} src={laura1} />
-                </div>
+                
             </div>
             <div className={style.view2}>
                 <img className={style.imgAbsoluta} />
                 <img className={style.imgAbsoluta2} />
-                <div className={style.info}>
+                
+                <div className={style.info2}>
                     <p className={style.title2}>acerca de laura vargas</p>
                     <p className={style.subtitle2}>Laura es micropigmentadora especialista en cejas y labios, se ha capacitado desde hace mas de
                         4 años para tener técnicas exclusivas con acabados super naturales que busca realzar la belleza de sus clientas y estudiantes.
