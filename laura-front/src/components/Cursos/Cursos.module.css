@@ -1,12 +1,12 @@
 /* VIEW 4 */
-.landing{
+.landing {
     background-color: #060708;
     margin: 0;
     height: fit-content;
     overflow: hidden;
 }
 
-.view4{
+.view4 {
     position: relative;
     height: 100vh;
     display: flex;
@@ -17,7 +17,23 @@
     gap: 200px;
 }
 
-.button2{
+.image {
+    width: 50vw; /* Ajustar el ancho del contenedor */
+    height: 50vw; /* Hacer el contenedor cuadrado */
+    max-width: 500px; /* Tamaño máximo del contenedor */
+    max-height: 500px; /* Tamaño máximo del contenedor */
+    position: relative;
+    overflow: hidden;
+    margin-top: 10%;
+}
+
+.image iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.button2 {
     background-color: transparent;
     width: 270px;
     height: 75px;
@@ -32,13 +48,14 @@
     cursor: pointer;
 }
 
-.button2:hover{
+.button2:hover {
     color: #facdd4;
 }
 
-.buttons{
+.buttons {
     display: flex;
     gap: 20px;
+    margin-top: 1%;
 }
 
 .fondo2 {
@@ -53,24 +70,9 @@
     background-position: center; /* Centra la imagen en el div */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
     filter: brightness(50%); /* Aplica un filtro de brillo para oscurecer la imagen (ajusta el porcentaje según sea necesario) */
-  }
-
-  .image{
-    width: 33vw;
-    height: 50vh;
-    position: relative;
 }
 
-.img{
-    z-index: 250;
-    height: 90vh;
-    position: absolute;
-    top: -40%; /* Mueve la imagen hacia abajo un 50% del contenedor */
-      left: -80%; /* Mueve la imagen hacia la derecha un 50% del contenedor */
-      /* transform: translate(-50%, -50%); */
-}
-
-.titlexd{
+.titlexd {
     margin: 0;
     text-transform: uppercase;
     font-size: 4em;
@@ -80,18 +82,18 @@
     font-style: italic;
 }
 
-.info{
+.info {
     z-index: 100;
 }
 
-.subtitle{
+.subtitle {
     width: 30vw;
     font-family: "Quicksand";
     font-weight: 800;
     font-size: 1.4em;
 }
 
-.button{
+.button {
     width: 270px;
     height: 75px;
     border: 0;
@@ -106,7 +108,7 @@
     transition: .3s;
 }
 
-.navBar{
+.navBar {
     margin: 30px;
     color: white;
     position: fixed;
@@ -114,90 +116,62 @@
     height: 60px;
 }
 
-.button:hover{
+.button:hover {
     box-shadow: 0 0 30px 10px #e5959579;
 }
 
-@media screen and (max-width:1400px){
-    .view1{
+@media screen and (max-width: 1400px) {
+    .view4 {
+        padding-top: 100px;
         flex-direction: column;
         height: fit-content;
     }
-    .view2{
-        flex-direction: column;
-        height: fit-content;
-    }
-    .imgAbsoluta{
-        display: none;
-    }
-    .info{
+
+    .info {
         width: fit-content;
         padding: 100px 120px;
         height: 100vh;
     }
-    .title{
+
+    .titlexd {
         width: fit-content;
         font-size: 6em;
     }
-    .subtitle{
+
+    .subtitle {
         width: fit-content;
     }
-    .image{
-        display: none;
-    }
-    .title3{
-        width: 85vw;
-    }
-    .procedimientos{
-        flex-direction: column;
-    }
-    .view4{
-        padding-top: 100px;
-    }
-    .titlexd{
-        width: fit-content;
+
+    .image {
+        width: 70vw; /* Aumentar el ancho en pantallas más pequeñas */
+        height: 70vw; /* Mantener la proporción 16:9 */
     }
 }
 
-@media screen and (max-width:700px){
-    .title{
-        width: fit-content;
-        font-size: 4em;
-    }
-    .titlexd{
+@media screen and (max-width: 700px) {
+    .titlexd {
         font-size: 2.6em;
         width: fit-content;
     }
-    .navBar{
+
+    .navBar {
         height: 40px;
     }
-    .imgAbsoluta2{
-        display: none;
-    }
-    .subtitle2{
+
+    .subtitle {
         width: fit-content;
     }
-    .title3{
-        font-size: 2.2em;
-        line-height: 55px;
-    }
-    .title2{
-        line-height: 40px;
-    }
-    .location{
-        flex-direction: column;
-    }
-    .infoloc{
-        padding: 0px 50px;
-        width: fit-content;
-    }
-    .view6{
-        height: fit-content;
-    }
-    .info{
+
+    .info {
         width: 100vw;
     }
-    .buttons{
+
+    .buttons {
         flex-direction: column;
+    }
+
+    .image {
+        width: 90vw; /* Ampliar aún más el ancho en pantallas pequeñas */
+        height: 90vw; /* Mantener la proporción 16:9 */
     }
 }
