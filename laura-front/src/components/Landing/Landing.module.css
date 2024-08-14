@@ -101,9 +101,9 @@
 
 .img{
     z-index: 250;
-    height: 90vh;
+    height: 60vh;
     position: absolute;
-    top: -40%; /* Mueve la imagen hacia abajo un 50% del contenedor */
+    top: -30%; /* Mueve la imagen hacia abajo un 50% del contenedor */
       left: -70%; /* Mueve la imagen hacia la derecha un 50% del contenedor */
       /* transform: translate(-50%, -50%); */
 }
@@ -444,6 +444,12 @@
     .info {
         
         margin-left: 50%;
+        height: fit-content;
+        text-align: center; /* Centra el texto */
+    }
+    .info2 {
+        
+        margin-top: 40%;
         height: fit-content;
         text-align: center; /* Centra el texto */
     }
