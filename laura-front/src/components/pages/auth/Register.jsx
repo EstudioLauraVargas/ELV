@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
-    last_name: '',
+    lastName: '',
     email: '',
     password: '',
     document: '',
@@ -66,8 +66,8 @@ const Register = () => {
             <label className="block text-sm font-medium text-gray-700">Apellido</label>
             <input
               type="text"
-              name="last_name"
-              value={formData.last_name}
+              name="lastName"
+              value={formData.lastName}
               onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               required
@@ -171,7 +171,7 @@ const Register = () => {
           )}
           <button
             type="submit"
-            className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+            className="w-full bg-pink-300 text-white py-2 px-4 rounded-md hover:bg-green-600"
             disabled={loading}
           >
             {loading ? 'Registrando...' : 'Registrar'}
