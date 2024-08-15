@@ -11,5 +11,6 @@ module.exports = {
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
     YOUTUBE_API_KEY:process.env.YOUTUBE_API_KEY,
     CHANNEL_ID:process.env.CHANNEL_ID
+
     
 }  
