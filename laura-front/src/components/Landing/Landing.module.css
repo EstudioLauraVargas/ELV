@@ -102,9 +102,10 @@
 .img{
     z-index: 250;
     height: 60vh;
+    
     position: absolute;
-    top: -30%; /* Mueve la imagen hacia abajo un 50% del contenedor */
-      left: -70%; /* Mueve la imagen hacia la derecha un 50% del contenedor */
+    top: -8%; /* Mueve la imagen hacia abajo un 50% del contenedor */
+      left: -15%; /* Mueve la imagen hacia la derecha un 50% del contenedor */
       /* transform: translate(-50%, -50%); */
 }
 
@@ -152,7 +153,7 @@
 .title2{
     margin: 0;
     text-transform: uppercase;
-    font-size: 1.8em;
+    font-size: 2.5em;
     font-weight: 700;
     line-height: 100px;
     font-style: italic;
@@ -163,7 +164,7 @@
     width: 30vw;
     font-family: "Quicksand";
     font-weight: 1000;
-    font-size: 1.4em;
+    font-size: 1.6em;
     text-align: center;
 }
 
@@ -327,13 +328,15 @@
 .view6{
     height: 100vh;
     color: white;
+    margin-top: 15%;
 }
 
 .locations{
     margin-top: 90px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 30px;
+    margin-left: 10%;
 }
 
 .location{
@@ -370,6 +373,49 @@
 .noLink{
     text-decoration: none;
 }
+
+/* src/components/SubscribeButton.module.css */
+@keyframes pulse {
+    0% {
+      background-color: #ff007a;
+      box-shadow: 0 0 10px rgba(255, 0, 122, 0.5);
+    }
+    50% {
+      background-color: #e60066;
+      box-shadow: 0 0 20px rgba(255, 0, 122, 0.7);
+    }
+    100% {
+      background-color: #ff007a;
+      box-shadow: 0 0 10px rgba(255, 0, 122, 0.5);
+    }
+  }
+.subscribeButton {
+    background-color: #ff007a; /* Color de fondo del botón */
+    border: 2px solid #ff007a; /* Color del borde del botón */
+    color: white; /* Color del texto */
+    width: 200px;
+    height: 80px;
+    border-radius: 40px;
+    font-size: 1.5em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Transiciones suaves */
+    position: fixed; /* Posición fija */
+    bottom: 20px; /* Espacio desde el borde inferior */
+    right: 20px; /* Espacio desde el borde derecho */
+    z-index: 1000; /* Asegura que el botón esté encima de otros elementos */
+    animation: pulse 2s infinite;  
+}
+  
+  .subscribeButton:hover {
+    transform: scale(1.05); /* Efecto de zoom al pasar el cursor */
+  }
+  
+  .subscribeButton:focus {
+    outline: none; /* Elimina el contorno del botón al hacer clic */
+    box-shadow: 0 0 0 2px rgba(255, 0, 122, 0.5); /* Efecto de sombra al enfocar */
+  }
+  
 
 @media screen and (max-width:1400px){
     .view1{
@@ -440,6 +486,7 @@
     .infoloc{
         padding: 0px 50px;
         width: fit-content;
+        
     }
     .info {
         
@@ -449,7 +496,7 @@
     }
     .info2 {
         
-        margin-top: 40%;
+        margin-top: 50%;
         height: fit-content;
         text-align: center; /* Centra el texto */
     }

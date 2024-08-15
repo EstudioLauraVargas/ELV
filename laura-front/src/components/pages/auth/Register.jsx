@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../../Redux/Actions/actions';
 import { useNavigate } from 'react-router-dom';
+import logolaura from "../../../lauraassets/logolaura.png";
+import style from '../../../components/Landing/Landing'
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -41,128 +43,129 @@ const Register = () => {
       if (loggedInUserInfo && loggedInUserInfo.role === 'admin') {
         navigate('/');
       } else {
-        navigate('/login');
+        navigate('/');
       }
     });
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg text-center items-center shadow-md w-full md:w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">Registro de Cliente</h2>
+    
+           
+    <div className="flex items-center justify-center min-h-screen bg-slate-950">
+      <div className="bg-white p-8 rounded-lg  shadow-md w-full max-w-4xl">
+      <div className="bg-black text-pink-500 py-4 px-6 rounded-lg flex items-center justify-center mb-4">
+      
+      <img className="w-38 h-12" src={logolaura} alt="Logo" />
+    </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Nombre</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              placeholder="Nombre"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-pink-500 focus:border-pink-500"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Apellido</label>
             <input
               type="text"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              placeholder="Apellido"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-pink-500 focus:border-pink-500"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              placeholder="Email"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-pink-500 focus:border-pink-500"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Contraseña</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              placeholder="Contraseña"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-pink-500 focus:border-pink-500"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Número de Documento</label>
             <input
               type="text"
               name="document"
               value={formData.document}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              placeholder="Número de Documento"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-pink-500 focus:border-pink-500"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Tipo de Documento</label>
             <select
               name="documentType"
               value={formData.documentType}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
             >
-              <option value="">Seleccione</option>
+              <option value="">Tipo de Documento</option>
               <option value="Cedula">CC</option>
               <option value="NIT">NIT</option>
               <option value="Otro">X</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Teléfono</label>
             <input
               type="text"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              placeholder="Teléfono"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-pink-500 focus:border-pink-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Género</label>
             <select
               name="sex"
               value={formData.sex}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
             >
-              <option value="">Seleccione</option>
+              <option value="">Género</option>
               <option value="M">Masculino</option>
               <option value="F">Femenino</option>
               <option value="O">X</option>
             </select>
           </div>
-          <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Fecha</label>
-          <input
-            type="date"
-            name="birthDate"
-            value={formData.birthDate}
-            onChange={handleChange}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            required
-          />
-        </div>
+          <div>
+            <input
+              type="date"
+              name="birthDate"
+              value={formData.birthDate}
+              onChange={handleChange}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
+              required
+            />
+          </div>
           {loggedInUserInfo && loggedInUserInfo.role === 'admin' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700">Rol</label>
               <select
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
               >
                 <option value="client">Usuario</option>
                 <option value="admin">Administrador</option>
@@ -171,7 +174,7 @@ const Register = () => {
           )}
           <button
             type="submit"
-            className="w-full bg-pink-300 text-white py-2 px-4 rounded-md hover:bg-green-600"
+            className="w-full bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-400"
             disabled={loading}
           >
             {loading ? 'Registrando...' : 'Registrar'}
@@ -181,8 +184,9 @@ const Register = () => {
         {userInfo && <div className="text-green-500 mt-2">Registro exitoso!</div>}
       </div>
     </div>
+   
   );
-};
-
+  
+}  
 export default Register;
 
