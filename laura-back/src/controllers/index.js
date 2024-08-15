@@ -11,5 +11,6 @@ module.exports = {
     deleteUser:catchedAsync(require("./Users/deleteUser")),
     getAllUser:catchedAsync(require("./Users/getAllUser")),
     subsController:catchedAsync(require("./subsController")),
+    getAndSaveVideo:catchedAsync(require('./getAndSaveVideo'))
 }
 

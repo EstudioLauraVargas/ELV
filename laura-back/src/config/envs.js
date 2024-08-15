@@ -9,5 +9,6 @@ module.exports = {
     PORT : process.env.PORT,
     DB_DEPLOY: process.env.DB_DEPLOY,
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
+    CHANNEL_ID:process.env.CHANNEL_ID
     
 }  
