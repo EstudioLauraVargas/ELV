@@ -7,13 +7,12 @@ import Landing from "./components/Landing/Landing";
 import Procedimientos from "./components/Procedimientos/Procedimientos";
 import Register from "./components/pages/auth/Register";
 import Cursos from "./components/Cursos/Cursos";
-import { AuthProvider } from "./AuthContext";
 import Users from "./components/Users"; 
 import Video from "./components/services/Video"
 
 function App() {
   return (
-    <AuthProvider>
+  
       <Routes>
       
       <Route path="/" element={<Landing />} />
@@ -27,7 +26,7 @@ function App() {
         <Route path="/users" element={<Users />} />
 
       </Routes>
-    </AuthProvider>
+   
   );
 }
 

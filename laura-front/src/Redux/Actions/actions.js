@@ -227,16 +227,18 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post(`${BASE_URL}/auth/login`,{ email, password }, config);
+    // Asegúrate de que la URL sea correcta
+    const { data } = await axios.post(`${BASE_URL}/auth/signin`, { email, password }, config);
+    console.log(`${BASE_URL}/auth/signin`);
 
-      // Decodifica el token para obtener el rol del usuario
-      const decodedToken = jwtDecode(data.data.token);
-      const userInfo = {
-        token: data.token,
-        role: decodedToken.role,
-        n_document: decodedToken.n_document, // Agregar n_document desde el token decodificado
-        message: data.message,
-      };
+    // Decodifica el token para obtener el rol del usuario
+    const decodedToken = jwtDecode(data.data.token); // Accede a data.data.token
+    const userInfo = {
+      token: data.data.token, // Accede a data.data.token
+      role: decodedToken.role,
+      document: decodedToken.document,
+      message: data.data.message,
+    };
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -244,13 +246,13 @@ export const login = (email, password) => async (dispatch) => {
     });
 
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
-     } catch (error) {
-       dispatch({
-         type: USER_LOGIN_FAIL,
-         payload: error.response && error.response.data.message ? error.response.data.message : error.message,
-       });
-     }
-   };
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
 
 export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo');

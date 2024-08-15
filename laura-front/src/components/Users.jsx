@@ -1,6 +1,6 @@
 // src/components/Users.js
 import  { useEffect, useState } from 'react';
-import { addUser, getUsers } from '../firestoreService';
+
 
 const Users = () => {
   const [users, setUsers] = useState([]);

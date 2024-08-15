@@ -27,12 +27,12 @@ module.exports = async (req, res) => {
 
     // Crear token
     const token = jwt.sign(
-      { document: user.document, role: user.role,  }, // Incluir n_document en el payload del token
+      { document: user.document, role: user.role }, // Incluir document y role en el payload del token
       process.env.JWT_SECRET_KEY,
       { expiresIn: '1h' }
     );
 
-    response(res, 200, { message: "Autenticación exitosa", role, token, document});
+    response(res, 200, { message: "Autenticación exitosa", token });
   } catch (error) {
     console.error(error);
     response(res, 500, "Error al autenticar el usuario");
