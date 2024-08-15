@@ -9,6 +9,7 @@ import Register from "./components/pages/auth/Register";
 import Cursos from "./components/Cursos/Cursos";
 import Users from "./components/Users"; 
 import Video from "./components/services/Video"
+import Panel from "./components/Dashboard/Panel";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
         <Route path="/procedimiento" element={<Procedimientos />} />
         <Route path="/cursos" element={<Cursos />} />
         <Route path="/users" element={<Users />} />
-
+        <Route path="/panel" element={<Panel/>} />
       </Routes>
    
   );
