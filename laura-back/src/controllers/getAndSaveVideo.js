@@ -4,10 +4,19 @@ const { getVideosByChannel, getVideoById, getVideosByPlaylist } = require('../..
 // Controlador para obtener y guardar videos por canal
 const getAndSaveVideo = async (req, res) => {
   const channelId = process.env.CHANNEL_ID;
+  const tokens = req.session.tokens;
+
+  if (!tokens) {
+    return res.status(401).json({ error: 'Unauthorized: No tokens found.' });
+  }
 
   try {
-    const videos = await getVideosByChannel(channelId);
-    console.log('Fetched videos:', videos)
+    const videos = await getVideosByChannel(tokens, channelId);
+    console.log('Fetched videos:', videos);
+
+    if (videos.length === 0) {
+      return res.status(200).json({ message: 'No videos found from YouTube.' });
+    }
 
     const videoPromises = videos.map(video =>
       Video.findOrCreate({
@@ -42,9 +51,14 @@ const getAllVideos = async (req, res) => {
 // Controlador para buscar y guardar un video por su ID
 const getVideoByIdController = async (req, res) => {
   const { videoId } = req.params;
+  const tokens = req.session.tokens;
+
+  if (!tokens) {
+    return res.status(401).json({ error: 'Unauthorized: No tokens found.' });
+  }
 
   try {
-    const video = await getVideoById(videoId);
+    const video = await getVideoById(tokens, videoId);
 
     if (video) {
       await Video.findOrCreate({
@@ -68,9 +82,14 @@ const getVideoByIdController = async (req, res) => {
 // Controlador para buscar y guardar videos por lista de reproducción
 const getVideosByPlaylistController = async (req, res) => {
   const { playlistId } = req.params;
+  const tokens = req.session.tokens;
+
+  if (!tokens) {
+    return res.status(401).json({ error: 'Unauthorized: No tokens found.' });
+  }
 
   try {
-    const videos = await getVideosByPlaylist(playlistId);
+    const videos = await getVideosByPlaylist(tokens, playlistId);
 
     const videoPromises = videos.map(video =>
       Video.findOrCreate({

@@ -200,7 +200,7 @@ export const registerUser = (userData) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post(`${BASE_URL}/auth/signup`,userData, config)
+    const { data } = await axios.post(`${BASE_URL}/users/signup`,userData, config)
    
 
     dispatch({
@@ -228,7 +228,7 @@ export const login = (email, password) => async (dispatch) => {
     };
 
     // Asegúrate de que la URL sea correcta
-    const { data } = await axios.post(`${BASE_URL}/auth/signin`, { email, password }, config);
+    const { data } = await axios.post(`${BASE_URL}/users/signin`, { email, password }, config);
     console.log(`${BASE_URL}/auth/signin`);
 
     // Decodifica el token para obtener el rol del usuario
