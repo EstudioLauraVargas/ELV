@@ -1,4 +1,4 @@
-const { User } = require("../../data/models");
+const { User } = require("../../data");
 const response = require("../../utils/response");
 const bcrypt = require("bcrypt");
 

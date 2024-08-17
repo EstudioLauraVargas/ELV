@@ -53,6 +53,9 @@ import {
   FETCH_LATEST_ORDER_REQUEST,
   FETCH_LATEST_ORDER_SUCCESS,
   FETCH_LATEST_ORDER_FAILURE,
+  FETCH_VIDEOS_SUCCESS,
+  FETCH_VIDEOS_FAILURE,
+  
 
 } from './actions-type';
 
@@ -92,6 +95,27 @@ export const createProduct = (productData) => async (dispatch) => {
   }
 };
 
+
+
+export const fetchVideos = () => async (dispatch) => {
+  try {
+      
+      const response = await fetch(`${BASE_URL}/videos/videos`, {
+          method: 'GET',
+          // headers: {
+          //     Authorization: `Bearer ${tokens.access_token}`,
+          // },
+      });
+
+      console.log('Response received:', response);
+      const videos = await response.json();
+      
+      dispatch({ type: FETCH_VIDEOS_SUCCESS, payload: videos });
+  } catch (error) {
+      console.error('Error fetching videos:', error);
+      dispatch({ type: FETCH_VIDEOS_FAILURE, payload: error.message });
+  }
+};
 
 
 export const fetchCategories = () => async (dispatch) => {

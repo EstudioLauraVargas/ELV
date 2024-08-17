@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
     thumbnail: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
+    }
   });
 };
 

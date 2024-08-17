@@ -31,8 +31,8 @@ const Cursos = () => {
                             al nivel al que tanto has querido llegar.
                         </p>
                         <div className={style.buttons}>
-                            <a target="_blank" className={style.noLink} href="https://wa.me/573502142355">
-                                <button className={style.button}>Consulta disponibilidad</button>
+                            <a target="_blank" className={style.noLink} href="/misCursos">
+                                <button className={style.button}>Ver Cursos</button>
                             </a>
                             <NavLink to="/">
                                 <button className={style.button2}>Volver</button>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../../Redux/Actions/actions';
-import { useNavigate } from 'react-router-dom';
+import { login } from '../../../Redux/Actions/actions'; // Asegúrate de importar la acción requestOAuthAuthorization
+import { useNavigate, Link } from 'react-router-dom';
 import logolaura from "../../../lauraassets/logolaura.png";
 
 const Login = ({ closePopup }) => {
@@ -18,22 +18,31 @@ const Login = ({ closePopup }) => {
     dispatch(login(email, password));
   };
 
+  const handleGoogleAuth = () => {
+    dispatch(requestOAuthAuthorization()); // Redirige a Google para la autorización
+  };
+
   if (userInfo) {
     navigate('/');
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-slate-950 ">
+    <div className="fixed inset-0 flex items-center justify-center bg-slate-950">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-      <div className="bg-black text-pink-500 py-2 px-6 rounded-lg flex items-center justify-center mb-4">
-      
-      <img className="w-38 h-12" src={logolaura} alt="Logo" />
-    </div>
+        <div className="bg-black text-pink-500 py-2 px-6 rounded-lg flex items-center justify-center mb-4">
+          <img className="w-38 h-12" src={logolaura} alt="Logo" />
+        </div>
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
           onClick={closePopup}
         >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
@@ -77,9 +86,17 @@ const Login = ({ closePopup }) => {
             </button>
           </div>
         </form>
+        <div className="mt-4 text-center">
+          <span className="text-gray-600">¿No tienes una cuenta? </span>
+          <Link to="/register" className="text-pink-600 hover:text-pink-400">
+            Registrarse
+          </Link>
+        </div>
+        
       </div>
     </div>
   );
 };
 
 export default Login;
+

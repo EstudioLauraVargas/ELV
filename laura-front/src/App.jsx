@@ -10,6 +10,7 @@ import Cursos from "./components/Cursos/Cursos";
 import Users from "./components/Users"; 
 import Video from "./components/services/Video"
 import Panel from "./components/Dashboard/Panel";
+import MisCursos from "./components/Cursos/MisCursos"
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/cursos" element={<Cursos />} />
         <Route path="/users" element={<Users />} />
         <Route path="/panel" element={<Panel/>} />
+        <Route path="/misCursos" element={<MisCursos/>} />
       </Routes>
    
   );
