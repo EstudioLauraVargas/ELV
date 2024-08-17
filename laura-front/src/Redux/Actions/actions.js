@@ -5,9 +5,9 @@ import {
   CREATE_PRODUCT_REQUEST,
   CREATE_PRODUCT_SUCCESS,
   CREATE_PRODUCT_FAILURE,
-  FETCH_CATEGORIES_REQUEST,
-  FETCH_CATEGORIES_SUCCESS,
-  FETCH_CATEGORIES_FAILURE,
+  CREATE_COURSE_REQUEST,
+  CREATE_COURSE_SUCCESS,
+  CREATE_COURSE_FAILURE,
   FETCH_PRODUCTS_REQUEST,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAILURE,
@@ -124,14 +124,13 @@ export const fetchVideos = () => async (dispatch) => {
 };
 
 
-export const fetchCategories = () => async (dispatch) => {
-  dispatch({ type: FETCH_CATEGORIES_REQUEST });
-
+export const createCourse = (courseData) => async (dispatch) => {
+  dispatch({ type: CREATE_COURSE_REQUEST });
   try {
-    const response = await axios.get(`${BASE_URL}/category/`);
-    dispatch({ type: FETCH_CATEGORIES_SUCCESS, payload: response.data.data.categories });
+    const response = await axios.post(`${BASE_URL}/cursos/add`, courseData);
+    dispatch({ type: CREATE_COURSE_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: FETCH_CATEGORIES_FAILURE, payload: error.message });
+    dispatch({ type: CREATE_COURSE_FAILURE, payload: error.message });
   }
 };
 

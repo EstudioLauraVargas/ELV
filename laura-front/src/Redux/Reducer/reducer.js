@@ -5,9 +5,9 @@ import {
   CREATE_PRODUCT_REQUEST,
   CREATE_PRODUCT_SUCCESS,
   CREATE_PRODUCT_FAILURE,
-  FETCH_CATEGORIES_REQUEST,
-  FETCH_CATEGORIES_SUCCESS,
-  FETCH_CATEGORIES_FAILURE,
+  CREATE_COURSE_REQUEST,
+  CREATE_COURSE_SUCCESS,
+  CREATE_COURSE_FAILURE,
   FETCH_PRODUCTS_REQUEST,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAILURE,
@@ -69,6 +69,7 @@ const initialState = {
   products: [],
   error: null,
   videos:[],
+  courses:[],
 
   userRegister: {
     userInfo: null,
@@ -82,11 +83,7 @@ const initialState = {
     loading: false,
     error: null,
   },
-  categories: {
-    loading: false,
-    data: [],
-    error: null,
-  },
+
   cart: {
     items: [],
     totalItems: 0,
@@ -159,32 +156,23 @@ const rootReducer = (state = initialState, action) => {
       };
       
     
-    case FETCH_CATEGORIES_REQUEST:
-      return {
-        ...state,
-        categories: {
-          ...state.categories,
-          loading: true,
-        },
-      };
-    case FETCH_CATEGORIES_SUCCESS:
-      return {
-        ...state,
-        categories: {
+      case CREATE_COURSE_REQUEST:
+        return { 
+          ...state,
+           loading: true 
+          };
+      case CREATE_COURSE_SUCCESS:
+        return {
+          ...state,
           loading: false,
-          data: action.payload,
-          error: null,
-        },
-      };
-    case FETCH_CATEGORIES_FAILURE:
-      return {
-        ...state,
-        categories: {
-          ...state.categories,
-          loading: false,
-          error: action.payload,
-        },
-      };
+          courses: [...state.courses, action.payload]
+        };
+      case CREATE_COURSE_FAILURE:
+        return { 
+          ...state, 
+          loading: false, 
+          error: action.payload
+        };
     case FETCH_PRODUCTS_REQUEST:
       return {
         ...state,

@@ -1,26 +1,63 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchVideos } from "../../Redux/Actions/actions";
+import { fetchVideos, createCourse } from "../../Redux/Actions/actions";
 
 const GestionCursos = () => {
   const dispatch = useDispatch();
   const videos = useSelector((state) => state.videos || []); //
   const [selectedVideos, setSelectedVideos] = useState([]);
+  const [courseTitle, setCourseTitle] = useState('');
+  const [courseDescription, setCourseDescription] = useState('');
 
   useEffect(() => {
     dispatch(fetchVideos());
   }, [dispatch]);
 
-  const handleCheckboxChange = (youtube_id) => {
+  const handleCheckboxChange = (idVideo) => {
     setSelectedVideos((prevSelected) =>
-      prevSelected.includes(youtube_id)
-        ? prevSelected.filter((id) => id !== youtube_id)
-        : [...prevSelected, youtube_id]
+      prevSelected.includes(idVideo)
+        ? prevSelected.filter((id) => id !== idVideo)
+        : [...prevSelected, idVideo]
     );
   };
-
+ const handleSubmit = (event) => {
+    event.preventDefault();
+    const courseData = {
+      title: courseTitle,
+      description: courseDescription,
+      idVideo: selectedVideos
+    };
+    dispatch(createCourse(courseData));
+  };
   return (
     <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Crear Nuevo Curso</h1>
+      <form onSubmit={handleSubmit} className="mb-4">
+        <div className="mb-4">
+          <label className="block text-gray-700">Título del Curso:</label>
+          <input
+            type="text"
+            value={courseTitle}
+            onChange={(e) => setCourseTitle(e.target.value)}
+            required
+            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Descripción:</label>
+          <textarea
+            value={courseDescription}
+            onChange={(e) => setCourseDescription(e.target.value)}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded"
+        >
+          Crear Curso
+        </button>
+      </form>
       <h1 className="text-2xl font-bold mb-4">YouTube Videos</h1>
       {videos.length > 0 ? (
         <table className="min-w-full bg-white border border-gray-200">
@@ -35,13 +72,13 @@ const GestionCursos = () => {
           </thead>
           <tbody>
             {videos.map((video) => (
-              <tr key={video.youtube_id} className="hover:bg-gray-100">
+              <tr key={video.idVideo} className="hover:bg-gray-100">
                 <td className="py-2 px-4 border-b text-center">
                   <input
                     type="checkbox"
-                    value={video.youtube_id}
-                    checked={selectedVideos.includes(video.youtube_id)}
-                    onChange={() => handleCheckboxChange(video.youtube_id)}
+                    value={video.idVideo}
+                    checked={selectedVideos.includes(video.idVideo)}
+                    onChange={() => handleCheckboxChange(video.idVideo)}
                   />
                 </td>
                 <td className="py-2 px-4 border-b">{video.title}</td>
@@ -70,5 +107,4 @@ const GestionCursos = () => {
     </div>
   );
 };
-
 export default GestionCursos;
