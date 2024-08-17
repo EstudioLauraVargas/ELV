@@ -6,12 +6,14 @@ import { fetchVideos } from '../../Redux/Actions/actions';
 const Videos = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const videos = useSelector(state => state.videos.data.videos || []); // Asegurarse de que videos es un array
+    const videos = useSelector(state => state.videos || []); // Asegurarse de que videos es un array
    
 
     useEffect(() => {
         dispatch(fetchVideos())
     }, [ dispatch, navigate]);
+
+    
 
     return (
         <div className="container mx-auto p-4">

@@ -99,21 +99,27 @@ export const createProduct = (productData) => async (dispatch) => {
 
 export const fetchVideos = () => async (dispatch) => {
   try {
-      
-      const response = await fetch(`${BASE_URL}/videos/videos`, {
-          method: 'GET',
-          // headers: {
-          //     Authorization: `Bearer ${tokens.access_token}`,
-          // },
-      });
+    const response = await fetch(`${BASE_URL}/videos/videos`, {
+      method: 'GET',
+      // headers: {
+      //     Authorization: `Bearer ${tokens.access_token}`,
+      // },
+    });
 
-      console.log('Response received:', response);
-      const videos = await response.json();
-      
-      dispatch({ type: FETCH_VIDEOS_SUCCESS, payload: videos });
+    console.log('Response received:', response);
+
+    if (!response.ok) {
+      // Lanza un error si la respuesta HTTP no es exitosa
+      throw new Error(`Error HTTP! Estado: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const videos = data.data.videos; // Asegúrate de acceder correctamente al array de videos
+
+    dispatch({ type: FETCH_VIDEOS_SUCCESS, payload: videos });
   } catch (error) {
-      console.error('Error fetching videos:', error);
-      dispatch({ type: FETCH_VIDEOS_FAILURE, payload: error.message });
+    console.error('Error fetching videos:', error);
+    dispatch({ type: FETCH_VIDEOS_FAILURE, payload: error.message });
   }
 };
 

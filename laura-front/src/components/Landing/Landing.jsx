@@ -34,14 +34,7 @@ const Landing = () => {
                         Por eso, nos dedicamos a resaltar la belleza natural de cada uno, fomentando la autenticidad y la
                         confianza a través de tratamientos especializados y personalizados.</p>
                         <a target="_blank" className={style.noLink} href="https://wa.me/573502142355"><button className={style.button}>Saber mas</button></a>
-                        <Fade triggerOnce={true} duration={1500}>
-            <button
-              onClick={handleSubscribe}
-              className={`${style.button} ${style.subscribeButton}`}
-            >
-              Suscríbete
-            </button>
-          </Fade>
+       
                
                 </div>
                 
@@ -60,9 +53,7 @@ const Landing = () => {
                         Cuenta con un equipo de trabajo entrenado para dar lo mejor en lo que saben hacer, y que busca atender a cada una de
                         nuestras clientas de forma especial para hacerlas sentir seguras y confiadas de su belleza.  </p>
                 </div>
-                <div className={style.image}>
-                    <img className={style.img} src={laura2} />
-                </div>
+                
             </div>
             <div className={style.view3}>
                 <p className={style.title3}>¿Que vas a encontrar en Laura Vargas
