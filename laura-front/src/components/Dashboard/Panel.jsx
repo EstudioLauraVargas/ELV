@@ -18,7 +18,7 @@ const Panel = () => {
           </div>
         </Link>
         <Link
-          to="/"
+          to="/abmcursos"
           className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:scale-105 p-6 flex items-center justify-center"
         >
           <div className="text-center">

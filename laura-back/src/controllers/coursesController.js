@@ -44,9 +44,9 @@ const addCourse = async (req, res) => {
 
 const updateCourse = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { idCourse } = req.params;
     const { title, description } = req.body;
-    const course = await Course.findByPk(id);
+    const course = await Course.findByPk(idCourse);
     if (!course) return res.status(404).json({ message: "Curso no encontrado" });
     await course.update({ title, description });
     res.status(200).json(course);
@@ -57,8 +57,8 @@ const updateCourse = async (req, res) => {
 
 const deleteCourse = async (req, res) => {
   try {
-    const { id } = req.params;
-    const course = await Course.findByPk(id);
+    const { idCourse } = req.params;
+    const course = await Course.findByPk(idCourse);
     if (!course) return res.status(404).json({ message: "Curso no encontrado" });
     await course.destroy();
     res.status(200).json({ message: "Curso eliminado" });

@@ -4,6 +4,7 @@ const {catchedAsync} = require("../utils");
 
 
 
+
 module.exports = {
    
     coursesController:catchedAsync(require("./coursesController")),
@@ -18,7 +19,8 @@ module.exports = {
     updateCourse: catchedAsync("./coursesController.updateCourse"),
     deleteCourse: catchedAsync("./coursesController.deleteCourse"),
     getCourses:catchedAsync(require("./getCourses")),
-    getCourseById:catchedAsync(require("./getCourseById"))
+    getCourseById:catchedAsync(require("./getCourseById")),
+    pruebaGetVideos:catchedAsync(require("./pruebaGetVideos"))
    
 
 }

@@ -12,6 +12,8 @@ import Video from "./components/services/Video"
 import Panel from "./components/Dashboard/Panel";
 import MisCursos from "./components/Cursos/MisCursos"
 import GestionCursos from "./components/Dashboard/GestionCursos";
+import ABMCursos from "./components/Dashboard/ABMCursos";
+import ListarCursos from "./components/Dashboard/ListarCursos"
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
         <Route path="/panel" element={<Panel/>} />
         <Route path="/misCursos" element={<MisCursos/>} />
         <Route path="/gestioncursos" element={<GestionCursos/>} />
+        <Route path="/listarCursos" element={<ListarCursos/>} />
+        <Route path="/abmcursos" element={<ABMCursos/>} />
 
       </Routes>
    
