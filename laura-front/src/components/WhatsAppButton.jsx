@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
 const WhatsAppButton = () => {
   return (
     <a
       href="https://wa.me/+573502142355" // Reemplaza con tu número de WhatsApp
-      className="fixed bottom-4 right-4 md:bottom-8 md:right-8 bg-pink-500 text-white p-4 md:p-5 rounded-full shadow-lg z-50"
+      className="fixed bottom-4 right-4 md:bottom-8 md:right-8 bg-pink-300 text-gray-600 p-4 md:p-5 rounded-full shadow-lg z-10 animated-bounce"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -21,4 +21,5 @@ const WhatsAppButton = () => {
 };
 
 export default WhatsAppButton;
+
 

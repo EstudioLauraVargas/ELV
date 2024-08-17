@@ -1,14 +1,15 @@
+/* src/index.css */
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+BE+WAL:wght@100..400&family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{ 
-    font-family: "Saira", sans-serif;
-    
-  }
+* {
+  font-family: "Saira", sans-serif; /* Aplica la fuente globalmente */
+}
 
-  /* src/index.css */
+/* Personalización Toastify */
 .Toastify__toast--custom {
   background-color: #333 !important;
   color: #fff !important;
@@ -16,6 +17,21 @@
 
 .Toastify__progress-bar--custom {
   background-color: #520f4e !important;
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+
+.animated-bounce {
+  animation: bounce 2s infinite;
 }
 
 

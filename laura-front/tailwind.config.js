@@ -2,10 +2,22 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", // Revisa que los corchetes y comas estén correctamente
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'saira': ['Saira', 'sans-serif'], // Define la fuente personalizada
+      },
+      colors: {
+        pink: {
+          500: '#f43f5e',
+        },
+        gray: {
+          200: '#e5e7eb',
+        },
+      },
+    },
   },
   plugins: [],
 }
