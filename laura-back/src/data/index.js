@@ -73,18 +73,19 @@ Course.hasMany(Subscription, {
 Subscription.belongsTo(Course, {
   foreignKey: 'idCourse',
 });
-
 Course.belongsToMany(Video, {
-  through: 'CourseVideos',  
-  foreignKey: 'idCourse',   
-        
+  through: 'CourseVideos',
+  foreignKey: 'idCourse',
+  otherKey: 'idVideo',
 });
 
 Video.belongsToMany(Course, {
-  through: 'CourseVideos',  
-  foreignKey: 'idVideo',    
-     
+  through: 'CourseVideos',
+  foreignKey: 'idVideo',
+  otherKey: 'idCourse',
 });
+
+
 //Relación OrdenCompra -> User (uno a muchos)
 OrderCompra.belongsTo(User, {
   foreignKey: 'document',

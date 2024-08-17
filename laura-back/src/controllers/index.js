@@ -1,5 +1,5 @@
 const {catchedAsync} = require("../utils");
-const YoutubeController = require("./YoutubeController");
+
 
 
 
@@ -14,7 +14,11 @@ module.exports = {
     getAllUser:catchedAsync(require("./Users/getAllUser")),
     subsController:catchedAsync(require("./subsController")),
     YoutubeController:catchedAsync(require("./YoutubeController")),
-
+    addCourse: catchedAsync("./coursesController.addCourse"),
+    updateCourse: catchedAsync("./coursesController.updateCourse"),
+    deleteCourse: catchedAsync("./coursesController.deleteCourse"),
+    getCourses:catchedAsync(require("./getCourses")),
+    getCourseById:catchedAsync(require("./getCourseById"))
    
 
 }

@@ -23,6 +23,10 @@ module.exports = (sequelize) => {
     thumbnail: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    duration:{
+      type:DataTypes.STRING,
+      allowNull:false,
     }
   });
 };
