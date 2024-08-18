@@ -55,6 +55,18 @@ import {
   FETCH_LATEST_ORDER_FAILURE,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
+  FETCH_SUBSCRIPTIONS_REQUEST,
+  FETCH_SUBSCRIPTIONS_SUCCESS,
+  FETCH_SUBSCRIPTIONS_FAILURE,
+  CREATE_SUBSCRIPTION_REQUEST,
+  CREATE_SUBSCRIPTION_SUCCESS,
+  CREATE_SUBSCRIPTION_FAILURE,
+  UPDATE_SUBSCRIPTION_REQUEST,
+  UPDATE_SUBSCRIPTION_SUCCESS,
+  UPDATE_SUBSCRIPTION_FAILURE,
+  DELETE_SUBSCRIPTION_REQUEST,
+  DELETE_SUBSCRIPTION_SUCCESS,
+  DELETE_SUBSCRIPTION_FAILURE,
   
 
 } from "../Actions/actions-type";
@@ -70,6 +82,7 @@ const initialState = {
   error: null,
   videos:[],
   courses:[],
+  subscriptions: [],
 
   userRegister: {
     userInfo: null,
@@ -614,6 +627,53 @@ const rootReducer = (state = initialState, action) => {
           error: action.payload,
         },
       };
+      case FETCH_SUBSCRIPTIONS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_SUBSCRIPTIONS_SUCCESS:
+      console.log("Subscriptions payload:", action.payload); // Verifica el payload recibido
+      return {
+        ...state,
+        loading: false,
+        subscriptions: action.payload, // Asegúrate de que esta línea maneje el array de suscripciones
+      };
+    case FETCH_SUBSCRIPTIONS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+      case CREATE_SUBSCRIPTION_REQUEST:
+        return { ...state, loading: true };
+      case CREATE_SUBSCRIPTION_SUCCESS:
+        return { ...state, loading: false, subscriptions: [...state.subscriptions, action.payload.data] };
+      case CREATE_SUBSCRIPTION_FAILURE:
+        return { ...state, loading: false, error: action.payload };
+      case UPDATE_SUBSCRIPTION_REQUEST:
+        return { ...state, loading: true };
+      case UPDATE_SUBSCRIPTION_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          subscriptions: state.subscriptions.map((sub) =>
+            sub.idSub === action.payload.data.idSub ? action.payload.data : sub
+          ),
+        };
+      case UPDATE_SUBSCRIPTION_FAILURE:
+        return { ...state, loading: false, error: action.payload };
+      case DELETE_SUBSCRIPTION_REQUEST:
+        return { ...state, loading: true };
+      case DELETE_SUBSCRIPTION_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          subscriptions: state.subscriptions.filter((sub) => sub.idSub !== action.payload),
+        };
+      case DELETE_SUBSCRIPTION_FAILURE:
+        return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }

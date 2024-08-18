@@ -55,6 +55,18 @@ import {
   FETCH_LATEST_ORDER_FAILURE,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
+  FETCH_SUBSCRIPTIONS_REQUEST,
+  FETCH_SUBSCRIPTIONS_SUCCESS,
+  FETCH_SUBSCRIPTIONS_FAILURE,
+  CREATE_SUBSCRIPTION_REQUEST,
+  CREATE_SUBSCRIPTION_SUCCESS,
+  CREATE_SUBSCRIPTION_FAILURE,
+  UPDATE_SUBSCRIPTION_REQUEST,
+  UPDATE_SUBSCRIPTION_SUCCESS,
+  UPDATE_SUBSCRIPTION_FAILURE,
+  DELETE_SUBSCRIPTION_REQUEST,
+  DELETE_SUBSCRIPTION_SUCCESS,
+  DELETE_SUBSCRIPTION_FAILURE,
   
 
 } from './actions-type';
@@ -443,5 +455,52 @@ export const createCategory = (name_category) => async (dispatch, getState) => {
         : error.message,
     });
     return { type: CATEGORY_CREATE_FAIL, error: error.response ? error.response.data.message : error.message };
+  }
+};
+
+
+export const fetchSubscriptions = () => async (dispatch) => {
+  dispatch({ type: FETCH_SUBSCRIPTIONS_REQUEST });
+  try {
+    const response = await axios.get(`${BASE_URL}/suscripcion`);
+    console.log("Response data:", response.data); // Verifica la respuesta de la API
+    dispatch({ type: FETCH_SUBSCRIPTIONS_SUCCESS, payload: response.data.data });
+  } catch (error) {
+    console.error("Error fetching subscriptions:", error); // Verifica si hay errores
+    dispatch({ type: FETCH_SUBSCRIPTIONS_FAILURE, payload: error.message });
+  }
+};
+
+
+// Crear una suscripción
+export const createSubscription = (subscriptionData) => async (dispatch) => {
+  dispatch({ type: CREATE_SUBSCRIPTION_REQUEST });
+  try {
+    const response = await axios.post('http://localhost:3001/suscripcion', subscriptionData);
+    dispatch({ type: CREATE_SUBSCRIPTION_SUCCESS, payload: response.data.data });
+  } catch (error) {
+    dispatch({ type: CREATE_SUBSCRIPTION_FAILURE, payload: error.message });
+  }
+};
+
+// Actualizar una suscripción
+export const updateSubscription = (idSub, subscriptionData) => async (dispatch) => {
+  dispatch({ type: UPDATE_SUBSCRIPTION_REQUEST });
+  try {
+    const response = await axios.put(`${BESE_URL}/suscripcion/${idSub}`, subscriptionData);
+    dispatch({ type: UPDATE_SUBSCRIPTION_SUCCESS, payload: response.data.data });
+  } catch (error) {
+    dispatch({ type: UPDATE_SUBSCRIPTION_FAILURE, payload: error.message });
+  }
+};
+
+// Eliminar una suscripción
+export const deleteSubscription = (idSub) => async (dispatch) => {
+  dispatch({ type: DELETE_SUBSCRIPTION_REQUEST });
+  try {
+    await axios.delete(`${BESE_URL}/suscripcion/${idSub}`);
+    dispatch({ type: DELETE_SUBSCRIPTION_SUCCESS, payload: idSub });
+  } catch (error) {
+    dispatch({ type: DELETE_SUBSCRIPTION_FAILURE, payload: error.message });
   }
 };

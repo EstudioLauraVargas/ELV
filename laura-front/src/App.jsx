@@ -13,7 +13,10 @@ import Panel from "./components/Dashboard/Panel";
 import MisCursos from "./components/Cursos/MisCursos"
 import GestionCursos from "./components/Dashboard/GestionCursos";
 import ABMCursos from "./components/Dashboard/ABMCursos";
-import ListarCursos from "./components/Dashboard/ListarCursos"
+import ListarCursos from "./components/Dashboard/ListarCursos";
+import SubscriptionList from "./components/Dashboard/Subscriptions/SubscriptionList";
+import SubscriptionForm from "./components/Dashboard/Subscriptions/SubscriptionForm";
+
 
 function App() {
   return (
@@ -34,7 +37,8 @@ function App() {
         <Route path="/gestioncursos" element={<GestionCursos/>} />
         <Route path="/listarCursos" element={<ListarCursos/>} />
         <Route path="/abmcursos" element={<ABMCursos/>} />
-
+        <Route path="/listarSuscripciones" element={<SubscriptionList/>} />
+        <Route path="/crudSubs" element={<SubscriptionForm/>} />
       </Routes>
    
   );
