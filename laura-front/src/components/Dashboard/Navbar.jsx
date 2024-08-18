@@ -4,14 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../Redux/Actions/actions'; 
 import { FaSignOutAlt } from 'react-icons/fa';
 import logolaura from "../../lauraassets/logolaura.png"
+import { useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
   const dispatch = useDispatch();
- 
+  const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.userLogin);
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/")
   };
 
   return (

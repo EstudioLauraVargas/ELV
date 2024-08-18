@@ -12,7 +12,8 @@ const Login = ({ closePopup }) => {
   const navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
-
+console.log(userLogin,"userLogin")
+console.log(userInfo)
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
