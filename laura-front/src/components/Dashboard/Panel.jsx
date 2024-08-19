@@ -6,7 +6,7 @@ const Panel = () => {
   return (
     <div className="h-screen w-full pt-20 p-8 bg-slate-600 mt-4">
         <Navbar/>
-      <h1 className="text-3xl font-bold mb-6 text-white text-center">Gestión de Suscripciones</h1>
+      <h1 className="text-3xl font-bold mb-6 text-white text-center">Panel de Administrador</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         <Link
           to="/"
@@ -45,7 +45,7 @@ const Panel = () => {
           </div>
         </Link>
         <Link
-          to="/listarSuscripciones"
+          to="/crudSubs"
           className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:scale-105 p-6 flex items-center justify-center"
         >
           <div className="text-center">

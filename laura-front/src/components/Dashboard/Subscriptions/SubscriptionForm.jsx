@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSubscription, updateSubscription } from '../../../Redux/Actions/actions';
 import { useParams, useNavigate } from 'react-router-dom';
+import Navbar from '../Navbar';
+import backgroundImage from "../../../lauraassets/bg1.png"
 
 const SubscriptionForm = () => {
   const dispatch = useDispatch();
@@ -45,8 +47,17 @@ const SubscriptionForm = () => {
     navigate('/panel');
   };
 
+  const handleGoToPanel = () => {
+    navigate("/panel");
+  };
+
   return (
-    <div className="container mx-auto p-4">
+    <div
+      className="min-h-screen bg-cover bg-center relative p-4 mt-4"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+      <Navbar/>
+      <div className="container mx-auto p-4 mt-24 relative z-10 bg-white bg-opacity-80 rounded-lg shadow-lg max-w-4xl">
       <h1 className="text-2xl font-bold mb-4">{idSub ? 'Editar Suscripción' : 'Crear Suscripción'}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -119,11 +130,18 @@ const SubscriptionForm = () => {
         </div>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+          className="px-4 py-2 bg-pink-500 text-white rounded-md shadow-sm hover:bg-pink-600"
         >
           {idSub ? 'Actualizar' : 'Crear'}
         </button>
+        <button
+    onClick={handleGoToPanel}
+    className="bg-pink-500 text-white px-4 py-2 rounded ml-8"
+  >
+    Ir a Panel
+  </button>
       </form>
+    </div>
     </div>
   );
 };

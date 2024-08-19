@@ -70,6 +70,9 @@ import {
   DELETE_SUBSCRIPTION_REQUEST,
   DELETE_SUBSCRIPTION_SUCCESS,
   DELETE_SUBSCRIPTION_FAILURE,
+  FETCH_SUBSCRIPTION_ID_REQUEST,
+  FETCH_SUBSCRIPTION_ID_SUCCESS,
+  FETCH_SUBSCRIPTION_ID_FAILURE,
   
 
 } from "../Actions/actions-type";
@@ -668,6 +671,26 @@ const rootReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+      case FETCH_SUBSCRIPTION_ID_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case FETCH_SUBSCRIPTION_ID_SUCCESS:
+        console.log("Subscriptions payload:", action.payload); // Verifica el payload recibido
+        return {
+          ...state,
+          loading: false,
+          subscriptions: action.payload, // Asegúrate de que esta línea maneje el array de suscripciones
+        };
+      case FETCH_SUBSCRIPTION_ID_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
+
       case CREATE_SUBSCRIPTION_REQUEST:
         return { ...state, loading: true };
       case CREATE_SUBSCRIPTION_SUCCESS:

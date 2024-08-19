@@ -63,6 +63,9 @@ import {
   FETCH_SUBSCRIPTIONS_REQUEST,
   FETCH_SUBSCRIPTIONS_SUCCESS,
   FETCH_SUBSCRIPTIONS_FAILURE,
+  FETCH_SUBSCRIPTION_ID_REQUEST,
+  FETCH_SUBSCRIPTION_ID_SUCCESS,
+  FETCH_SUBSCRIPTION_ID_FAILURE,
   CREATE_SUBSCRIPTION_REQUEST,
   CREATE_SUBSCRIPTION_SUCCESS,
   CREATE_SUBSCRIPTION_FAILURE,
@@ -501,6 +504,19 @@ export const fetchSubscriptions = () => async (dispatch) => {
   }
 };
 
+// Acción para obtener una suscripción por ID
+export const fetchSubscriptionById = (idSub) => async (dispatch) => {
+  dispatch({ type: FETCH_SUBSCRIPTION_ID_REQUEST });
+  try {
+    const response = await axios.get(`http://localhost:3001/suscripcion/${idSub}`);
+    dispatch({ type: FETCH_SUBSCRIPTION_ID_SUCCESS, payload: response.data.data });
+  } catch (error) {
+    dispatch({ type: FETCH_SUBSCRIPTION_ID_FAILURE, payload: error.message });
+  }
+};
+
+
+
 
 // Crear una suscripción
 export const createSubscription = (subscriptionData) => async (dispatch) => {
@@ -517,7 +533,7 @@ export const createSubscription = (subscriptionData) => async (dispatch) => {
 export const updateSubscription = (idSub, subscriptionData) => async (dispatch) => {
   dispatch({ type: UPDATE_SUBSCRIPTION_REQUEST });
   try {
-    const response = await axios.put(`${BESE_URL}/suscripcion/${idSub}`, subscriptionData);
+    const response = await axios.put(`http://localhost:3001/suscripcion/${idSub}`, subscriptionData);
     dispatch({ type: UPDATE_SUBSCRIPTION_SUCCESS, payload: response.data.data });
   } catch (error) {
     dispatch({ type: UPDATE_SUBSCRIPTION_FAILURE, payload: error.message });
@@ -528,7 +544,7 @@ export const updateSubscription = (idSub, subscriptionData) => async (dispatch) 
 export const deleteSubscription = (idSub) => async (dispatch) => {
   dispatch({ type: DELETE_SUBSCRIPTION_REQUEST });
   try {
-    await axios.delete(`${BESE_URL}/suscripcion/${idSub}`);
+    await axios.delete(`http://localhost:3001/suscripcion/${idSub}`);
     dispatch({ type: DELETE_SUBSCRIPTION_SUCCESS, payload: idSub });
   } catch (error) {
     dispatch({ type: DELETE_SUBSCRIPTION_FAILURE, payload: error.message });

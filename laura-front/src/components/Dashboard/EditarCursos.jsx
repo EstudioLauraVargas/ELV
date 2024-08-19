@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchVideos, updateCourse } from "../../Redux/Actions/actions"; 
 import axios from "axios";
+import Navbar from "./Navbar";
+import backgroundImage from "../../lauraassets/bg1.png"
 
 const EditarCurso = () => {
   const { idCourse } = useParams(); // Obtener el ID del curso desde la URL
@@ -77,10 +79,17 @@ const EditarCurso = () => {
       setSelectedVideos(selectedVideos.filter((video) => video.idVideo !== idVideo));
     }
   };
-  
+  const handleGoToPanel = () => {
+    navigate("/panel");
+  };
   
   return (
-    <div className="container mx-auto p-4">
+    <div
+    className="min-h-screen bg-cover bg-center relative p-4 mt-4"
+    style={{ backgroundImage: `url(${backgroundImage})` }}
+  >
+        <Navbar/>
+        <div className="container mx-auto p-4 mt-24 relative z-10 bg-white bg-opacity-80 rounded-lg shadow-lg max-w-4xl">     
       <h1 className="text-2xl font-bold mb-4">Editar Curso</h1>
 
       <div className="mb-4">
@@ -145,10 +154,17 @@ const EditarCurso = () => {
 
       <button
         onClick={handleUpdateCourse}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="bg-pink-500 text-white px-4 py-2 rounded mr-4"
       >
         Actualizar Curso
       </button>
+      <button
+        onClick={handleGoToPanel}
+        className="bg-pink-500 text-white px-4 py-2 rounded"
+      >
+        Ir a Panel
+      </button>
+    </div>
     </div>
   );
 };

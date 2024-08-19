@@ -4,6 +4,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditarCurso from './EditarCursos'; // Asegúrate de importar el nuevo componente
 import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
+import backgroundImage from "../../lauraassets/bg1.png"
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const ListarCursos = () => {
   const [cursos, setCursos] = useState([]);
@@ -71,12 +74,38 @@ const ListarCursos = () => {
     // Si hay un curso seleccionado, renderiza el componente de edición
     return <EditarCurso idCourse={cursoSeleccionado} />;
   }
+  const handleGoToPanel = () => {
+    navigate("/panel");
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <ToastContainer />
-      <h1 className="text-2xl font-bold mb-4">Lista de Cursos</h1>
-
+    <div
+    className="min-h-screen bg-cover bg-center relative p-4 mt-4"
+    style={{ backgroundImage: `url(${backgroundImage})` }}
+  >
+      <Navbar/>
+      <div className="container mx-auto p-4 mt-24 relative z-10 bg-white bg-opacity-80 rounded-lg shadow-lg max-w-4xl">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="light"
+        style={{ zIndex: 9999 }}
+      />
+     <div className="flex justify-between items-center mb-4">
+  <button
+    onClick={handleGoToPanel}
+    className="bg-pink-500 text-white px-4 py-2 rounded"
+  >
+    Ir a Panel
+  </button>
+  <h1 className="text-2xl font-bold text-center flex-grow">
+    Cursos Disponibles
+  </h1>
+</div>
       {cursos.length > 0 ? (
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
@@ -84,7 +113,7 @@ const ListarCursos = () => {
               <th className="py-2 px-4 border-b">Título</th>
               <th className="py-2 px-4 border-b">Descripción</th>
               <th className="py-2 px-4 border-b">Videos</th>
-              <th className="py-2 px-4 border-b">Acciones</th>
+              <th className="py-2 px-4 border-b">Editar / Eliminar</th>
             </tr>
           </thead>
           <tbody>
@@ -108,20 +137,20 @@ const ListarCursos = () => {
                       ))
                     : "No hay videos disponibles"}
                 </td>
-                <td className="py-2 px-4 border-b">
-                  <button
-                    onClick={() => handleEdit(curso.idCourse)}
-                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(curso.idCourse)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Eliminar
-                  </button>
-                </td>
+                <td className="py-2 px-4 border-b flex items-center">
+              <button
+                onClick={() => handleEdit(curso.idCourse)}
+                className="text-pink-500 hover:text-pink-700 mr-2"
+              >
+                <FaEdit size={20} />
+              </button>
+              <button
+                onClick={() => handleDelete(curso.idCourse)}
+                className="text-grey-300 hover:text-grey-700"
+              >
+                <FaTrash size={20} />
+              </button>
+            </td>
               </tr>
             ))}
           </tbody>
@@ -129,6 +158,7 @@ const ListarCursos = () => {
       ) : (
         <p>No hay cursos disponibles.</p>
       )}
+    </div>
     </div>
   );
 };
