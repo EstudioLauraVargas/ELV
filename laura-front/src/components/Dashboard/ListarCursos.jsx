@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import EditarCurso from './EditarCursos'; // Asegúrate de importar el nuevo componente
+import { useNavigate } from "react-router-dom";
 
 const ListarCursos = () => {
   const [cursos, setCursos] = useState([]);
+  const [cursoSeleccionado, setCursoSeleccionado] = useState(null); // Estado para almacenar el curso a editar
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Hacer la petición a la ruta que trae los cursos
     axios
       .get("http://localhost:3001/cursos")
       .then((response) => {
@@ -21,29 +26,55 @@ const ListarCursos = () => {
   }, []);
 
   const handleEdit = (idCourse) => {
-    // Lógica para editar el curso
-    console.log(`Editar curso con ID: ${idCourse}`);
+    setCursoSeleccionado(idCourse); // Almacena el id del curso a editar
+    navigate(`/editarCurso/${idCourse}`);   
   };
 
   const handleDelete = (idCourse) => {
-    // Lógica para eliminar el curso
-    axios
-      .delete(`http://localhost:3001/cursos/delete/${idCourse}`, { data: { idCourse } })
-      .then((response) => {
-        if (!response.data.error) {
-          setCursos(cursos.filter((curso) => curso.idCourse !== idCourse));
-          console.log(`Curso con ID: ${idCourse} eliminado`);
-        } else {
-          console.error("Error en la respuesta:", response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error al eliminar el curso:", error);
-      });
+    const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar este curso?");
+    
+    if (confirmDelete) {
+      axios
+        .delete(`http://localhost:3001/cursos/delete/${idCourse}`, { data: { idCourse } })
+        .then((response) => {
+          if (!response.data.error) {
+            setCursos(cursos.filter((curso) => curso.idCourse !== idCourse));
+            toast.success("Curso eliminado con éxito!", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else {
+            console.error("Error en la respuesta:", response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error al eliminar el curso:", error);
+          toast.error("Error al eliminar el curso. Inténtalo de nuevo.", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+    }
   };
+
+  if (cursoSeleccionado) {
+    // Si hay un curso seleccionado, renderiza el componente de edición
+    return <EditarCurso idCourse={cursoSeleccionado} />;
+  }
 
   return (
     <div className="container mx-auto p-4">
+      <ToastContainer />
       <h1 className="text-2xl font-bold mb-4">Lista de Cursos</h1>
 
       {cursos.length > 0 ? (
@@ -103,3 +134,5 @@ const ListarCursos = () => {
 };
 
 export default ListarCursos;
+
+

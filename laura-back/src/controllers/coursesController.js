@@ -1,4 +1,4 @@
-const { Course, Video } = require("../data");
+const { Course, Video, CourseVideos } = require("../data");
 const { sequelize } = require("../data");
 const response = require("../utils/response")
 
@@ -45,12 +45,45 @@ const addCourse = async (req, res) => {
 const updateCourse = async (req, res) => {
   try {
     const { idCourse } = req.params;
-    const { title, description } = req.body;
-    const course = await Course.findByPk(idCourse);
+    const { title, description, addVideos, removeVideos } = req.body;
+
+    // Buscar el curso por su ID
+    const course = await Course.findByPk(idCourse, {
+      include: [Video], // Incluye los videos asociados al curso
+    });
+
     if (!course) return res.status(404).json({ message: "Curso no encontrado" });
+
+    // Actualizar título y descripción
     await course.update({ title, description });
-    res.status(200).json(course);
+
+    // Eliminar videos si se proporcionan IDs de videos para eliminar
+    if (removeVideos && removeVideos.length > 0) {
+      await CourseVideos.destroy({
+        where: {
+          idVideo: removeVideos,
+          idCourse: idCourse, // Asegurar que el video pertenece a este curso
+        },
+      });
+    }
+
+    // Agregar nuevos videos si se proporcionan
+    if (addVideos && addVideos.length > 0) {
+      const newVideos = addVideos.map((videoId) => ({
+        idCourse: idCourse,
+        idVideo: videoId,
+      }));
+      await CourseVideos.bulkCreate(newVideos, { ignoreDuplicates: true });
+    }
+
+    // Volver a obtener el curso con los videos actualizados
+    const updatedCourse = await Course.findByPk(idCourse, {
+      include: [Video],
+    });
+
+    res.status(200).json(updatedCourse);
   } catch (error) {
+    console.error("Error al actualizar el curso:", error);
     res.status(500).json({ message: "Error al actualizar el curso", error });
   }
 };

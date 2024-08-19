@@ -8,6 +8,9 @@ import {
   CREATE_COURSE_REQUEST,
   CREATE_COURSE_SUCCESS,
   CREATE_COURSE_FAILURE,
+  COURSE_UPDATE_REQUEST,
+  COURSE_UPDATE_SUCCESS,
+  COURSE_UPDATE_FAIL,
   FETCH_PRODUCTS_REQUEST,
   FETCH_PRODUCTS_SUCCESS,
   FETCH_PRODUCTS_FAILURE,
@@ -186,6 +189,25 @@ const rootReducer = (state = initialState, action) => {
           loading: false, 
           error: action.payload
         };
+        case COURSE_UPDATE_REQUEST:
+          return { 
+            ...state, 
+            loading: true 
+          };
+    
+        case COURSE_UPDATE_SUCCESS:
+          return { 
+            ...state, 
+            loading: false, 
+            courses: action.payload 
+          };
+    
+        case COURSE_UPDATE_FAIL:
+          return {
+            ...state, 
+            loading: false, 
+            error: action.payload 
+          };
     case FETCH_PRODUCTS_REQUEST:
       return {
         ...state,
