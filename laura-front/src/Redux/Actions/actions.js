@@ -83,7 +83,7 @@ export const updateCourse = (idCourse, updatedCourseData) => async (dispatch) =>
   try {
     dispatch({ type: COURSE_UPDATE_REQUEST });
 
-    const { data } = await axios.put(`http://localhost:3001/cursos/update/${idCourse}`, updatedCourseData);
+    const { data } = await axios.put(`${BASE_URL}/cursos/update/${idCourse}`, updatedCourseData);
 
     console.log('Respuesta de la API:', data); // Agrega esto para verificar la respuesta
 
@@ -194,7 +194,7 @@ export const fetchSubscriptions = () => async (dispatch) => {
 export const fetchSubscriptionById = (idSub) => async (dispatch) => {
   dispatch({ type: FETCH_SUBSCRIPTION_ID_REQUEST });
   try {
-    const response = await axios.get(`http://localhost:3001/suscripcion/${idSub}`);
+    const response = await axios.get(`${BASE_URL}/suscripcion/${idSub}`);
     dispatch({ type: FETCH_SUBSCRIPTION_ID_SUCCESS, payload: response.data.data });
   } catch (error) {
     dispatch({ type: FETCH_SUBSCRIPTION_ID_FAILURE, payload: error.message });
@@ -208,7 +208,7 @@ export const fetchSubscriptionById = (idSub) => async (dispatch) => {
 export const createSubscription = (subscriptionData) => async (dispatch) => {
   dispatch({ type: CREATE_SUBSCRIPTION_REQUEST });
   try {
-    const response = await axios.post('http://localhost:3001/suscripcion', subscriptionData);
+    const response = await axios.post('${BASE_URL}/suscripcion', subscriptionData);
     dispatch({ type: CREATE_SUBSCRIPTION_SUCCESS, payload: response.data.data });
   } catch (error) {
     dispatch({ type: CREATE_SUBSCRIPTION_FAILURE, payload: error.message });
@@ -219,7 +219,7 @@ export const createSubscription = (subscriptionData) => async (dispatch) => {
 export const updateSubscription = (idSub, subscriptionData) => async (dispatch) => {
   dispatch({ type: UPDATE_SUBSCRIPTION_REQUEST });
   try {
-    const response = await axios.put(`http://localhost:3001/suscripcion/${idSub}`, subscriptionData);
+    const response = await axios.put(`${BASE_URL}/suscripcion/${idSub}`, subscriptionData);
     dispatch({ type: UPDATE_SUBSCRIPTION_SUCCESS, payload: response.data.data });
   } catch (error) {
     dispatch({ type: UPDATE_SUBSCRIPTION_FAILURE, payload: error.message });
@@ -230,7 +230,7 @@ export const updateSubscription = (idSub, subscriptionData) => async (dispatch) 
 export const deleteSubscription = (idSub) => async (dispatch) => {
   dispatch({ type: DELETE_SUBSCRIPTION_REQUEST });
   try {
-    await axios.delete(`http://localhost:3001/suscripcion/${idSub}`);
+    await axios.delete(`${BASE_URL}/suscripcion/${idSub}`);
     dispatch({ type: DELETE_SUBSCRIPTION_SUCCESS, payload: idSub });
   } catch (error) {
     dispatch({ type: DELETE_SUBSCRIPTION_FAILURE, payload: error.message });

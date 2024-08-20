@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import backgroundImage from "../../lauraassets/bg1.png"
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { BASE_URL } from "../../Config";
 
 const ListarCursos = () => {
   const [cursos, setCursos] = useState([]);
@@ -15,7 +16,7 @@ const ListarCursos = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/cursos")
+      .get(`${BASE_URL}/cursos`)
       .then((response) => {
         if (!response.data.error) {
           setCursos(response.data.data); // Asegúrate de acceder a la propiedad 'data'
@@ -38,7 +39,7 @@ const ListarCursos = () => {
     
     if (confirmDelete) {
       axios
-        .delete(`http://localhost:3001/cursos/delete/${idCourse}`, { data: { idCourse } })
+        .delete(`${BASE_URL}/cursos/delete/${idCourse}`, { data: { idCourse } })
         .then((response) => {
           if (!response.data.error) {
             setCursos(cursos.filter((curso) => curso.idCourse !== idCourse));

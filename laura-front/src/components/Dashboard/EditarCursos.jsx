@@ -5,6 +5,7 @@ import { fetchVideos, updateCourse } from "../../Redux/Actions/actions";
 import axios from "axios";
 import Navbar from "./Navbar";
 import backgroundImage from "../../lauraassets/bg1.png"
+import { BASE_URL } from "../../Config";
 
 const EditarCurso = () => {
   const { idCourse } = useParams(); // Obtener el ID del curso desde la URL
@@ -21,7 +22,7 @@ const EditarCurso = () => {
     // Obtener detalles del curso actual
     
     axios
-    .get(`http://localhost:3001/cursos/${idCourse}`)
+    .get(`${BASE_URL}/cursos/${idCourse}`)
     .then((response) => {
       console.log(response.data); // Verifica la estructura de los datos
       const { title, description, Videos } = response.data.data;
