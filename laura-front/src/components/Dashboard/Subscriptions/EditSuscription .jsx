@@ -6,7 +6,7 @@ import Navbar from '../Navbar';
 import backgroundImage from "../../../lauraassets/bg1.png";
 
 function EditSubscription() {
-  const { idSub } = useParams(); // Obtener el ID de la suscripción desde la URL
+  const { idSub } = useParams(); 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const subscription = useSelector((state) => state.subscriptions);
@@ -14,7 +14,7 @@ function EditSubscription() {
   const loading = useSelector((state) => state.loading);
   const error = useSelector((state) => state.error);
 
-  // Estados para los campos del formulario
+
   const [typeSub, setTypeSub] = useState("");
   const [accessStartDate, setAccessStartDate] = useState("");
   const [durationDays, setDurationDays] = useState("");
@@ -22,22 +22,21 @@ function EditSubscription() {
   const [active, setActive] = useState(false);
   const [subscriptionReminderSent, setSubscriptionReminderSent] = useState(false);
 
-  // Obtener los datos de la suscripción cuando el componente se monta
+  
   useEffect(() => {
     dispatch(fetchSubscriptionById(idSub));
   }, [dispatch, idSub]);
 
-  // Actualizar los campos del formulario cuando la suscripción cambie
   useEffect(() => {
-    if (subscription) {
-      setTypeSub(subscription.typeSub);
-      setAccessStartDate(subscription.accessStartDate.split('T')[0]); // Formato YYYY-MM-DD
-      setDurationDays(subscription.durationDays);
-      setPrice(subscription.price);
-      setActive(subscription.active);
-      setSubscriptionReminderSent(subscription.subscriptionReminderSent);
+    if (subscription && subscription.accessStartDate) {
+        setTypeSub(subscription.typeSub);
+        setAccessStartDate(subscription.accessStartDate.split('T')[0]); 
+        setDurationDays(subscription.durationDays);
+        setPrice(subscription.price);
+        setActive(subscription.active);
+        setSubscriptionReminderSent(subscription.subscriptionReminderSent);
     }
-  }, [subscription]);
+}, [subscription]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -53,7 +52,7 @@ function EditSubscription() {
 
     dispatch(updateSubscription(idSub, subscriptionData))
       .then(() => {
-        navigate('/panel'); // Redirigir a la lista de suscripciones después de la actualización
+        navigate('/panel'); 
       })
       .catch((error) => {
         console.error("Error updating subscription:", error);

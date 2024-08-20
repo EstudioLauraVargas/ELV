@@ -2,21 +2,21 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSubscriptions } from '../../../Redux/Actions/actions';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import backgroundImage from "../../../lauraassets/sombras.png"
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-// Instala los módulos necesarios de Swiper
-
 
 const SubscriptionCarousel = () => {
     const dispatch = useDispatch();
     const subscriptions = useSelector((state) => state.subscriptions);
-  
+    const navigate = useNavigate(); 
+
     useEffect(() => {
-      dispatch(fetchSubscriptions());
+        dispatch(fetchSubscriptions());
     }, [dispatch]);
 
     useEffect(() => {
@@ -26,8 +26,6 @@ const SubscriptionCarousel = () => {
         if (nextButton && prevButton) {
           nextButton.style.color = 'grey';
           prevButton.style.color = 'grey';
-    
-          // Otras propiedades como background, padding, etc.
           nextButton.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
           prevButton.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
           nextButton.style.padding = '10px';
@@ -36,6 +34,10 @@ const SubscriptionCarousel = () => {
           prevButton.style.borderRadius = '50%';
         }
       }, []);
+
+    const handleSubscriptionSelect = (subscription) => {
+        navigate(`/detallePago/${subscription.idSub}`, { state: { subscription } });
+    };
   
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -51,16 +53,16 @@ const SubscriptionCarousel = () => {
             }}
             pagination={{ clickable: true }}
             navigation
-            modules={[Autoplay, Pagination, Navigation]} // Usa los módulos aquí
+            modules={[Autoplay, Pagination, Navigation]}
             className="mySwiper"
           >
             {subscriptions.map((subscription) => (
-              <SwiperSlide key={subscription.idSub}>
+              <SwiperSlide key={subscription.idSub} onClick={() => handleSubscriptionSelect(subscription)}>
                 <div
-                  className="relative bg-cover bg-center bg-no-repeat rounded-lg shadow-lg p-8 flex flex-col items-center justify-center"
+                  className="relative bg-cover bg-center bg-no-repeat rounded-lg shadow-lg p-8 flex flex-col items-center justify-center cursor-pointer"
                   style={{
                     backgroundImage: `url(${backgroundImage})`,
-                    width: 'calc(100% + 50%)', // Ancho del slide
+                    width: 'calc(100% + 50%)',
                   }}
                 >
                   <div className="bg-black bg-opacity-50 rounded-lg p-16 text-center">
@@ -75,7 +77,8 @@ const SubscriptionCarousel = () => {
         </div>
       </div>
     );
-  };
-  
+};
+
 export default SubscriptionCarousel;
+
 

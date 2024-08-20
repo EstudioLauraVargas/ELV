@@ -19,7 +19,7 @@ import SubscriptionForm from "./components/Dashboard/Subscriptions/SubscriptionF
 import EditarCurso from "./components/Dashboard/EditarCursos";
 import Suscripciones from "./components/Dashboard/Subscriptions/Suscripciones";
 import EditSuscription from "./components/Dashboard/Subscriptions/EditSuscription ";
-
+import PaymentDetail from "./components/Dashboard/Subscriptions/PaymentDetail";
 
 function App() {
   return (
@@ -45,6 +45,7 @@ function App() {
         <Route path="/crudSubs" element={<Suscripciones/>} />
         <Route path="/crearSubs" element={<SubscriptionForm/>} />
         <Route path="/editarSubs/:idSub" element={<EditSuscription/>} />
+        <Route path="/detallePago/:idSub" element={<PaymentDetail />} />
       </Routes>
    
   );
