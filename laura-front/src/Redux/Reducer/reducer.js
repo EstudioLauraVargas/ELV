@@ -2,29 +2,13 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-unused-vars */
 import {
-  CREATE_PRODUCT_REQUEST,
-  CREATE_PRODUCT_SUCCESS,
-  CREATE_PRODUCT_FAILURE,
+ 
   CREATE_COURSE_REQUEST,
   CREATE_COURSE_SUCCESS,
   CREATE_COURSE_FAILURE,
   COURSE_UPDATE_REQUEST,
   COURSE_UPDATE_SUCCESS,
   COURSE_UPDATE_FAIL,
-  FETCH_PRODUCTS_REQUEST,
-  FETCH_PRODUCTS_SUCCESS,
-  FETCH_PRODUCTS_FAILURE,
-  FETCH_PRODUCT_REQUEST,
-  FETCH_PRODUCT_SUCCESS,
-  FETCH_PRODUCT_FAILURE,
-  ADD_TO_CART,
-  REMOVE_FROM_CART,
-  CLEAR_CART,
-  INCREMENT_QUANTITY,
-  DECREMENT_QUANTITY,
-  ORDER_CREATE_REQUEST,
-  ORDER_CREATE_SUCCESS,
-  ORDER_CREATE_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
@@ -32,30 +16,6 @@ import {
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGOUT,
-  SET_SEARCH_TERM,
-  SET_PRICE_FILTER,
-  SET_CATEGORY_FILTER,
-  CLEAR_ORDER_STATE,
-  FETCH_ORDERS_REQUEST,
-  FETCH_ORDERS_SUCCESS,
-  FETCH_ORDERS_FAILURE,
-  FETCH_ALLS_ORDERS_REQUEST,
-  FETCH_ALLS_ORDERS_SUCCESS,
-  FETCH_ALLS_ORDERS_FAILURE,
-  UPDATE_ORDER_STATE_SUCCESS,
-  UPDATE_ORDER_STATE_FAILURE,
-  UPDATE_PRODUCT_REQUEST,
-  UPDATE_PRODUCT_SUCCESS,
-  UPDATE_PRODUCT_FAILURE,
-  DELETE_PRODUCT_REQUEST,
-  DELETE_PRODUCT_SUCCESS,
-  DELETE_PRODUCT_FAILURE,
-  CATEGORY_CREATE_REQUEST,
-  CATEGORY_CREATE_SUCCESS,
-  CATEGORY_CREATE_FAIL,
-  FETCH_LATEST_ORDER_REQUEST,
-  FETCH_LATEST_ORDER_SUCCESS,
-  FETCH_LATEST_ORDER_FAILURE,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
   FETCH_SUBSCRIPTIONS_REQUEST,
@@ -78,13 +38,8 @@ import {
 } from "../Actions/actions-type";
 
 const initialState = {
-  searchTerm: "",
-  priceFilter: { min: null, max: null },
-  categoryFilter: "",
-  searchResults: [],
+
   loading: false,
-  product: null,
-  products: [],
   error: null,
   videos:[],
   courses:[],
@@ -103,62 +58,14 @@ const initialState = {
     error: null,
   },
 
-  cart: {
-    items: [],
-    totalItems: 0,
-    totalPrice: 0,
-  },
-  order: {
-    loading: false,
-    success: false,
-    error: null,
-    order: {},
-  },
-  orders: {
-    loading: false,
-    orders: [],
-    error: null,
-  },
-  ordersGeneral: {
-    loading: false,
-    orders: [],
-    error: null,
-  },
-  updateProduct: {
-    loading: false,
-    roduct: null,
-    error: null,
-  },
-  latestOrder: {
-    loading: false,
-    success: false,
-    error: null,
-    data: {},
-  },
+  
 };
 
 
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_PRODUCT_REQUEST:
-      return {
-        ...state,
-        loading: true,
-      };
-    case CREATE_PRODUCT_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        product: action.payload,
-      };
-    case CREATE_PRODUCT_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-
+  
     case FETCH_VIDEOS_SUCCESS:
       return {
         ...state,
@@ -211,176 +118,7 @@ const rootReducer = (state = initialState, action) => {
             loading: false, 
             error: action.payload 
           };
-    case FETCH_PRODUCTS_REQUEST:
-      return {
-        ...state,
-        loading: true,
-      };
-    case FETCH_PRODUCTS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        products: action.payload,
-      };
-    case FETCH_PRODUCTS_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    case FETCH_PRODUCT_REQUEST:
-      return {
-        ...state,
-        loading: true,
-      };
-    case FETCH_PRODUCT_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        product: action.payload,
-      };
-    case FETCH_PRODUCT_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    case ADD_TO_CART:
-      // eslint-disable-next-line no-case-declarations
-      const existingItem = state.cart.items.find(
-        (item) => item.id_product === action.payload.id_product
-      );
-      if (existingItem) {
-        return {
-          ...state,
-          cart: {
-            ...state.cart,
-            items: state.cart.items.map((item) =>
-              item.id_product === action.payload.id_product
-                ? { ...item, quantity: item.quantity + 1 }
-                : item
-            ),
-            totalItems: state.cart.totalItems + 1,
-            totalPrice: state.cart.totalPrice + action.payload.price,
-          },
-        };
-      } else {
-        return {
-          ...state,
-          cart: {
-            ...state.cart,
-            items: [...state.cart.items, { ...action.payload, quantity: 1 }],
-            totalItems: state.cart.totalItems + 1,
-            totalPrice: state.cart.totalPrice + action.payload.price,
-          },
-        };
-      }
-    case REMOVE_FROM_CART:
-      const itemToRemove = state.cart.items.find(
-        (item) => item.id_product === action.payload
-      );
-      if (!itemToRemove) return state;
-
-      return {
-        ...state,
-        cart: {
-          ...state.cart,
-          items: state.cart.items.filter(
-            (item) => item.id_product !== action.payload
-          ),
-          totalItems: state.cart.totalItems - itemToRemove.quantity,
-          totalPrice:
-            state.cart.totalPrice - itemToRemove.price * itemToRemove.quantity,
-        },
-      };
-    case INCREMENT_QUANTITY:
-      return {
-        ...state,
-        cart: {
-          ...state.cart,
-          items: state.cart.items.map((item) =>
-            item.id_product === action.payload
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-          totalItems: state.cart.totalItems + 1,
-          totalPrice:
-            state.cart.totalPrice +
-            state.cart.items.find((item) => item.id_product === action.payload)
-              .price,
-        },
-      };
-    case DECREMENT_QUANTITY:
-      const itemToDecrement = state.cart.items.find(
-        (item) => item.id_product === action.payload
-      );
-      if (itemToDecrement.quantity === 1) {
-        return {
-          ...state,
-          cart: {
-            ...state.cart,
-            items: state.cart.items.filter(
-              (item) => item.id_product !== action.payload
-            ),
-            totalItems: state.cart.totalItems - 1,
-            totalPrice: state.cart.totalPrice - itemToDecrement.price,
-          },
-        };
-      }
-      return {
-        ...state,
-        cart: {
-          ...state.cart,
-          items: state.cart.items.map((item) =>
-            item.id_product === action.payload
-              ? { ...item, quantity: item.quantity - 1 }
-              : item
-          ),
-          totalItems: state.cart.totalItems - 1,
-          totalPrice: state.cart.totalPrice - itemToDecrement.price,
-        },
-      };
-    case CLEAR_CART:
-      return {
-        ...state,
-        cart: {
-          items: [],
-          totalItems: 0,
-          totalPrice: 0,
-        },
-      };
-    case ORDER_CREATE_REQUEST:
-      return {
-        ...state,
-        order: {
-          ...state.order,
-          loading: true,
-          success: false,
-          error: null,
-        },
-      };
-    case ORDER_CREATE_SUCCESS:
-      return {
-        ...state,
-        order: {
-          ...state.order,
-          loading: false,
-          success: true,
-          order: action.payload,
-          error: null,
-        },
-      };
-    case ORDER_CREATE_FAIL:
-      return {
-        ...state,
-        order: {
-          ...state.order,
-          loading: false,
-          success: false,
-          error: action.payload,
-        },
-      };
-
+  
     case USER_REGISTER_REQUEST:
       return {
         ...state,
@@ -434,224 +172,7 @@ const rootReducer = (state = initialState, action) => {
           userInfo: null,
         },
       };
-    case SET_SEARCH_TERM:
-      return {
-        ...state,
-        searchTerm: action.payload,
-      };
-    case SET_PRICE_FILTER:
-      return {
-        ...state,
-        priceFilter: action.payload,
-      };
-    case SET_CATEGORY_FILTER:
-      return {
-        ...state,
-        categoryFilter: action.payload,
-      };
-    case FETCH_PRODUCTS_REQUEST:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
-    case FETCH_PRODUCTS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        products: action.payload,
-      };
-    case FETCH_PRODUCTS_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    case CLEAR_ORDER_STATE:
-      return {
-        ...state,
-        order: {
-          loading: false,
-          success: false,
-          order: null,
-          error: null,
-        },
-      };
-    case FETCH_ORDERS_REQUEST:
-      return {
-        ...state,
-        orders: {
-          ...state.orders,
-          loading: true,
-          error: null,
-        },
-      };
-    case FETCH_ORDERS_SUCCESS:
-      return {
-        ...state,
-        orders: {
-          loading: false,
-          orders: action.payload,
-          error: null,
-        },
-      };
-    case FETCH_ORDERS_FAILURE:
-      return {
-        ...state,
-        orders: {
-          loading: false,
-          orders: [],
-          error: action.payload,
-        },
-      };
-    case FETCH_ALLS_ORDERS_REQUEST:
-      return {
-        ...state,
-        ordersGeneral: {
-          ...state.ordersGeneral,
-          loading: true,
-          error: null,
-        },
-      };
-    case FETCH_ALLS_ORDERS_SUCCESS:
-      return {
-        ...state,
-        ordersGeneral: {
-          loading: false,
-          orders: action.payload,
-          error: null,
-        },
-      };
-    case FETCH_ALLS_ORDERS_FAILURE:
-      return {
-        ...state,
-        ordersGeneral: {
-          loading: false,
-          orders: [],
-          error: action.payload,
-        },
-      };
-    case UPDATE_ORDER_STATE_SUCCESS:
-      // Actualiza el estado de una orden específica dentro de ordersGeneral.orders
-      const updatedOrders = state.ordersGeneral.orders.map(
-        (order) => order.id_orderDetail === action.payload.id_orderDetail
-      );
-      return {
-        ...state,
-        ordersGeneral: {
-          ...state.ordersGeneral,
-          orders: updatedOrders,
-          error: null,
-        },
-      };
-
-    case UPDATE_ORDER_STATE_FAILURE:
-      return {
-        ...state,
-        ordersGeneral: {
-          ...state.ordersGeneral,
-          error: action.payload,
-        },
-      };
-    case UPDATE_PRODUCT_REQUEST:
-      return {
-        ...state,
-        updateProduct: {
-          ...state.updateProduct,
-          loading: true,
-        },
-      };
-    case UPDATE_PRODUCT_SUCCESS:
-      return {
-        ...state,
-        updateProduct: {
-          ...state.updateProduct,
-          loading: false,
-          product: action.payload.product,
-        },
-      };
-    case UPDATE_PRODUCT_FAILURE:
-      return {
-        ...state,
-        updateProduct: {
-          ...state.updateProduct,
-          loading: false,
-          error: action.payload,
-        },
-      };
-    case DELETE_PRODUCT_REQUEST:
-      return {
-        ...state,
-        loading: true,
-      };
-    case DELETE_PRODUCT_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        products: state.products.filter(
-          (product) => product.id_product !== action.payload
-        ),
-      };
-    case DELETE_PRODUCT_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    case CATEGORY_CREATE_REQUEST:
-      return {
-        ...state,
-        categories: {
-          ...state.categories,
-          loading: true,
-        },
-      };
-    case CATEGORY_CREATE_SUCCESS:
-      return {
-        ...state,
-        categories: {
-          ...state.categories,
-          loading: false,
-          data: [...state.categories.data, action.payload.data.category],
-        },
-      };
-    case CATEGORY_CREATE_FAIL:
-      return {
-        ...state,
-        categories: {
-          ...state.categories,
-          loading: false,
-          error: action.payload,
-        },
-      };
-    case FETCH_LATEST_ORDER_REQUEST:
-      return {
-        ...state,
-        latestOrder: {
-          ...state.latestOrder,
-          loading: true,
-          error: null,
-        },
-      };
-    case FETCH_LATEST_ORDER_SUCCESS:
-      return {
-        ...state,
-        latestOrder: {
-          ...state.latestOrder,
-          loading: false,
-          success: true,
-          data: action.payload.data,
-        },
-      };
-    case FETCH_LATEST_ORDER_FAILURE:
-      return {
-        ...state,
-        latestOrder: {
-          ...state.latestOrder,
-          loading: false,
-          error: action.payload,
-        },
-      };
+   
       case FETCH_SUBSCRIPTIONS_REQUEST:
       return {
         ...state,
