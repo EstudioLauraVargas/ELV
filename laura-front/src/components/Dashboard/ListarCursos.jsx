@@ -124,21 +124,21 @@ const ListarCursos = () => {
                 <td className="py-2 px-4 border-b">
                   {curso.description || "Sin descripción"}
                 </td>
-                <td className="py-2 px-4 border-b">
+                <td className="py-2 px-4 border-b ">
                   {curso.Videos.length > 0
                     ? curso.Videos.map((video) => (
                         <div key={video.idVideo} className="mb-2">
                           <img
                             src={video.thumbnail}
                             alt={video.title}
-                            className="w-16 h-auto inline-block mr-2"
+                            className="w-16 h-auto inline-block ml-10"
                           />
                           <span>{video.title}</span>
                         </div>
                       ))
                     : "No hay videos disponibles"}
                 </td>
-                <td className="py-2 px-4 border-b flex items-center">
+                <td className="py-2 px-4 border-b flex items-center ml-6">
               <button
                 onClick={() => handleEdit(curso.idCourse)}
                 className="text-pink-500 hover:text-pink-700 mr-2"
@@ -147,7 +147,7 @@ const ListarCursos = () => {
               </button>
               <button
                 onClick={() => handleDelete(curso.idCourse)}
-                className="text-grey-300 hover:text-grey-700"
+                className="text-gray-500 hover:text-gray-600"
               >
                 <FaTrash size={20} />
               </button>

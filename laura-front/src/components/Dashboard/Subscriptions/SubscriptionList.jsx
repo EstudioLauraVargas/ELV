@@ -43,54 +43,53 @@ const SubscriptionList = () => {
             style={{ backgroundImage: `url(${backgroundImage})` }}
         >
             <Navbar />
-
             <div className="container mx-auto p-4 mt-24 relative z-10 bg-white bg-opacity-80 rounded-lg shadow-lg max-w-4xl">
-                <div className="flex justify-between items-center mb-4">
-                    <button
-                        onClick={handleGoToPanel}
-                        className="bg-pink-500 text-white px-4 py-2 rounded"
-                    >
-                        Ir a Panel
-                    </button>
-                    <h1 className="text-2xl font-bold text-center flex-grow">
-                        Suscripciones
-                    </h1>
-                </div>
+         <div className="flex justify-between items-center mb-4">
+  <button
+    onClick={handleGoToPanel}
+    className="bg-pink-500 text-white px-4 py-2 rounded"
+  >
+    Ir a Panel
+  </button>
+  <h1 className="text-2xl font-bold text-center flex-grow">
+    Suscripciones 
+  </h1>
+</div>
 
-                <table className="min-w-full bg-white border border-gray-200">
-                    <thead>
-                        <tr className="border-b">
-                            <th className="py-2 px-4 text-left">Tipo</th>
-                            <th className="py-2 px-4 text-left">Precio</th>
-                            <th className="py-2 px-4 text-left">Editar / Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {subscriptions.map((sub) => (
-                            <tr key={sub.idSub} className="border-b">
-                                <td className="py-2 px-4">{sub.typeSub}</td>
-                                <td className="py-2 px-4">${sub.price.toFixed(2)}</td>
-                                <td className="py-2 px-4 border-b flex items-center">
-                                    <Link
-                                        to={`/editarSubs/${sub.idSub}`}
-                                        className="text-blue-500 hover:underline mr-4"
-                                    >
-                                        <FaEdit size={20} />
-                                    </Link>
-                                    <button
-                                        onClick={() => handleDelete(sub.idSub)}
-                                        className="text-red-500 hover:underline"
-                                    >
-                                        <FaTrash size={20} />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
+        <table className="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr className="border-b">
+              <th className="py-2 px-4 text-left">Tipo</th>
+              <th className="py-2 px-4 text-left">Precio</th>
+              <th className="py-2 px-4 text-left">Editar / Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {subscriptions.map((sub) => (
+              <tr key={sub.idSub} className="border-b">
+                <td className="py-2 px-4">{sub.typeSub}</td>
+                <td className="py-2 px-4">${sub.price.toFixed(2)}</td>
+                <td className="py-2 px-4 border-b flex items-center ml-6">
+                  <Link
+                    to={`/editarSubs/${sub.idSub}`}
+                    className="text-blue-500 hover:underline mr-4"
+                  >
+                    <FaEdit size={20} />
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(sub.idSub)}
+                    className="text-gray-500 hover:underline"
+                  >
+                    <FaTrash size={20} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      </div>
+       );
 };
 
 export default SubscriptionList;
