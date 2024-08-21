@@ -60,7 +60,7 @@ const SubscriptionList = () => {
               <tr key={sub.idSub} className="border-b">
                 <td className="py-2 px-4">{sub.typeSub}</td>
                 <td className="py-2 px-4">${sub.price.toFixed(2)}</td>
-                <td className="py-2 px-4 border-b flex items-center">
+                <td className="py-2 px-4 border-b flex items-center ml-6">
                   <Link
                     to={`/editarSubs/${sub.idSub}`}
                     className="text-blue-500 hover:underline mr-4"
@@ -69,7 +69,7 @@ const SubscriptionList = () => {
                   </Link>
                   <button
                     onClick={() => handleDelete(sub.idSub)}
-                    className="text-red-500 hover:underline"
+                    className="text-gray-500 hover:underline"
                   >
                     <FaTrash size={20} />
                   </button>

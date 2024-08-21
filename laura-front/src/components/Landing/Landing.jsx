@@ -9,6 +9,7 @@ import logolaura from "../../lauraassets/logolaura.png"
 //import sombras from "../../lauraassets/sombras.png"
 import { Fade } from "react-awesome-reveal";
 import { useNavigate } from 'react-router-dom'
+import WhatssapButton from '../WhatsAppButton'
 
 import { FaFacebook, FaInstagram, FaLocationDot,   FaWhatsapp } from "react-icons/fa6";
 
@@ -77,7 +78,7 @@ const Landing = () => {
                         <div className={style.descProc}>Somos la única tienda física especializada en insumos para aplicación de cejas y pestañas en el Meta. </div>
                         <button className={style.buttonProc}>Saber mas</button>
                     </div>
-
+<WhatssapButton/>
                 </div>
             </div>
             <div className={style.view6}>
