@@ -27,6 +27,6 @@ module.exports = {
     getSubscriptions:catchedAsync(require("./Suscription/getSubscriptions")),
     getSubscriptionById:catchedAsync(require("./Suscription/getSubscriptionById")),
     updateSubscription:catchedAsync(require("./Suscription/updateSubscription")),
-
+    webhook:catchedAsync(require("./webhook"))   
 }
 
