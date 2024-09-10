@@ -208,7 +208,7 @@ export const fetchSubscriptionById = (idSub) => async (dispatch) => {
 export const createSubscription = (subscriptionData) => async (dispatch) => {
   dispatch({ type: CREATE_SUBSCRIPTION_REQUEST });
   try {
-    const response = await axios.post('${BASE_URL}/suscripcion', subscriptionData);
+    const response = await axios.post(`${BASE_URL}/suscripcion`, subscriptionData);
     dispatch({ type: CREATE_SUBSCRIPTION_SUCCESS, payload: response.data.data });
   } catch (error) {
     dispatch({ type: CREATE_SUBSCRIPTION_FAILURE, payload: error.message });

@@ -13,10 +13,7 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      accessStartDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
+      
       durationDays: {
         type: DataTypes.INTEGER, 
         allowNull: false,
@@ -26,12 +23,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: true,
       },
-      subscriptionReminderSent: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-
+      
       price: {
         type: DataTypes.FLOAT,
         allowNull: false,

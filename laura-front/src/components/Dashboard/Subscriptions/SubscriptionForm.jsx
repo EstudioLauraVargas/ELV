@@ -13,7 +13,6 @@ const SubscriptionForm = () => {
   
   const [formData, setFormData] = useState({
     typeSub: '',
-    accessStartDate: '',
     durationDays: '',
     price: '',
     active: true,
@@ -71,17 +70,7 @@ const SubscriptionForm = () => {
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Fecha de Inicio</label>
-          <input
-            type="date"
-            name="accessStartDate"
-            value={formData.accessStartDate}
-            onChange={handleChange}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            required
-          />
-        </div>
+       
         <div className="mb-4">
           <label className="block text-gray-700">Duración (días)</label>
           <input

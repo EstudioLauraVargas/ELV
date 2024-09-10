@@ -4,7 +4,7 @@ const response = require('../../utils/response');
 // Actualizar una suscripción por ID
 module.exports = async (req, res) => {
   const { idSub } = req.params;
-  const { typeSub, accessStartDate, durationDays, price, active, subscriptionReminderSent } = req.body;
+  const { typeSub, durationDays, price, active } = req.body;
 
   try {
     // Buscar la suscripción por su ID
@@ -17,11 +17,10 @@ module.exports = async (req, res) => {
 
     // Actualizar los campos de la suscripción solo si están presentes en la solicitud
     subscription.typeSub = typeSub || subscription.typeSub;
-    subscription.accessStartDate = accessStartDate || subscription.accessStartDate;
     subscription.durationDays = durationDays || subscription.durationDays;
     subscription.price = price || subscription.price;
     subscription.active = active !== undefined ? active : subscription.active;
-    subscription.subscriptionReminderSent = subscriptionReminderSent !== undefined ? subscriptionReminderSent : subscription.subscriptionReminderSent;
+   
 
     // Guardar los cambios en la base de datos
     await subscription.save();

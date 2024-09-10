@@ -4,17 +4,16 @@ const response = require("../../utils/response");
 
 module.exports = async (req, res) => {
   try {
-    const { typeSub, accessStartDate, durationDays, price } = req.body;
+    const { typeSub,  durationDays, price } = req.body;
 
     // Validar los datos de entrada
-    if (!typeSub || !accessStartDate || !durationDays || !price) {
+    if (!typeSub || !durationDays || !price) {
       return response(res, 400, null, 'Faltan datos requeridos');
     }
 
     // Crear la suscripción
     const newSubscription = await Subscription.create({
       typeSub,
-      accessStartDate,
       durationDays,
       price
     });
