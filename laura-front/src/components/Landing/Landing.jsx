@@ -1,13 +1,8 @@
 import { NavLink } from 'react-router-dom'
 import style from './Landing.module.css'
-import laura1 from "../../lauraassets/laura1.png"
-import laura2 from "../../lauraassets/laura2.png"
 import procedimientos from "../../lauraassets/procedimientos.png"
 import cursos from "../../lauraassets/cursos.png"
 import insumos from "../../lauraassets/insumos.png"
-import logolaura from "../../lauraassets/logolaura.png"
-//import sombras from "../../lauraassets/sombras.png"
-import { Fade } from "react-awesome-reveal";
 import { useNavigate } from 'react-router-dom'
 import WhatssapButton from '../WhatsAppButton'
 
@@ -23,9 +18,6 @@ const Landing = () => {
 
     return  (
         <div className={style.landing}>
-            <NavLink to="/login">
-                <img className={style.navBar} src={logolaura} alt="Logo" />
-            </NavLink>
             <div className={style.view1}>
                
                 <div className={style.fondo}></div>

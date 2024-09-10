@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import Navbar from './Navbar';
+
 
 
 const Panel = () => {
   return (
-    <div className="h-screen w-full pt-20 p-8 bg-slate-600 mt-4">
-        <Navbar/>
+    <div className="h-screen w-full pt-20 p-8 bg-slate-600 ">
+      
       <h1 className="text-3xl font-bold mb-6 text-white text-center">Panel de Administrador</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
        

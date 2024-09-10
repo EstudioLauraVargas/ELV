@@ -20,10 +20,12 @@ import EditarCurso from "./components/Dashboard/EditarCursos";
 import Suscripciones from "./components/Dashboard/Subscriptions/Suscripciones";
 import EditSuscription from "./components/Dashboard/Subscriptions/EditSuscription ";
 import PaymentDetail from "./components/Dashboard/Subscriptions/PaymentDetail";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
-  
+  <div>
+    <Navbar />
       <Routes>
       
       <Route path="/" element={<Landing />} />
@@ -47,7 +49,7 @@ function App() {
         <Route path="/editarSubs/:idSub" element={<EditSuscription/>} />
         <Route path="/detallePago/:idSub" element={<PaymentDetail />} />
       </Routes>
-   
+      </div>
   );
 }
 
