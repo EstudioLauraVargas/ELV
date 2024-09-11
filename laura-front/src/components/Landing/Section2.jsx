@@ -22,7 +22,7 @@ const Section2 = () => {
         <div className="flex flex-col lg:flex-row items-center lg:justify-center px-4 lg:px-8 w-full">
           {/* Recuadro semitransparente con texto clickeable */}
           <a 
-            href="#"
+            href="/cursos"
             className="w-full lg:w-1/3 h-64 flex items-center justify-center bg-pink-500 bg-opacity-70 text-white text-center p-8 rounded-lg shadow-lg z-20 no-underline hover:opacity-80"
           >
             <span className="text-xl lg:text-3xl font-bold">
