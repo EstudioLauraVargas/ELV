@@ -43,7 +43,7 @@ const Landing = () => {
           className="no-underline"
           href="https://wa.me/573502142355"
         >
-          <button className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded">
+          <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-xl uppercase py-4 px-6 rounded-2xl">
             Saber más
           </button>
         </a>
@@ -61,19 +61,19 @@ const Landing = () => {
                         <img className={style.imgProc} src={procedimientos} />
                         <h4 className={style.titleProc}>Procedimientos</h4>
                         <div className={style.descProc}>Realizados por especialistas expertas en cada área, que harán que realces tu belleza natural </div>
-                        <NavLink to="/procedimiento"><button className={style.buttonProc}>Saber mas</button></NavLink>
+                        <NavLink to="/procedimiento"><button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-xl uppercase py-4 px-6 rounded-2xl m-4">Saber mas</button></NavLink>
                     </div>
                     <div className={style.procedimiento}>
                         <img className={style.imgProc} src={cursos} />
                         <h4 className={style.titleProc}>cursos personalizados</h4>
                         <div className={style.descProc}>Aprende y perfecciona tu técnica de la mano de Laura y lleva tu empresa a otro nivel.</div>
-                        <NavLink to="/cursos"><button className={style.buttonProc}>Saber mas</button></NavLink>
+                        <NavLink to="/cursos"><button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-xl uppercase py-4 px-6 rounded-2xl m-4">Saber mas</button></NavLink>
                     </div>
                     <div className={style.procedimiento}>
                         <img className={style.imgProc} src={insumos} />
                         <h4 className={style.titleProc}>Insumos</h4>
                         <div className={style.descProc}>Somos la única tienda física especializada en insumos para aplicación de cejas y pestañas en el Meta. </div>
-                        <button className={style.buttonProc}>Saber mas</button>
+                        <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-xl uppercase py-4 px-6 rounded-2xl m-4">Saber mas</button>
                     </div>
 <WhatssapButton/>
                 </div>
