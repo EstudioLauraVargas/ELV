@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}", // Revisa que los corchetes y comas estén correctamente
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        button:"#facdd4"
+      }
+    },
   },
   plugins: [],
 }

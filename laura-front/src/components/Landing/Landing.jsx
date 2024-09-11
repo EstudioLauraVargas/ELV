@@ -3,9 +3,10 @@ import style from './Landing.module.css'
 import procedimientos from "../../lauraassets/procedimientos.png"
 import cursos from "../../lauraassets/cursos.png"
 import insumos from "../../lauraassets/insumos.png"
+import fondo from "../../lauraassets/bg1.png"
 import { useNavigate } from 'react-router-dom'
 import WhatssapButton from '../WhatsAppButton'
-
+import Section2 from './Section2'
 import { FaFacebook, FaInstagram, FaLocationDot,   FaWhatsapp } from "react-icons/fa6";
 
 const Landing = () => {
@@ -18,36 +19,40 @@ const Landing = () => {
 
     return  (
         <div className={style.landing}>
-            <div className={style.view1}>
-               
-                <div className={style.fondo}></div>
-                <div className={style.info}>
-                    <p className={style.title}>realzamos tu belleza</p>
-                    <p className={style.subtitle}>En nuestro estudio de cejas y pestañas creemos que la belleza es única y está en cada persona.
-                        Por eso, nos dedicamos a resaltar la belleza natural de cada uno, fomentando la autenticidad y la
-                        confianza a través de tratamientos especializados y personalizados.</p>
-                        <a target="_blank" className={style.noLink} href="https://wa.me/573502142355"><button className={style.button}>Saber mas</button></a>
-       
-               
-                </div>
-                
-            </div>
-            <div className={style.view2}>
-                <img className={style.imgAbsoluta} />
-                <img className={style.imgAbsoluta2} />
-                
-                <div className={style.info2}>
-                    <p className={style.title2}>acerca de laura vargas</p>
-                    <p className={style.subtitle2}>Laura es micropigmentadora especialista en cejas y labios, se ha capacitado desde hace mas de
-                        4 años para tener técnicas exclusivas con acabados super naturales que busca realzar la belleza de sus clientas y estudiantes.
-                        <br></br><br></br>
-                        <span style={{ color: "#e59595", fontSize:'1.6em'}}>Actualmente dicta cursos personalizados, enfocados en crear artistas especialistas en Micropigmentación, Cejas y Pestañas.</span>
-                        <br></br><br></br>
-                        Cuenta con un equipo de trabajo entrenado para dar lo mejor en lo que saben hacer, y que busca atender a cada una de
-                        nuestras clientas de forma especial para hacerlas sentir seguras y confiadas de su belleza.  </p>
-                </div>
-                
-            </div>
+     
+    <div className="relative h-screen flex justify-center items-center text-white">
+      {/* Imagen de fondo */}
+      <div
+        className="absolute inset-0 bg-no-repeat bg-center bg-cover brightness-50"
+        style={{ backgroundImage: `url(${fondo})` }}
+      ></div>
+
+      {/* Contenido */}
+      <div className="relative z-10 flex flex-col items-center text-center lg:text-left px-4 md:px-8 lg:px-16">
+        <p className="uppercase text-4xl md:text-5xl lg:text-[6.5em] font-bold italic leading-tight lg:leading-[100px] w-full md:w-[50vw] lg:w-[33vw] mb-4">
+          realzamos tu belleza
+        </p>
+        <p className="w-full md:w-[50vw] lg:w-[30vw] font-quicksand font-semibold text-lg md:text-xl lg:text-[1.7em] mb-8">
+          En nuestro estudio de cejas y pestañas creemos que la belleza es única y está en cada persona.
+          Por eso, nos dedicamos a resaltar la belleza natural de cada uno, fomentando la autenticidad y la
+          confianza a través de tratamientos especializados y personalizados.
+        </p>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          className="no-underline"
+          href="https://wa.me/573502142355"
+        >
+          <button className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded">
+            Saber más
+          </button>
+        </a>
+        </div>
+        </div>
+
+            <Section2/>
+
+
             <div className={style.view3}>
                 <p className={style.title3}>¿Que vas a encontrar en Laura Vargas
                     cejas y pestañas?</p>
@@ -73,44 +78,69 @@ const Landing = () => {
 <WhatssapButton/>
                 </div>
             </div>
-            <div className={style.view6}>
-                <p className={style.title3}>Encuentranos en</p>
-                <div className={style.locations}>
-                    <div className={style.location}>
-                        <div className={style.mapa}>
-                            <iframe
-                                src="https://maps.google.com/maps?q=Cra.%2043a%20calle%2026c%2036,%20Buque,%20Villavicencio,%20Meta&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
-                                frameborder="0"
-                                className={style.map}
-                            ></iframe>
-                            {/* <iframe className={style.map} frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=Cra.+43a+#26c+-36,+Buque,+Villavicencio,+Meta&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"></iframe> */}
-
-                        </div>
-                        <div className={style.infoloc}>
-                            <a target="_blank" className={style.noLink} href="https://maps.app.goo.gl/urGxSpTtibWLYTsF8"><p className={style.texto}><FaLocationDot /> El Buque, Cra. 43a #26c -36,<br></br> Buque, Villavicencio, Meta.</p></a>
-                            <a target="_blank" className={style.noLink} href="https://www.facebook.com/lauravargas.cp/"><p className={style.texto}><FaFacebook/> fucsiainsumosCP</p></a>
-                            <a target="_blank" className={style.noLink} href="https://www.instagram.com/fucsiainsumos/"><p className={style.texto}><FaInstagram /> @fucsiainsumos</p></a>
-                            <a target="_blank" className={style.noLink} href="https://wa.me/573114928756"><p className={style.texto}><FaWhatsapp /> +57 311 4922856</p></a>
-                        </div>
-                    </div>
-                    <div className={style.location}>
-                        <div className={style.mapa}>
-                            <iframe
-                                src="https://maps.google.com/maps?q=CC%20Balcones%20Plaza,%20Local%20L29C,%20Restrepo,%20Meta&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
-                                frameborder="0"
-                                className={style.map}
-                            ></iframe>
-                        </div>
-                        <div className={style.infoloc}>
-                        <a target="_blank" className={style.noLink} href="https://maps.app.goo.gl/mjDcG7ZvJjjW6HzGA"><p className={style.texto}><FaLocationDot /> CC Balcones Plaza Local L29C,<br></br> Restrepo Meta.</p></a>
-                        <a target="_blank" className={style.noLink} href="https://www.facebook.com/lauravargas.cp/"><p className={style.texto}><FaFacebook/> lauravargas.cp</p></a>
-                        <a target="_blank" className={style.noLink} href="https://www.instagram.com/lauravargas.cpmu/"><p className={style.texto}><FaInstagram /> @lauravargas.cpmu</p></a>
-                        <a target="_blank" className={style.noLink} href="https://wa.me/573502142355"><p className={style.texto}><FaWhatsapp /> +57 350 2142355</p></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div className="py-12 bg-black">
+      <p className="text-3xl md:text-5xl font-bold text-center text-white mb-8">Encuéntranos en</p>
+      <div className="flex flex-col md:flex-row justify-center gap-8 px-4 md:px-8">
+        {/* Ubicación 1 */}
+        <div className="flex flex-col w-full md:w-1/2">
+          <div className="relative w-full h-64 mb-4">
+            <iframe
+              src="https://maps.google.com/maps?q=Cra.%2043a%20calle%2026c%2036,%20Buque,%20Villavicencio,%20Meta&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
+              frameBorder="0"
+              className="absolute inset-0 w-full h-full object-cover rounded-lg"
+              allowFullScreen
+              aria-hidden="false"
+              tabIndex="0"
+            ></iframe>
+          </div>
+          <div className="p-4 bg-pink-200 bg-opacity-90 rounded-lg shadow-md">
+            <a target="_blank" rel="noopener noreferrer" href="https://maps.app.goo.gl/urGxSpTtibWLYTsF8" className="text-gray-600 hover:underline block mb-3 text-lg md:text-xl">
+              <FaLocationDot className="inline mr-2 text-red-600"/> El Buque, Cra. 43a #26c -36,<br /> Buque, Villavicencio, Meta.
+            </a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/lauravargas.cp/" className="text-gray-600 hover:underline block mb-3 text-lg md:text-xl">
+              <FaFacebook className="inline mr-2 text-blue-800"/> fucsiainsumosCP
+            </a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/fucsiainsumos/" className="text-gray-600 hover:underline block mb-3 text-lg md:text-xl">
+              <FaInstagram className="inline mr-2 text-pink-700"/> @fucsiainsumos
+            </a>
+            <a target="_blank" rel="noopener noreferrer" href="https://wa.me/573114928756" className="text-gray-600 hover:underline text-lg md:text-xl">
+              <FaWhatsapp className="inline mr-2 text-green-600"/> +57 311 4922856
+            </a>
+          </div>
         </div>
+
+        {/* Ubicación 2 */}
+        <div className="flex flex-col w-full md:w-1/2 ">
+          <div className="relative w-full h-64 mb-4">
+            <iframe
+              src="https://maps.google.com/maps?q=CC%20Balcones%20Plaza,%20Local%20L29C,%20Restrepo,%20Meta&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
+              frameBorder="0"
+              className="absolute inset-0 w-full h-full object-cover rounded-lg"
+              allowFullScreen
+              aria-hidden="false"
+              tabIndex="0"
+            ></iframe>
+          </div>
+          <div className="p-4 bg-pink-200 bg-opacity-90 rounded-lg shadow-md">
+            <a target="_blank" rel="noopener noreferrer" href="https://maps.app.goo.gl/mjDcG7ZvJjjW6HzGA" className="text-gray-600 hover:underline block mb-3 text-lg md:text-xl">
+              <FaLocationDot className="inline mr-2  text-red-600"/> CC Balcones Plaza Local L29C,<br /> Restrepo Meta.
+            </a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/lauravargas.cp/" className="text-gray-600 hover:underline block mb-3 text-lg md:text-xl">
+              <FaFacebook className="inline mr-2 text-blue-800"/> lauravargas.cp
+            </a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/lauravargas.cpmu/" className="text-gray-600 hover:underline block mb-3 text-lg md:text-xl">
+              <FaInstagram className="inline mr-2 text-pink-700"/> @lauravargas.cpmu
+            </a>
+            <a target="_blank" rel="noopener noreferrer" href="https://wa.me/573502142355" className="text-gray-600 hover:underline text-lg md:text-xl">
+              <FaWhatsapp className="inline mr-2 text-green-600"/> +57 350 2142355
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+            </div>
+       
     )
 }
 
