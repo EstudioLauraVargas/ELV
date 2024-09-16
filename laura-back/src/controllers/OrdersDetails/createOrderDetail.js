@@ -1,74 +1,75 @@
-
-const { OrderDetail, Product } = require("../../data");
+const { OrderCompra, Subscription } = require("../../data");
 const response = require("../../utils/response");
-const { v4: uuidv4 } = require('uuid');
-const crypto = require('crypto');
+const { v4: uuidv4 } = require("uuid");
+const crypto = require("crypto");
 
-const secretoIntegridad = 'test_integrity_VMVZ36lyoQot5DsN0fBXAmp4onT5T86G'; 
+const secretoIntegridad = "test_integrity_VMVZ36lyoQot5DsN0fBXAmp4onT5T86G";
 
-function generarFirmaIntegridad(id_orderDetail, monto, moneda, secretoIntegridad) {
-  const cadenaConcatenada = `${id_orderDetail}${monto}${moneda}${secretoIntegridad}`;
-  return crypto.createHash('sha256').update(cadenaConcatenada).digest('hex');
+function generarFirmaIntegridad(orderId, monto, moneda, secretoIntegridad) {
+  const cadenaConcatenada = `${orderId}${monto}${moneda}${secretoIntegridad}`;
+  return crypto.createHash("sha256").update(cadenaConcatenada).digest("hex");
 }
 
 module.exports = async (req, res) => {
   try {
-    const { date, amount, quantity, state_order, id_product, address, deliveryAddress, n_document } = req.body;
+    const { date, amount, subscriptions, state_order, address, deliveryAddress, n_document } = req.body;
 
-    if (!date || !amount || !quantity || !state_order || !id_product || !address ) {
+    if (!date || !amount || !subscriptions || !state_order || !address) {
       return response(res, 400, { error: "Missing Ordering Data" });
     }
-    if (address === 'Envio a domicilio' && !deliveryAddress) {
+    if (address === "Envio a domicilio" && !deliveryAddress) {
       return response(res, 400, { error: "Missing delivery address" });
     }
 
-    const lastOrder = await OrderDetail.findOne({ order: [['createdAt', 'DESC']] });
-    const lastOrderNumber = lastOrder ? lastOrder.id_orderDetail : 0;
-    const referencia = `SO-${lastOrderNumber + 1}`;
     
-    // Generar la firma de integridad
+    const lastOrder = await OrderCompra.findOne({ order: [["createdAt", "DESC"]] });
+    const lastOrderNumber = lastOrder ? lastOrder.orderId : 0;
+    const referencia = `SO-${lastOrderNumber + 1}`;
+
+    
     const integritySignature = generarFirmaIntegridad(
       referencia,
-      amount * 100, // Convertir el monto a centavos
-      'COP',
+      amount * 100, 
+      "COP",
       secretoIntegridad
     );
 
-    const orderDetailData = {
-     id_category: uuidv4(),
+    const orderCompraData = {
+      orderId: uuidv4(),
       date,
       amount,
-      quantity,
       state_order,
       address,
-      deliveryAddress: address === 'Envio a domicilio' ? deliveryAddress : null,
+      deliveryAddress: address === "Envio a domicilio" ? deliveryAddress : null,
       n_document,
       integritySignature,
     };
 
-    const orderDetail = await OrderDetail.create(orderDetailData);
-    const productUpdates = id_product.map(productId => ({
-      id_orderDetail: orderDetail.id_orderDetail,
-      id_product: productId
+    const orderCompra = await OrderCompra.create(orderCompraData);
+
+    
+    const subscriptionUpdates = subscriptions.map((sub) => ({
+      orderId: orderCompra.orderId,
+      id_subscription: sub.id_subscription, 
+      duration: sub.duration, 
     }));
 
-    await Promise.all(productUpdates.map(async ({ id_orderDetail, id_product }) => {
-      await Product.update({ id_orderDetail }, { where: { id_product } });
-    }));
+    await Subscription.bulkCreate(subscriptionUpdates);
 
-    const updatedOrderDetail = await OrderDetail.findOne({
-      where: { id_orderDetail: orderDetail.id_orderDetail },
+    const updatedOrderCompra = await OrderCompra.findOne({
+      where: { orderId: orderCompra.orderId },
       include: {
-        model: Product,
-        as: 'products',
-        attributes: ['id_product'],
-      }
+        model: Subscription,
+        as: "subscriptions",
+        attributes: ["id_subscription", "duration"], 
+      },
     });
-    console.log("Order created:", updatedOrderDetail);
-    console.log("Order created:", orderDetail);
-    return response(res, 201, { orderDetail });
+
+    console.log("Order created:", updatedOrderCompra);
+    return response(res, 201, { orderCompra: updatedOrderCompra });
   } catch (error) {
-    console.error("Error creating orderDetail:", error);
+    console.error("Error creating orderCompra:", error);
     return response(res, 500, { error: error.message });
   }
 };
+

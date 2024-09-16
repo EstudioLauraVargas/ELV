@@ -1,27 +1,25 @@
-const { OrderDetail } = require("../../data");
+const { OrderCompra, Subscription } = require("../../data");
 const response = require("../../utils/response");
 
 module.exports = async (req, res) => {
-  const { id_orderDetail } = req.params;
+  const { orderId } = req.params;
   const { state_order, trackingNumber, transaction_status } = req.body;
 
   try {
-    const orderDetail = await OrderDetail.findByPk(id_orderDetail);
+    const orderCompra = await OrderCompra.findByPk(orderId);
 
-    if (!orderDetail) {
+    if (!orderCompra) {
       return response(res, 404, { error: "Order Detail not found" });
     }
 
-    // Verificar si el valor del estado de la orden es válido
     const validStatesOrder = [
       "Pedido Realizado",
-      "En Preparación",
-      "Listo para entregar",
-      "Envío Realizado",
-      "Retirado",
+      "Activo",
+      "Finalizado"
     ];
+
     if (state_order && !validStatesOrder.includes(state_order)) {
-      return response(res, 400, { error: "Invalid state_order value" });
+      return response(res, 400, { error: `Invalid state_order value: ${state_order}` });
     }
 
     const validTransactionStates = [
@@ -31,35 +29,33 @@ module.exports = async (req, res) => {
       "Fallido",
       "Cancelado",
     ];
+
     if (
       transaction_status &&
       !validTransactionStates.includes(transaction_status)
     ) {
-      return response(res, 400, { error: "Invalid transaction_status value" });
+      return response(res, 400, { error: `Invalid transaction_status value: ${transaction_status}` });
     }
 
-    
     if (state_order) {
-      orderDetail.state_order = state_order;
+      orderCompra.state_order = state_order;
     }
 
-   
     if (trackingNumber) {
-      orderDetail.trackingNumber = trackingNumber;
+      orderCompra.trackingNumber = trackingNumber;
     }
 
-    
     if (transaction_status) {
-      orderDetail.transaction_status = transaction_status;
+      orderCompra.transaction_status = transaction_status;
     }
 
-    
-    await orderDetail.save();
+    await orderCompra.save();
 
-    return response(res, 200, { orderDetail });
+    return response(res, 200, { orderCompra });
   } catch (error) {
     console.error("Error updating order detail:", error);
     return response(res, 500, { error: error.message });
   }
 };
+
 

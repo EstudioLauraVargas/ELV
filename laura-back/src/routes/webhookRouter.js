@@ -2,18 +2,16 @@ const express = require("express");
 const router = express.Router();
 const webhook = require("../controllers/webhook");
 
-router.post('/', (req, res) => {
-    const event = req.body.event;
-    const transaction = req.body.data.transaction;
-  
-    // Aquí puedes hacer algo con los datos recibidos
-    console.log(`Evento: ${event}`);
-    console.log(`ID de Transacción: ${transaction.id}`);
-    console.log(`Referencia: ${transaction.reference}`);
-    console.log(`Estado: ${transaction.status}`);
-  
-    // Responder a Wompi para confirmar que recibiste el webhook
-    res.status(200).send('Webhook recibido');
-  });
+// Define el webhook como middleware para la ruta POST
+router.post('/', async (req, res) => {
+  try {
+    // Llama al controlador webhook para procesar el evento
+    await webhook(req, res);
+  } catch (error) {
+    // Si ocurre un error, devuelve un estado 500 con un mensaje adecuado
+    console.error('Error in webhook route:', error);
+    res.status(500).json({ error: 'Error processing webhook' });
+  }
+});
 
 module.exports = router;

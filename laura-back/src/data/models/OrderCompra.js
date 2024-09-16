@@ -4,22 +4,26 @@ module.exports = (sequelize) => {
   sequelize.define(
     'OrderCompra',
     {
-        orderId: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true,
-          },
-          
-          id_Sub: {
-            type: DataTypes.UUID,
-            allowNull: false,
-          },
-          date: {
-        type: DataTypes.DATEONLY,
+      orderId: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      id_Sub: {
+        type: DataTypes.INTEGER, // Relación con Subscription
         allowNull: false,
       },
-      quantity: {
-        type: DataTypes.INTEGER,
+      userId: { // Relación con User
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      startDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      endDate: {
+        type: DataTypes.DATEONLY, // Se calculará al aprobar la orden
         allowNull: false,
       },
       amount: {
@@ -27,36 +31,18 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       state_order: {
-        type: DataTypes.ENUM( 'Activo Desde', 'Activo Hasta'),
+        type: DataTypes.ENUM('Activo', 'Pendiente', 'Finalizado'),
         allowNull: false,
-       
-      },
-      integritySignature: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        defaultValue: 'Pendiente',
       },
       transaction_status: {
         type: DataTypes.ENUM('Pendiente', 'Aprobado', 'Rechazado', 'Fallido', 'Cancelado'),
         allowNull: false,
-        defaultValue: 'Pendiente',  
+        defaultValue: 'Pendiente',
       },
-      deletedAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: null,
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      }
-
-        },
-
+    },
+    {
+      timestamps: true,
+    }
   );
 };
