@@ -3,7 +3,7 @@ const { conn } = require("./src/data/index")
 const app = require('./src/app.js');
 const PORT = process.env.PORT || 3000;
 
-conn.sync({ force: true }).then(() => {
+conn.sync({ alter: true }).then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Listening on port: ${PORT} 🚀`);
   });

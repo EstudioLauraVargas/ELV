@@ -49,7 +49,7 @@ const sequelize = new Sequelize(
   sequelize.models = Object.fromEntries(capsEntries);
   
  
-  const { User, Course, Subscription, Video, Payment, OrderCompra } = sequelize.models;
+  const { User, Course, Subscription, Video, Payment, OrderCompra, CourseVideos } = sequelize.models;
 
 
 /////////////////////////////////////////RELACIONES//////////////////////////////////////

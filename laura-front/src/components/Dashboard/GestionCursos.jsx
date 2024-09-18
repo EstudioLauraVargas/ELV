@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
-import backgroundImage from "../../lauraassets/bg1.png"
+import backgroundImage from "../../lauraassets/bg1.png";
 
 const GestionCursos = () => {
   const dispatch = useDispatch();
@@ -19,20 +19,40 @@ const GestionCursos = () => {
     dispatch(fetchVideos());
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log("Videos fetched:", videos);
+  }, [videos]);
+
   const handleCheckboxChange = (idVideo) => {
-    setSelectedVideos((prevSelected) =>
-      prevSelected.includes(idVideo)
+    setSelectedVideos((prevSelected) => {
+      const isSelected = prevSelected.includes(idVideo);
+      const updatedSelected = isSelected
         ? prevSelected.filter((id) => id !== idVideo)
-        : [...prevSelected, idVideo]
-    );
+        : [...prevSelected, idVideo];
+      
+      console.log("Checkbox toggled:", idVideo);
+      console.log("Updated selectedVideos:", updatedSelected);
+      
+      return updatedSelected;
+    });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // Validación: al menos un video debe ser seleccionado
+    if (selectedVideos.length === 0) {
+      toast.error("Debes seleccionar al menos un video.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
     const courseData = {
       title: courseTitle,
       description: courseDescription,
-      idVideo: selectedVideos
+      idVideo: selectedVideos // Asegúrate de que el backend espera un array de idVideos
     };
     dispatch(createCourse(courseData))
       .then(() => {
@@ -47,7 +67,7 @@ const GestionCursos = () => {
         });
         setTimeout(() => {
           navigate("/panel");
-        }, 3000); // Redirige después de 3 segundos (el tiempo que dura el toast)
+        }, 3000); 
       })
       .catch((error) => {
         toast.error("Error al crear el curso. Inténtalo de nuevo.", {
@@ -73,16 +93,16 @@ const GestionCursos = () => {
     >
       <Navbar />
       <div className="container mx-auto p-4 mt-24 relative z-10 bg-white bg-opacity-80 rounded-lg shadow-lg max-w-4xl">
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        closeOnClick
-        pauseOnHover
-        draggable
-        theme="light"
-        style={{ zIndex: 9999 }}
-      />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          draggable
+          theme="light"
+          style={{ zIndex: 9999 }}
+        />
         <h1 className="text-2xl font-bold mb-4">Crear Nuevo Curso</h1>
         <form onSubmit={handleSubmit} className="mb-4 p-4 bg-gray-100 rounded-lg shadow-md">
           <div className="mb-4">
@@ -110,11 +130,12 @@ const GestionCursos = () => {
             Crear Curso
           </button>
           <button
-        onClick={handleGoToPanel}
-        className="bg-pink-500 text-white px-4 py-2 rounded"
-      >
-        Ir a Panel
-      </button>
+            type="button"
+            onClick={handleGoToPanel}
+            className="bg-pink-500 text-white px-4 py-2 rounded"
+          >
+            Ir a Panel
+          </button>
         </form>
         <h1 className="text-2xl font-bold mb-4">Videos del Canal</h1>
         {videos.length > 0 ? (
@@ -134,8 +155,10 @@ const GestionCursos = () => {
                   <td className="py-2 px-4 border-b text-center">
                     <input
                       type="checkbox"
+                      value={video.idVideo}
                       checked={selectedVideos.includes(video.idVideo)}
                       onChange={() => handleCheckboxChange(video.idVideo)}
+                      className="form-checkbox"
                     />
                   </td>
                   <td className="py-2 px-4 border-b">{video.title}</td>
@@ -166,7 +189,9 @@ const GestionCursos = () => {
   );
 };
 
-
 export default GestionCursos;
+
+
+
 
 

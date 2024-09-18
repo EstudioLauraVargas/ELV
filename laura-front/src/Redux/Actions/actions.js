@@ -8,6 +8,8 @@ import {
   CREATE_COURSE_REQUEST,
   CREATE_COURSE_SUCCESS,
   CREATE_COURSE_FAILURE,
+  GET_COURSES_SUCCESS, 
+  GET_COURSES_FAILURE,
   COURSE_UPDATE_REQUEST,
   COURSE_UPDATE_SUCCESS,
   COURSE_UPDATE_FAIL,
@@ -69,6 +71,7 @@ export const fetchVideos = () => async (dispatch) => {
 };
 
 
+// actions.js
 export const createCourse = (courseData) => async (dispatch) => {
   dispatch({ type: CREATE_COURSE_REQUEST });
   try {
@@ -76,8 +79,29 @@ export const createCourse = (courseData) => async (dispatch) => {
     dispatch({ type: CREATE_COURSE_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: CREATE_COURSE_FAILURE, payload: error.message });
+    throw error; 
   }
 };
+
+export const getCourses = () => {
+  return async (dispatch) => {
+      try {
+          const response = await axios.get(`${BASE_URL}/cursos`);
+          const courses = response.data; // Asegúrate de manejar el 'data' dentro de la respuesta
+          
+          dispatch({
+              type: GET_COURSES_SUCCESS,
+              payload: courses
+          });
+      } catch (error) {
+          dispatch({
+              type: GET_COURSES_FAILURE,
+              payload: error.message
+          });
+      }
+  };
+};
+
 
 export const updateCourse = (idCourse, updatedCourseData) => async (dispatch) => {
   try {

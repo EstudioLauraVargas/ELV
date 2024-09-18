@@ -6,21 +6,21 @@ import { fetchVideos } from '../../Redux/Actions/actions';
 const Videos = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const videos = useSelector(state => state.videos || []); // Asegurarse de que videos es un array
-    const [selectedVideo, setSelectedVideo] = useState(null); // Estado para el video seleccionado
+    const videos = useSelector(state => state.videos || []); 
+    const [selectedVideo, setSelectedVideo] = useState(null); 
 
     useEffect(() => {
         dispatch(fetchVideos());
     }, [dispatch, navigate]);
 
-    // Maneja el clic en un video para seleccionarlo
+   
     const handleVideoSelect = (video) => {
-        setSelectedVideo(video.youtube_id); // Guardar el ID del video seleccionado
+        setSelectedVideo(video.youtube_id); 
     };
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold">YouTube Videos</h1>
+            <h1 className="text-2xl font-bold">Curso Disponibles</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {videos.length > 0 ? (
                     videos.map(video => (

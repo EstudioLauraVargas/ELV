@@ -1,16 +1,18 @@
-import { NavLink } from "react-router-dom";
-import fondo2 from "../../lauraassets/bg2.png";
-import React from "react";
-import SubscriptionCarousel from "../Dashboard/Subscriptions/SubscriptionCarousel";
 
-const Cursos = () => {
+import { NavLink } from "react-router-dom";
+
+import CursosCarousel from "../Cursos/CursosCarousel";
+import fondo2 from "../../lauraassets/bg1.png"
+
+
+const CursosDisponibles = () => {
     return (
         <div className="landing bg-black text-white">
             <div className="view4 relative flex flex-col md:flex-row-reverse justify-center items-center gap-8 px-4 md:px-8 pt-10 md:pt-20 w-full max-w-full">
                 
                 {/* Carousel */}
                 <div className="w-full md:w-1/2 ">
-                    <SubscriptionCarousel />
+                    <CursosCarousel />
                 </div>
 
                 {/* Información del curso */}
@@ -22,7 +24,7 @@ const Cursos = () => {
                         En mis cursos personalizados, te enseño todos mis tips y técnicas que me han funcionado a lo largo de mi carrera y que te ayudarán a llevar tus procedimientos al nivel al que tanto has querido llegar.
                     </p>
                     <div className="buttons flex flex-col md:flex-row gap-4 mt-6 md:mt-8">
-                        <a target="_blank" href="/cursosDisponibles">
+                        <a target="_blank" href="/listaCursos">
                             <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-base sm:text-lg md:text-xl uppercase py-3 md:py-4 px-6 rounded-xl">
                                 Ver Cursos
                             </button>
@@ -42,7 +44,4 @@ const Cursos = () => {
     );
 };
 
-export default Cursos;
-
-
-
+export default CursosDisponibles

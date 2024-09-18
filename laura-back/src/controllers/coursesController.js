@@ -4,6 +4,7 @@ const response = require("../utils/response")
 
 
 const addCourse = async (req, res) => {
+  const transaction = await sequelize.transaction();
   try {
     const { title, description, idVideo } = req.body;
 
@@ -11,21 +12,41 @@ const addCourse = async (req, res) => {
     console.log("Course description:", description);
     console.log("Video IDs to associate:", idVideo);
 
-    // Crear el curso
-    const newCourse = await Course.create({ title, description });
+    // Validación básica
+    if (!title) {
+      return response(res, 400, null, "El título es obligatorio");
+    }
+
+    // Validar que idVideo sea un array si está presente
+    if (idVideo && !Array.isArray(idVideo)) {
+      return response(res, 400, null, "idVideo debe ser un array de IDs de videos");
+    }
+
+    // Crear el curso dentro de una transacción
+    const newCourse = await Course.create(
+      { title, description },
+      { transaction }
+    );
     console.log("Course created with ID:", newCourse.idCourse);
 
     // Asociar los videos existentes al curso
     if (idVideo && idVideo.length > 0) {
-      // Asegúrate de que los IDs de videos son válidos
-      try {
-        await newCourse.addVideos(idVideo);
-        console.log("Videos associated with course:", idVideo);
-      } catch (associationError) {
-        console.error("Error associating videos with course:", associationError);
-        throw associationError; // Re-lanzar el error para manejarlo en el bloque catch principal
+      // Verificar que los videos existen
+      const videos = await Video.findAll({
+        where: { idVideo: idVideo },
+        transaction,
+      });
+
+      if (videos.length !== idVideo.length) {
+        throw new Error("Algunos videos no existen");
       }
+
+      await newCourse.addVideos(idVideo, { transaction });
+      console.log("Videos associated with course:", idVideo);
     }
+
+    // Confirmar la transacción
+    await transaction.commit();
 
     // Responder con el curso creado y los videos asociados
     const courseWithVideos = await Course.findByPk(newCourse.idCourse, {
@@ -35,10 +56,13 @@ const addCourse = async (req, res) => {
 
     response(res, 201, courseWithVideos, "Curso creado correctamente");
   } catch (error) {
+    // Revertir la transacción en caso de error
+    await transaction.rollback();
     console.error("Error adding course:", error);
-    response(res, 500, null, "Error al agregar el curso");
+    response(res, 500, null, error.message || "Error al agregar el curso");
   }
 };
+
 
 
 
@@ -49,7 +73,7 @@ const updateCourse = async (req, res) => {
 
     // Buscar el curso por su ID
     const course = await Course.findByPk(idCourse, {
-      include: [Video], // Incluye los videos asociados al curso
+      include: [Video], 
     });
 
     if (!course) return res.status(404).json({ message: "Curso no encontrado" });

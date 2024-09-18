@@ -8,7 +8,7 @@ import backgroundImage from "../../lauraassets/bg1.png"
 import { BASE_URL } from "../../Config";
 
 const EditarCurso = () => {
-  const { idCourse } = useParams(); // Obtener el ID del curso desde la URL
+  const { idCourse } = useParams(); 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

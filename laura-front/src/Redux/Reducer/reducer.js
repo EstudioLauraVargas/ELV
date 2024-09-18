@@ -9,6 +9,8 @@ import {
   COURSE_UPDATE_REQUEST,
   COURSE_UPDATE_SUCCESS,
   COURSE_UPDATE_FAIL,
+  GET_COURSES_SUCCESS, 
+  GET_COURSES_FAILURE,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
@@ -80,6 +82,18 @@ const rootReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+
+      case GET_COURSES_SUCCESS:
+            return {
+                ...state,
+                courses: action.payload,
+                error: null
+            };
+        case GET_COURSES_FAILURE:
+            return {
+                ...state,
+                error: action.payload
+            };
       
     
       case CREATE_COURSE_REQUEST:
