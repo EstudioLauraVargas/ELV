@@ -22,6 +22,8 @@ import EditSuscription from "./components/Dashboard/Subscriptions/EditSuscriptio
 import PaymentDetail from "./components/Dashboard/Subscriptions/PaymentDetail";
 import Navbar from "./components/Navbar";
 import CursosDisponibles from "./components/Cursos/CursosDisponibles";
+import TiendaCursos from "./components/Cursos/TiendaCursos";
+import CourseDetail from "./components/Cursos/CourseDetail";
 
 function App() {
   return (
@@ -44,6 +46,8 @@ function App() {
         <Route path="/listarCursos" element={<ListarCursos/>} />
         <Route path="/editarCurso/:idCourse" element={<EditarCurso/>} />
         <Route path="/abmcursos" element={<ABMCursos/>} />
+        <Route path="/tiendaCursos" element={<TiendaCursos/>}/>
+        <Route path="/curso/:idCourse" element={<CourseDetail />} />
         <Route path="/listarSuscripciones" element={<SubscriptionList/>} />
         <Route path="/crudSubs" element={<Suscripciones/>} />
         <Route path="/crearSubs" element={<SubscriptionForm/>} />

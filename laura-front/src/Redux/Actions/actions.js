@@ -37,7 +37,9 @@ import {
   DELETE_SUBSCRIPTION_REQUEST,
   DELETE_SUBSCRIPTION_SUCCESS,
   DELETE_SUBSCRIPTION_FAILURE,
-  
+  GET_COURSE_REQUEST,
+  GET_COURSE_SUCCESS,
+  GET_COURSE_FAILURE
 
 } from './actions-type';
 
@@ -99,6 +101,28 @@ export const getCourses = () => {
               payload: error.message
           });
       }
+  };
+};
+
+// Acción para obtener un curso por su id
+export const getCourseById = (idCourse) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: GET_COURSE_REQUEST }); // Inicia la carga
+
+      const response = await axios.get(`${BASE_URL}/cursos/${idCourse}`);
+      const course = response.data.data; 
+
+      dispatch({
+        type: GET_COURSE_SUCCESS,
+        payload: course, // Guardamos el curso en el payload
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_COURSE_FAILURE,
+        payload: error.message, // Enviamos el mensaje de error si ocurre
+      });
+    }
   };
 };
 

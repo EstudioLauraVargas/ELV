@@ -35,7 +35,9 @@ import {
   FETCH_SUBSCRIPTION_ID_REQUEST,
   FETCH_SUBSCRIPTION_ID_SUCCESS,
   FETCH_SUBSCRIPTION_ID_FAILURE,
-  
+  GET_COURSE_REQUEST,
+  GET_COURSE_SUCCESS,
+  GET_COURSE_FAILURE
 
 } from "../Actions/actions-type";
 
@@ -45,6 +47,7 @@ const initialState = {
   error: null,
   videos:[],
   courses:[],
+  course:null,
   subscriptions: [],
 
   userRegister: {
@@ -94,7 +97,24 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 error: action.payload
             };
-      
+            case GET_COURSE_REQUEST:
+              return {
+                 ...state, 
+                 loading: true, 
+                 error: null 
+                };
+            case GET_COURSE_SUCCESS:
+              return { 
+                ...state, 
+                loading: false,
+                 course: action.payload 
+                }; 
+            case GET_COURSE_FAILURE:
+              return { 
+                ...state, 
+                loading: false, 
+                error: action.payload
+               };
     
       case CREATE_COURSE_REQUEST:
         return { 
