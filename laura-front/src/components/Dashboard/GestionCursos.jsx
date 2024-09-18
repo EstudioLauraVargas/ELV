@@ -37,9 +37,9 @@ const GestionCursos = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     // Validación: al menos un video debe ser seleccionado
     if (selectedVideos.length === 0) {
       toast.error("Debes seleccionar al menos un video.", {
@@ -48,39 +48,42 @@ const GestionCursos = () => {
       });
       return;
     }
-
+  
     const courseData = {
       title: courseTitle,
       description: courseDescription,
-      idVideo: selectedVideos // Asegúrate de que el backend espera un array de idVideos
+      idVideo: selectedVideos, // Asegúrate de que el backend espera un array de idVideos
     };
-    dispatch(createCourse(courseData))
-      .then(() => {
-        toast.success("Curso creado con éxito!", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setTimeout(() => {
-          navigate("/panel");
-        }, 3000); 
-      })
-      .catch((error) => {
-        toast.error("Error al crear el curso. Inténtalo de nuevo.", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+  
+    try {
+      await dispatch(createCourse(courseData)); // Ahora usamos await para esperar a que termine la acción
+      toast.success("Curso creado con éxito!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
+      setTimeout(() => {
+        navigate("/panel");
+      }, 3000);
+    } catch (error) {
+      // Manejo de errores en el catch
+      toast.error("Error al crear el curso. Inténtalo de nuevo.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      console.error("Error en la creación del curso:", error); // Esto te ayudará a ver el error en la consola
+    }
   };
+  
 
   const handleGoToPanel = () => {
     navigate("/panel");
