@@ -1,10 +1,9 @@
 const { Course, Video, CourseVideos } = require("../data");
-const { sequelize } = require("../data");
+const { sequelize } = require("../data/index");
 const response = require("../utils/response")
 
 
 const addCourse = async (req, res) => {
-  const transaction = await sequelize.transaction();
   try {
     const { title, description, idVideo } = req.body;
 
@@ -22,11 +21,8 @@ const addCourse = async (req, res) => {
       return response(res, 400, null, "idVideo debe ser un array de IDs de videos");
     }
 
-    // Crear el curso dentro de una transacción
-    const newCourse = await Course.create(
-      { title, description },
-      { transaction }
-    );
+    // Crear el curso sin transacción
+    const newCourse = await Course.create({ title, description });
     console.log("Course created with ID:", newCourse.idCourse);
 
     // Asociar los videos existentes al curso
@@ -34,19 +30,16 @@ const addCourse = async (req, res) => {
       // Verificar que los videos existen
       const videos = await Video.findAll({
         where: { idVideo: idVideo },
-        transaction,
       });
 
       if (videos.length !== idVideo.length) {
-        throw new Error("Algunos videos no existen");
+        return response(res, 400, null, "Algunos videos no existen");
       }
 
-      await newCourse.addVideos(idVideo, { transaction });
+      // Asociar los videos al curso
+      await newCourse.addVideos(idVideo);
       console.log("Videos associated with course:", idVideo);
     }
-
-    // Confirmar la transacción
-    await transaction.commit();
 
     // Responder con el curso creado y los videos asociados
     const courseWithVideos = await Course.findByPk(newCourse.idCourse, {
@@ -56,8 +49,6 @@ const addCourse = async (req, res) => {
 
     response(res, 201, courseWithVideos, "Curso creado correctamente");
   } catch (error) {
-    // Revertir la transacción en caso de error
-    await transaction.rollback();
     console.error("Error adding course:", error);
     response(res, 500, null, error.message || "Error al agregar el curso");
   }

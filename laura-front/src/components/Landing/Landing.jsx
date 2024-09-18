@@ -67,7 +67,7 @@ const Landing = () => {
                         <img className={style.imgProc} src={cursos} />
                         <h4 className={style.titleProc}>cursos personalizados</h4>
                         <div className={style.descProc}>Aprende y perfecciona tu técnica de la mano de Laura y lleva tu empresa a otro nivel.</div>
-                        <NavLink to="/cursos"><button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-xl uppercase py-4 px-6 rounded-2xl m-4">Saber mas</button></NavLink>
+                        <NavLink to="/cursosDisponibles"><button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-xl uppercase py-4 px-6 rounded-2xl m-4">Saber mas</button></NavLink>
                     </div>
                     <div className={style.procedimiento}>
                         <img className={style.imgProc} src={insumos} />

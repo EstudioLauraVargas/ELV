@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchVideos } from '../../Redux/Actions/actions';
 
-const Videos = () => {
+const AllVideos = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const videos = useSelector(state => state.videos || []); 
@@ -61,6 +61,6 @@ const Videos = () => {
     );
 };
 
-export default Videos;
+export default AllVideos;
 
 

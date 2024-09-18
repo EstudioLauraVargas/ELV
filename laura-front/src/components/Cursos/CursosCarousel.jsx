@@ -41,8 +41,8 @@ const CursosCarousel = () => {
 
     return (
         <div className="flex justify-center items-center min-h-screen px-4">
-            <div className="w-full max-w-4xl">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">Suscripciones Disponibles</h2>
+            <div className="w-1/2 max-w-4xl">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">Cursos Disponibles</h2>
                 <Swiper
                     spaceBetween={20}
                     slidesPerView={1}

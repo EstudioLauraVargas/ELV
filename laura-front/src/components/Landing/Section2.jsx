@@ -1,5 +1,6 @@
 import React from 'react';
 import backgroundImage from '../../lauraassets/sombras.png'; // Asegúrate de que la ruta sea correcta
+import CursosCarousel from '../../components/Cursos/CursosCarousel'
 
 const Section2 = () => {
   return (
@@ -23,11 +24,9 @@ const Section2 = () => {
           {/* Recuadro semitransparente con texto clickeable */}
           <a 
             href="/cursos"
-            className="w-full lg:w-1/3 h-64 flex items-center justify-center bg-pink-500 bg-opacity-70 text-white text-center p-8 rounded-lg shadow-lg z-20 no-underline hover:opacity-80"
+            className="w-full lg:w-1/3 h-64 flex items-center justify-center bg-pink-400 bg-opacity-30 text-white text-center p-8 rounded-lg shadow-lg z-20 no-underline hover:opacity-80"
           >
-            <span className="text-xl lg:text-3xl font-bold">
-              SUSCRÍBETE<br></br> Y<br></br> OBTÉN BENEFICIOS
-            </span>
+            <CursosCarousel/>
           </a>
 
           {/* Contenido del lado derecho */}

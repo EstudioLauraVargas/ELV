@@ -10,7 +10,7 @@ import Cursos from "./components/Cursos/Cursos";
 import Users from "./components/Users"; 
 import Video from "./components/services/Video"
 import Panel from "./components/Dashboard/Panel";
-import MisCursos from "./components/Cursos/MisCursos"
+import AllVideos from "./components/Cursos/AllVideos"
 import GestionCursos from "./components/Dashboard/GestionCursos";
 import ABMCursos from "./components/Dashboard/ABMCursos";
 import ListarCursos from "./components/Dashboard/ListarCursos";
@@ -34,12 +34,12 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/changePass" element={<ChangePassword />} />
         <Route path="/forgotPass" element={<ForgotPassword />} />
-        <Route path="/video/:id" element={<Video/>} />
+        <Route path="/video/:id" element={<Video/>} /> {/* para listar los videos del usuario logueado*/}
         <Route path="/procedimiento" element={<Procedimientos />} />
-        <Route path="/cursos" element={<Cursos />} />
+        <Route path="/cursos" element={<Cursos />} /> 
         <Route path="/users" element={<Users />} />
         <Route path="/panel" element={<Panel/>} />
-        <Route path="/cursos" element={<MisCursos/>} />
+        <Route path="/videos" element={<AllVideos/>} />
         <Route path="/gestioncursos" element={<GestionCursos/>} />
         <Route path="/listarCursos" element={<ListarCursos/>} />
         <Route path="/editarCurso/:idCourse" element={<EditarCurso/>} />

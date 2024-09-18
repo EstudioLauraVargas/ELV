@@ -10,7 +10,7 @@ import img3 from "../../lauraassets/img3.png"
 import img4 from "../../lauraassets/img4.png"
 import img5 from "../../lauraassets/img5.png"
 import img6 from "../../lauraassets/img6.jpg"
-import logolaura from "../../lauraassets/logolaura.png"
+//import logolaura from "../../lauraassets/logolaura.png"
 
 // microcejas
 import microcejas3 from "../../lauraassets/procLaura/microcejas/microcejas3.jpeg"
@@ -104,7 +104,7 @@ const Procedimientos = () => {
         </div></div>
         }
         {id == 1 && <div className={style.landing}>
-            <img className={style.navBar} src={logolaura} />
+            {/* <img className={style.navBar} src={logolaura} /> */}
             <h1 className={style.title}>Micropigmentación de cejas</h1>
             <div className={style.procedimiento}>
                 <div className={style.carrusel}>
