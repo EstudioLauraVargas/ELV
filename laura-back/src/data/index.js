@@ -94,11 +94,11 @@ User.hasMany(OrderCompra, {
 });
 
 // Relación OrderCompra -> Subscription (uno a muchos)
-OrderCompra.belongsTo(Subscription, {
-  foreignKey: 'idSub',
+OrderCompra.hasMany(Subscription, {
+  foreignKey: 'orderId',
 });
-Subscription.hasMany(OrderCompra, {
-  foreignKey: 'idSub',
+Subscription.belongsTo(OrderCompra, {
+  foreignKey: 'orderId',
 });
 
 // Relación OrderCompra -> Payment (uno a uno)

@@ -10,11 +10,11 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      id_Sub: {
+      idSub: {
         type: DataTypes.INTEGER, 
-        allowNull: false,
+        allowNull: true,
       },
-      userId: { // Relación con User
+      document: { // Relación con User
         type: DataTypes.STRING,
         allowNull: false,
       },
