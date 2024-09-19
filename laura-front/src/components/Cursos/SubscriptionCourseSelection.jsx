@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCourses, fetchSubscriptions } from '../../Redux/Actions/actions';
+import { getCourses, fetchSubscriptions, createOrder } from '../../Redux/Actions/actions';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
 import fondo from '../../lauraassets/bg1.png';
@@ -19,6 +19,7 @@ const SubscriptionCourseSelection = () => {
   useEffect(() => {
     dispatch(getCourses());
     dispatch(fetchSubscriptions());
+    // Eliminar la creación de la orden aquí
   }, [dispatch]);
 
   const handleSubscriptionChange = (e) => {
@@ -38,27 +39,57 @@ const SubscriptionCourseSelection = () => {
     setSelectedCourses(updatedCourses);
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!userInfo) {
       navigate('/login'); 
       return;
     }
 
-    if (!window.WompiCheckout) {
-      console.error('WompiCheckout no está disponible en window.');
-      return;
-    }
-
-    // Aquí iniciaremos el proceso de pago con Wompi
-    const checkout = new window.WompiCheckout({
+    // Preparar los datos de la orden
+    const orderData = {
+      date: new Date().toISOString(),
+      amount: selectedCourses.length * 100000, // Ajusta según el precio real
+      subscriptions: selectedCourses.map(courseId => ({
+        courseId: parseInt(courseId),
+        // Agrega otros detalles de la suscripción si es necesario
+      })),
+      state_order: 'Pendiente', // Estado inicial
+      document: userInfo.document, // Asumiendo que 'document' es el identificador del usuario
       currency: 'COP',
-      amountInCents: selectedCourses.length * 100000, // Ajusta según el precio real
-      reference: `SUBS-${userInfo.id}-${Date.now()}`,
-      publicKey: 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw', // Tu clave pública de Wompi
-      redirectUrl: 'https://tu-sitio.com/confirmacion-pago',
-    });
+    };
 
-    checkout.open();
+    try {
+      // Despachar la acción para crear la orden
+      const resultAction = await dispatch(createOrder(orderData));
+
+      if (createOrder.fulfilled.match(resultAction)) {
+        const createdOrder = resultAction.payload.orderCompra; // Ajusta según la respuesta de tu backend
+
+        // Inicializar WompiCheckout con la orden creada
+        if (!window.WompiCheckout) {
+          console.error('WompiCheckout no está disponible en window.');
+          return;
+        }
+
+        const checkout = new window.WompiCheckout({
+          currency: createdOrder.currency,
+          amountInCents: createdOrder.amount,
+          reference: createdOrder.orderId, // Usa orderId como referencia
+          publicKey: 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw', // Tu clave pública de Wompi
+          redirectUrl: 'https://tu-sitio.com/confirmacion-pago', // Reemplaza con tu URL real
+          // Opcionalmente, agrega información adicional del cliente
+        });
+
+        checkout.open();
+      } else {
+        // Manejar errores al crear la orden
+        console.error('Error al crear la orden:', resultAction.payload);
+        // Opcional: mostrar una notificación al usuario
+      }
+    } catch (err) {
+      console.error('Error durante el proceso de pago:', err);
+      // Opcional: mostrar una notificación al usuario
+    }
   };
 
   if (loading) {
@@ -76,7 +107,7 @@ const SubscriptionCourseSelection = () => {
     >
       <Navbar />
       <div className="pt-16 container mx-auto py-8">
-      <div className="text-center mt-16 bg-pink-200 bg-opacity-50 p-4 shadow-md rounded-lg">
+        <div className="text-center mt-16 bg-pink-200 bg-opacity-50 p-4 shadow-md rounded-lg">
           <p className="xl:text-4xl text-white font-semibold">Elige una suscripción y accede a los cursos que quieras.</p>
         </div>
 
@@ -130,7 +161,7 @@ const SubscriptionCourseSelection = () => {
             <button
               className="bg-pink-500 text-white font-bold py-2 px-4 rounded hover:bg-pink-600 transition-all"
               onClick={handlePayment}
-              disabled={selectedCourses.length !== maxCourses}
+              disabled={selectedCourses.some(courseId => !courseId)} // Asegura que todos los cursos estén seleccionados
             >
               Pagar
             </button>
@@ -142,6 +173,7 @@ const SubscriptionCourseSelection = () => {
 };
 
 export default SubscriptionCourseSelection;
+
 
 
 

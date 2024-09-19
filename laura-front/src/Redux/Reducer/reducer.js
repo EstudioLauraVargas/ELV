@@ -2,14 +2,13 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-unused-vars */
 import {
- 
   CREATE_COURSE_REQUEST,
   CREATE_COURSE_SUCCESS,
   CREATE_COURSE_FAILURE,
   COURSE_UPDATE_REQUEST,
   COURSE_UPDATE_SUCCESS,
   COURSE_UPDATE_FAIL,
-  GET_COURSES_SUCCESS, 
+  GET_COURSES_SUCCESS,
   GET_COURSES_FAILURE,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
@@ -37,17 +36,23 @@ import {
   FETCH_SUBSCRIPTION_ID_FAILURE,
   GET_COURSE_REQUEST,
   GET_COURSE_SUCCESS,
-  GET_COURSE_FAILURE
+  GET_COURSE_FAILURE,
+  ORDER_CREATE_REQUEST,
+  ORDER_CREATE_SUCCESS,
+  ORDER_CREATE_FAIL,
+  FETCH_LATEST_ORDER_REQUEST,
+  FETCH_LATEST_ORDER_SUCCESS,
+  FETCH_LATEST_ORDER_FAILURE,
 
+  
 } from "../Actions/actions-type";
 
 const initialState = {
-
   loading: false,
   error: null,
-  videos:[],
-  courses:[],
-  course:null,
+  videos: [],
+  courses: [],
+  course: null,
   subscriptions: [],
 
   userRegister: {
@@ -55,32 +60,37 @@ const initialState = {
     loading: false,
     error: null,
   },
- 
 
   userLogin: {
-    userInfo: localStorage.getItem('userInfo') 
-               ? JSON.parse(localStorage.getItem('userInfo')) 
-               : null,
+    userInfo: localStorage.getItem("userInfo")
+      ? JSON.parse(localStorage.getItem("userInfo"))
+      : null,
     loading: false,
     error: null,
   },
+  order: {
+    loading: false,
+    success: false,
+    error: null,
+    order: {},
+  },
+  latestOrder: {
+    loading: false,
+    success: false,
+    error: null,
+    data: {},
+  },
+
+
 };
-
-  
-
-
-
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-  
     case FETCH_VIDEOS_SUCCESS:
       return {
         ...state,
         loading: false,
         videos: action.payload,
-
-        
       };
     case FETCH_VIDEOS_FAILURE:
       return {
@@ -89,74 +99,74 @@ const rootReducer = (state = initialState, action) => {
         error: action.payload,
       };
 
-      case GET_COURSES_SUCCESS:
-            return {
-                ...state,
-                courses: action.payload,
-                error: null
-            };
-        case GET_COURSES_FAILURE:
-            return {
-                ...state,
-                error: action.payload
-            };
-            case GET_COURSE_REQUEST:
-              return {
-                 ...state, 
-                 loading: true, 
-                 error: null 
-                };
-            case GET_COURSE_SUCCESS:
-              return { 
-                ...state, 
-                loading: false,
-                 course: action.payload 
-                }; 
-            case GET_COURSE_FAILURE:
-              return { 
-                ...state, 
-                loading: false, 
-                error: action.payload
-               };
-    
-               case CREATE_COURSE_REQUEST:
-                return {
-                  ...state,
-                  
-                  error: null,
-                };
-              case CREATE_COURSE_SUCCESS:
-                return {
-                  ...state,
-                  
-                  courses: [...state.courses, action.payload], // Añade el nuevo curso al arreglo
-                };
-              case CREATE_COURSE_FAILURE:
-                return {
-                  ...state,
-                  
-                  error: action.payload,
-                };
-        case COURSE_UPDATE_REQUEST:
-          return { 
-            ...state, 
-            loading: true 
-          };
-    
-        case COURSE_UPDATE_SUCCESS:
-          return { 
-            ...state, 
-            loading: false, 
-            courses: action.payload 
-          };
-    
-        case COURSE_UPDATE_FAIL:
-          return {
-            ...state, 
-            loading: false, 
-            error: action.payload 
-          };
-  
+    case GET_COURSES_SUCCESS:
+      return {
+        ...state,
+        courses: action.payload,
+        error: null,
+      };
+    case GET_COURSES_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case GET_COURSE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case GET_COURSE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        course: action.payload,
+      };
+    case GET_COURSE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CREATE_COURSE_REQUEST:
+      return {
+        ...state,
+
+        error: null,
+      };
+    case CREATE_COURSE_SUCCESS:
+      return {
+        ...state,
+
+        courses: [...state.courses, action.payload], // Añade el nuevo curso al arreglo
+      };
+    case CREATE_COURSE_FAILURE:
+      return {
+        ...state,
+
+        error: action.payload,
+      };
+    case COURSE_UPDATE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case COURSE_UPDATE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        courses: action.payload,
+      };
+
+    case COURSE_UPDATE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
     case USER_REGISTER_REQUEST:
       return {
         ...state,
@@ -184,7 +194,7 @@ const rootReducer = (state = initialState, action) => {
         },
       };
     case USER_LOGIN_SUCCESS:
-      localStorage.setItem('userInfo', JSON.stringify(action.payload));
+      localStorage.setItem("userInfo", JSON.stringify(action.payload));
       return {
         ...state,
         userLogin: {
@@ -204,7 +214,7 @@ const rootReducer = (state = initialState, action) => {
         },
       };
     case USER_LOGOUT:
-      localStorage.removeItem('userInfo');
+      localStorage.removeItem("userInfo");
       return {
         ...state,
         userLogin: {
@@ -212,8 +222,8 @@ const rootReducer = (state = initialState, action) => {
           userInfo: null,
         },
       };
-   
-      case FETCH_SUBSCRIPTIONS_REQUEST:
+
+    case FETCH_SUBSCRIPTIONS_REQUEST:
       return {
         ...state,
         loading: true,
@@ -232,54 +242,123 @@ const rootReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
-      case FETCH_SUBSCRIPTION_ID_REQUEST:
-        return {
-          ...state,
+    case FETCH_SUBSCRIPTION_ID_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_SUBSCRIPTION_ID_SUCCESS:
+      console.log("Subscriptions payload:", action.payload); // Verifica el payload recibido
+      return {
+        ...state,
+        loading: false,
+        subscriptions: action.payload, // Asegúrate de que esta línea maneje el array de suscripciones
+      };
+    case FETCH_SUBSCRIPTION_ID_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CREATE_SUBSCRIPTION_REQUEST:
+      return { ...state, loading: true };
+    case CREATE_SUBSCRIPTION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        subscriptions: [...state.subscriptions, action.payload.data],
+      };
+    case CREATE_SUBSCRIPTION_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+    case UPDATE_SUBSCRIPTION_REQUEST:
+      return { ...state, loading: true };
+    case UPDATE_SUBSCRIPTION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        subscriptions: state.subscriptions.map((sub) =>
+          sub.idSub === action.payload.data.idSub ? action.payload.data : sub
+        ),
+      };
+    case UPDATE_SUBSCRIPTION_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+    case DELETE_SUBSCRIPTION_REQUEST:
+      return { ...state, loading: true };
+    case DELETE_SUBSCRIPTION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        subscriptions: state.subscriptions.filter(
+          (sub) => sub.idSub !== action.payload
+        ),
+      };
+    case DELETE_SUBSCRIPTION_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+      case ORDER_CREATE_REQUEST:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          loading: true,
+          success: false,
+          error: null,
+        },
+      };
+    case ORDER_CREATE_SUCCESS:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          loading: false,
+          success: true,
+          order: action.payload,
+          error: null,
+        },
+      };
+    case ORDER_CREATE_FAIL:
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          loading: false,
+          success: false,
+          error: action.payload,
+        },
+      };
+
+      case FETCH_LATEST_ORDER_REQUEST:
+      return {
+        ...state,
+        latestOrder: {
+          ...state.latestOrder,
           loading: true,
           error: null,
-        };
-      case FETCH_SUBSCRIPTION_ID_SUCCESS:
-        console.log("Subscriptions payload:", action.payload); // Verifica el payload recibido
-        return {
-          ...state,
+        },
+      };
+    case FETCH_LATEST_ORDER_SUCCESS:
+      return {
+        ...state,
+        latestOrder: {
+          ...state.latestOrder,
           loading: false,
-          subscriptions: action.payload, // Asegúrate de que esta línea maneje el array de suscripciones
-        };
-      case FETCH_SUBSCRIPTION_ID_FAILURE:
-        return {
-          ...state,
+          success: true,
+          data: action.payload.data,
+        },
+      };
+    case FETCH_LATEST_ORDER_FAILURE:
+      return {
+        ...state,
+        latestOrder: {
+          ...state.latestOrder,
           loading: false,
           error: action.payload,
-        };
+        },
+      };
 
-      case CREATE_SUBSCRIPTION_REQUEST:
-        return { ...state, loading: true };
-      case CREATE_SUBSCRIPTION_SUCCESS:
-        return { ...state, loading: false, subscriptions: [...state.subscriptions, action.payload.data] };
-      case CREATE_SUBSCRIPTION_FAILURE:
-        return { ...state, loading: false, error: action.payload };
-      case UPDATE_SUBSCRIPTION_REQUEST:
-        return { ...state, loading: true };
-      case UPDATE_SUBSCRIPTION_SUCCESS:
-        return {
-          ...state,
-          loading: false,
-          subscriptions: state.subscriptions.map((sub) =>
-            sub.idSub === action.payload.data.idSub ? action.payload.data : sub
-          ),
-        };
-      case UPDATE_SUBSCRIPTION_FAILURE:
-        return { ...state, loading: false, error: action.payload };
-      case DELETE_SUBSCRIPTION_REQUEST:
-        return { ...state, loading: true };
-      case DELETE_SUBSCRIPTION_SUCCESS:
-        return {
-          ...state,
-          loading: false,
-          subscriptions: state.subscriptions.filter((sub) => sub.idSub !== action.payload),
-        };
-      case DELETE_SUBSCRIPTION_FAILURE:
-        return { ...state, loading: false, error: action.payload };
+
     default:
       return state;
   }
