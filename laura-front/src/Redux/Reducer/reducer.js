@@ -122,19 +122,19 @@ const rootReducer = (state = initialState, action) => {
                case CREATE_COURSE_REQUEST:
                 return {
                   ...state,
-                  loading: true,
+                  
                   error: null,
                 };
               case CREATE_COURSE_SUCCESS:
                 return {
                   ...state,
-                  loading: false,
+                  
                   courses: [...state.courses, action.payload], // Añade el nuevo curso al arreglo
                 };
               case CREATE_COURSE_FAILURE:
                 return {
                   ...state,
-                  loading: false,
+                  
                   error: action.payload,
                 };
         case COURSE_UPDATE_REQUEST:
