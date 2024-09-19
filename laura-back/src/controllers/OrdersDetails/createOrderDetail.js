@@ -90,7 +90,13 @@ module.exports = async (req, res) => {
       typeSub: sub.typeSub, 
     }));
 
-    await Subscription.bulkCreate(subscriptionUpdates);
+    const createdSubscriptions = await Subscription.bulkCreate(subscriptionUpdates);
+
+// Actualiza el idSub en la orden si es necesario
+const firstSubscription = createdSubscriptions[0]; // Si hay una relación de uno a uno
+if (firstSubscription) {
+  await orderCompra.update({ idSub: firstSubscription.id });
+}
 
     const updatedOrderCompra = await OrderCompra.findOne({
       where: { orderId: orderCompra.orderId },
