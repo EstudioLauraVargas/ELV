@@ -41,7 +41,7 @@ const TiendaCursos = () => {
               >
                 <div className="w-full h-48 bg-gray-200 mb-4 rounded overflow-hidden">
                   <img
-                    src={course.videoImage || '/default-thumbnail.jpg'}
+                    src={course.imageUrl || '/default-thumbnail.jpg'}
                     alt={course.title}
                     className="object-cover w-full h-full"
                   />

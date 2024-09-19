@@ -43,7 +43,7 @@ const GestionCursos = () => {
           imagePublicId: uploadedImage.imagePublicId,
         });
         toast.success("Imagen subida con éxito!", {
-          position: "top-right",
+          position: "bottom-right",
           autoClose: 3000,
         });
       }
@@ -56,7 +56,7 @@ const GestionCursos = () => {
       imagePublicId: '',
     });
     toast.info("Imagen eliminada.", {
-      position: "top-right",
+      position: "bottom-right",
       autoClose: 3000,
     });
   };
@@ -67,7 +67,7 @@ const GestionCursos = () => {
     // Validación: al menos un video debe ser seleccionado
     if (selectedVideos.length === 0) {
       toast.error("Debes seleccionar al menos un video.", {
-        position: "top-right",
+        position: "bottom-right",
         autoClose: 3000,
       });
       return;
@@ -89,7 +89,7 @@ const GestionCursos = () => {
       const createdCourse = await dispatch(createCourse(courseData)); // Espera a que termine la acción
       console.log("Curso creado exitosamente:", createdCourse); // Log de depuración
       toast.success("Curso creado con éxito!", {
-        position: "top-right",
+        position: "bottom-right",
         autoClose: 3000,
       });
       setTimeout(() => {
@@ -98,7 +98,7 @@ const GestionCursos = () => {
     } catch (error) {
       // Manejo de errores en el catch
       toast.error("Error al crear el curso. Inténtalo de nuevo.", {
-        position: "top-right",
+        position: "bottom-right",
         autoClose: 3000,
       });
       console.error("Error en la creación del curso en el componente:", error); // Log de depuración
@@ -119,7 +119,7 @@ const GestionCursos = () => {
       <Navbar />
       <div className="container mx-auto p-4 mt-24 relative z-10 bg-white bg-opacity-80 rounded-lg shadow-lg max-w-4xl">
         <ToastContainer
-          position="top-right"
+          position="bottom-right"
           autoClose={3000}
           hideProgressBar={false}
           closeOnClick
