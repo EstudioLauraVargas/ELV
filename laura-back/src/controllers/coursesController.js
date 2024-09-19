@@ -101,7 +101,7 @@ const updateCourse = async (req, res) => {
       });
     }
 
-    // Agregar nuevos videos si se proporcionan
+    
     if (addVideos && addVideos.length > 0) {
       const newVideos = addVideos.map((videoId) => ({
         idCourse: idCourse,
