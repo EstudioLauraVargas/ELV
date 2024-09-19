@@ -24,7 +24,7 @@ import Navbar from "./components/Navbar";
 import CursosDisponibles from "./components/Cursos/CursosDisponibles";
 import TiendaCursos from "./components/Cursos/TiendaCursos";
 import CourseDetail from "./components/Cursos/CourseDetail";
-
+import SubscriptionCourseSelection from "./components/Cursos/SubscriptionCourseSelection";
 function App() {
   return (
   <div>
@@ -48,6 +48,7 @@ function App() {
         <Route path="/abmcursos" element={<ABMCursos/>} />
         <Route path="/tiendaCursos" element={<TiendaCursos/>}/>
         <Route path="/curso/:idCourse" element={<CourseDetail />} />
+        <Route path="/suscCourse" element={<SubscriptionCourseSelection/>}/>
         <Route path="/listarSuscripciones" element={<SubscriptionList/>} />
         <Route path="/crudSubs" element={<Suscripciones/>} />
         <Route path="/crearSubs" element={<SubscriptionForm/>} />
