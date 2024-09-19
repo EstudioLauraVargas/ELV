@@ -1,15 +1,18 @@
 const { Course, Video, CourseVideos } = require("../data");
 const { sequelize } = require("../data/index");
 const response = require("../utils/response")
+const cloudinary = require('../config/cloudinaryConfig');
 
 
 const addCourse = async (req, res) => {
   try {
-    const { title, description, idVideo } = req.body;
+    const { title, description, idVideo, imageUrl, imagePublicId } = req.body;
 
     console.log("Received request to create course with title:", title);
     console.log("Course description:", description);
     console.log("Video IDs to associate:", idVideo);
+    console.log("Image URL:", imageUrl);
+    console.log("Image Public ID:", imagePublicId);
 
     // Validación básica
     if (!title) {
@@ -21,8 +24,13 @@ const addCourse = async (req, res) => {
       return response(res, 400, null, "idVideo debe ser un array de IDs de videos");
     }
 
-    // Crear el curso sin transacción
-    const newCourse = await Course.create({ title, description });
+    // Crear el curso
+    const newCourse = await Course.create({
+      title,
+      description,
+      imageUrl: imageUrl || null,
+      imagePublicId: imagePublicId || null,
+    });
     console.log("Course created with ID:", newCourse.idCourse);
 
     // Asociar los videos existentes al curso
@@ -54,23 +62,34 @@ const addCourse = async (req, res) => {
   }
 };
 
-
-
-
 const updateCourse = async (req, res) => {
   try {
     const { idCourse } = req.params;
-    const { title, description, addVideos, removeVideos } = req.body;
+    const { title, description, addVideos, removeVideos, imageUrl, imagePublicId } = req.body;
 
     // Buscar el curso por su ID
     const course = await Course.findByPk(idCourse, {
-      include: [Video], 
+      include: [Video],
     });
 
     if (!course) return res.status(404).json({ message: "Curso no encontrado" });
 
-    // Actualizar título y descripción
-    await course.update({ title, description });
+    let updateData = { title, description };
+
+    // Si se proporciona una nueva imagen, actualizarla
+    if (imageUrl && imagePublicId) {
+      // Eliminar la imagen anterior de Cloudinary si existe
+      if (course.imagePublicId) {
+        await cloudinary.uploader.destroy(course.imagePublicId);
+      }
+
+      // Asignar la nueva imagen
+      updateData.imageUrl = imageUrl;
+      updateData.imagePublicId = imagePublicId;
+    }
+
+    // Actualizar el curso
+    await course.update(updateData);
 
     // Eliminar videos si se proporcionan IDs de videos para eliminar
     if (removeVideos && removeVideos.length > 0) {
@@ -108,12 +127,19 @@ const deleteCourse = async (req, res) => {
     const { idCourse } = req.params;
     const course = await Course.findByPk(idCourse);
     if (!course) return res.status(404).json({ message: "Curso no encontrado" });
+
+    // Eliminar la imagen de Cloudinary si existe
+    if (course.imagePublicId) {
+      await cloudinary.uploader.destroy(course.imagePublicId);
+    }
+
     await course.destroy();
     res.status(200).json({ message: "Curso eliminado" });
   } catch (error) {
     res.status(500).json({ message: "Error al eliminar el curso", error });
   }
 };
+
 
 module.exports = {
   addCourse,

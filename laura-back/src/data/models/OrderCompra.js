@@ -1,3 +1,4 @@
+// models/OrderCompra.js
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
@@ -9,10 +10,6 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      id_Sub: {
-        type: DataTypes.INTEGER, // Relación con Subscription
-        allowNull: false,
-      },
       userId: { // Relación con User
         type: DataTypes.STRING,
         allowNull: false,
@@ -23,7 +20,7 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.NOW,
       },
       endDate: {
-        type: DataTypes.DATEONLY, // Se calculará al aprobar la orden
+        type: DataTypes.DATEONLY, 
         allowNull: false,
       },
       amount: {
@@ -46,3 +43,5 @@ module.exports = (sequelize) => {
     }
   );
 };
+
+

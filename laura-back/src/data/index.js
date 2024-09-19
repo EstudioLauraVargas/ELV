@@ -59,17 +59,21 @@ const sequelize = new Sequelize(
 // Relación User -> Subscription (uno a muchos)
 User.hasMany(Subscription, {
   foreignKey: 'document', 
+  as: 'subscriptions',
 });
 Subscription.belongsTo(User, {
   foreignKey: 'document',
+  as: 'user',
 });
 
 // Relación Course -> Subscription (uno a muchos)
 Course.hasMany(Subscription, {
   foreignKey: 'idCourse', 
+  as: 'subscriptions',
 });
 Subscription.belongsTo(Course, {
   foreignKey: 'idCourse',
+  as: 'course',
 });
 
 // Relación Course -> Video (muchos a muchos)
@@ -86,30 +90,34 @@ Video.belongsToMany(Course, {
 
 // Relación OrderCompra -> User (uno a muchos)
 OrderCompra.belongsTo(User, {
-  foreignKey: 'document',
-  allowNull: false,
+  foreignKey: 'userId',
+  as: 'user',
 });
 User.hasMany(OrderCompra, {
-  foreignKey: 'document',
+  foreignKey: 'userId',
+  as: 'orders',
 });
 
 // Relación OrderCompra -> Subscription (uno a muchos)
-OrderCompra.belongsTo(Subscription, {
-  foreignKey: 'idSub',
+OrderCompra.hasMany(Subscription, {
+  foreignKey: 'orderCompraId', 
+  as: 'subscriptions',
 });
-Subscription.hasMany(OrderCompra, {
-  foreignKey: 'idSub',
+Subscription.belongsTo(OrderCompra, {
+  foreignKey: 'orderCompraId', 
+  as: 'orderCompra',
 });
 
 // Relación OrderCompra -> Payment (uno a uno)
 OrderCompra.hasOne(Payment, {
   foreignKey: 'orderId', 
+  as: 'payment',
   allowNull: false,
 });
 Payment.belongsTo(OrderCompra, {
   foreignKey: 'orderId',
+  as: 'orderCompra',
 });
-
 
 
 //-----------------------------------**---------------------------------------

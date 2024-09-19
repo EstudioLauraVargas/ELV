@@ -79,8 +79,9 @@ export const createCourse = (courseData) => async (dispatch) => {
   try {
     const response = await axios.post(`${BASE_URL}/cursos/add`, courseData);
     dispatch({ type: CREATE_COURSE_SUCCESS, payload: response.data });
+    return response.data; 
   } catch (error) {
-    dispatch({ type: CREATE_COURSE_FAILURE, payload: error.message });
+    dispatch({ type: CREATE_COURSE_FAILURE, payload: error.response?.data?.message || error.message });
     throw error; 
   }
 };

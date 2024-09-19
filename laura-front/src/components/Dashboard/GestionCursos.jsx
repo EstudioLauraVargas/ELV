@@ -1,3 +1,4 @@
+// src/components/GestionCursos.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchVideos, createCourse } from "../../Redux/Actions/actions";
@@ -6,14 +7,25 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import backgroundImage from "../../lauraassets/bg1.png";
+import { openCloudinaryWidget } from "../../cloudinaryConfig"; // Asegúrate del path
 
 const GestionCursos = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const videos = useSelector((state) => state.videos || []);
+
   const [selectedVideos, setSelectedVideos] = useState([]);
   const [courseTitle, setCourseTitle] = useState('');
   const [courseDescription, setCourseDescription] = useState('');
+
+  // Estados para manejar la imagen
+  const [image, setImage] = useState({
+    imageUrl: '',
+    imagePublicId: '',
+  });
+
+  // Estado para manejar el envío del formulario
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     dispatch(fetchVideos());
@@ -23,23 +35,35 @@ const GestionCursos = () => {
     console.log("Videos fetched:", videos);
   }, [videos]);
 
-  const handleCheckboxChange = (idVideo) => {
-    setSelectedVideos((prevSelected) => {
-      const isSelected = prevSelected.includes(idVideo);
-      const updatedSelected = isSelected
-        ? prevSelected.filter((id) => id !== idVideo)
-        : [...prevSelected, idVideo];
-      
-      console.log("Checkbox toggled:", idVideo);
-      console.log("Updated selectedVideos:", updatedSelected);
-      
-      return updatedSelected;
+  const handleImageUpload = () => {
+    openCloudinaryWidget((uploadedImage) => {
+      if (uploadedImage) {
+        setImage({
+          imageUrl: uploadedImage.imageUrl,
+          imagePublicId: uploadedImage.imagePublicId,
+        });
+        toast.success("Imagen subida con éxito!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    });
+  };
+
+  const handleRemoveImage = () => {
+    setImage({
+      imageUrl: '',
+      imagePublicId: '',
+    });
+    toast.info("Imagen eliminada.", {
+      position: "top-right",
+      autoClose: 3000,
     });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     // Validación: al menos un video debe ser seleccionado
     if (selectedVideos.length === 0) {
       toast.error("Debes seleccionar al menos un video.", {
@@ -48,23 +72,25 @@ const GestionCursos = () => {
       });
       return;
     }
-  
+
+    setIsSubmitting(true);
+
     const courseData = {
       title: courseTitle,
       description: courseDescription,
       idVideo: selectedVideos, // Asegúrate de que el backend espera un array de idVideos
+      imageUrl: image.imageUrl,
+      imagePublicId: image.imagePublicId,
     };
-  
+
+    console.log("Enviando datos al dispatch:", courseData); // Log de depuración
+
     try {
-      await dispatch(createCourse(courseData)); // Ahora usamos await para esperar a que termine la acción
+      const createdCourse = await dispatch(createCourse(courseData)); // Espera a que termine la acción
+      console.log("Curso creado exitosamente:", createdCourse); // Log de depuración
       toast.success("Curso creado con éxito!", {
         position: "top-right",
         autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
       setTimeout(() => {
         navigate("/panel");
@@ -74,16 +100,12 @@ const GestionCursos = () => {
       toast.error("Error al crear el curso. Inténtalo de nuevo.", {
         position: "top-right",
         autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
-      console.error("Error en la creación del curso:", error); // Esto te ayudará a ver el error en la consola
+      console.error("Error en la creación del curso en el componente:", error); // Log de depuración
+    } finally {
+      setIsSubmitting(false);
     }
   };
-  
 
   const handleGoToPanel = () => {
     navigate("/panel");
@@ -126,26 +148,74 @@ const GestionCursos = () => {
               className="mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </div>
-          <button
-            type="submit"
-            className="bg-pink-500 text-white p-2 rounded mr-4"
-          >
-            Crear Curso
-          </button>
-          <button
-            type="button"
-            onClick={handleGoToPanel}
-            className="bg-pink-500 text-white px-4 py-2 rounded"
-          >
-            Ir a Panel
-          </button>
+          <div className="mb-4">
+            <label className="block text-gray-700">Imagen del Curso:</label>
+            {image.imageUrl ? (
+              <div className="mb-2 flex items-center">
+                <img src={image.imageUrl} alt="Course" className="w-48 h-auto mr-4 rounded" loading="lazy" />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  Eliminar Imagen
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleImageUpload}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Subir Imagen
+              </button>
+            )}
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Videos:</label>
+            {/* Selector múltiple para seleccionar videos */}
+            <select
+              multiple
+              value={selectedVideos}
+              onChange={(e) => {
+                const selectedOptions = Array.from(e.target.selectedOptions).map(
+                  (option) => parseInt(option.value)
+                );
+                setSelectedVideos(selectedOptions);
+              }}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded h-40" // Ajusta la altura según sea necesario
+            >
+              {videos.map((video) => (
+                <option key={video.idVideo} value={video.idVideo}>
+                  {video.title}
+                </option>
+              ))}
+            </select>
+            <p className="text-gray-500 mt-1">Mantén presionada la tecla Ctrl (Windows) o Cmd (Mac) para seleccionar múltiples videos.</p>
+          </div>
+          <div className="flex items-center">
+            <button
+              type="submit"
+              className={`bg-pink-500 text-white p-2 rounded mr-4 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Creando...' : 'Crear Curso'}
+            </button>
+            <button
+              type="button"
+              onClick={handleGoToPanel}
+              className="bg-pink-500 text-white px-4 py-2 rounded"
+            >
+              Ir a Panel
+            </button>
+          </div>
         </form>
         <h1 className="text-2xl font-bold mb-4">Videos del Canal</h1>
         {videos.length > 0 ? (
           <table className="min-w-full bg-gray-100 border border-gray-200 rounded-lg shadow-md">
             <thead>
               <tr>
-                <th className="py-2 px-4 border-b">Seleccionar</th>
+                {/* Eliminamos la columna de Selección */}
                 <th className="py-2 px-4 border-b">Título</th>
                 <th className="py-2 px-4 border-b">Descripción</th>
                 <th className="py-2 px-4 border-b">Duración</th>
@@ -155,15 +225,6 @@ const GestionCursos = () => {
             <tbody>
               {videos.map((video) => (
                 <tr key={video.idVideo} className="hover:bg-gray-200">
-                  <td className="py-2 px-4 border-b text-center">
-                    <input
-                      type="checkbox"
-                      value={video.idVideo}
-                      checked={selectedVideos.includes(video.idVideo)}
-                      onChange={() => handleCheckboxChange(video.idVideo)}
-                      className="form-checkbox"
-                    />
-                  </td>
                   <td className="py-2 px-4 border-b">{video.title}</td>
                   <td className="py-2 px-4 border-b">
                     {video.description || "Sin descripción"}
@@ -178,6 +239,7 @@ const GestionCursos = () => {
                       src={video.thumbnail}
                       alt={video.title}
                       className="w-16 h-auto"
+                      loading="lazy"
                     />
                   </td>
                 </tr>
@@ -193,6 +255,11 @@ const GestionCursos = () => {
 };
 
 export default GestionCursos;
+
+
+
+
+
 
 
 

@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
       },
     },
     {
-      tableName: "course_videos",
+      tableName: "CourseVideos",
       timestamps: false, // Ajusta según tus necesidades
     }
   );
