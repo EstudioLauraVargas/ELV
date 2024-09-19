@@ -10,7 +10,7 @@ const SubscriptionCourseSelection = () => {
   const { loading, error } = useSelector((state) => state.courses);
   const subscriptions = useSelector((state) => state.subscriptions); 
   const courses = useSelector((state) => state.courses.data);
-  const [selectedSubscription, setSelectedSubscription] = useState('');
+  const [selectedSubscription, setSelectedSubscription] = useState(null); // Cambiado a objeto
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [maxCourses, setMaxCourses] = useState(0);
   const { userInfo } = useSelector((state) => state.userLogin); 
@@ -19,17 +19,20 @@ const SubscriptionCourseSelection = () => {
   useEffect(() => {
     dispatch(getCourses());
     dispatch(fetchSubscriptions());
-    // Eliminar la creación de la orden aquí
   }, [dispatch]);
 
   const handleSubscriptionChange = (e) => {
-    const selectedSubId = e.target.value;
-    setSelectedSubscription(selectedSubId);
-    const selectedSub = subscriptions.find((sub) => sub.idSub === parseInt(selectedSubId));
+    const selectedSubId = parseInt(e.target.value);
+    const selectedSub = subscriptions.find((sub) => sub.idSub === selectedSubId);
     if (selectedSub) {
+      setSelectedSubscription(selectedSub);
       const max = selectedSub.durationDays === 30 ? 1 : selectedSub.durationDays === 180 ? 2 : 3;
       setMaxCourses(max);
       setSelectedCourses(new Array(max).fill(''));  // Reinicia la selección de cursos
+    } else {
+      setSelectedSubscription(null);
+      setMaxCourses(0);
+      setSelectedCourses([]);
     }
   };
 
@@ -44,53 +47,67 @@ const SubscriptionCourseSelection = () => {
       navigate('/login'); 
       return;
     }
-
-    // Preparar los datos de la orden
+  
+    if (!selectedSubscription) {
+      alert("Por favor, selecciona una suscripción.");
+      return;
+    }
+  
+    if (selectedCourses.some(courseId => !courseId)) {
+      alert("Por favor, selecciona todos los cursos.");
+      return;
+    }
+  
+    const totalAmount = selectedCourses.length * selectedSubscription.price;
+  
     const orderData = {
-      date: new Date().toISOString(),
-      amount: selectedCourses.length * 100000, // Ajusta según el precio real
+      date: new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+      amount: totalAmount,
       subscriptions: selectedCourses.map(courseId => ({
-        courseId: parseInt(courseId),
-        // Agrega otros detalles de la suscripción si es necesario
+        idSub: selectedSubscription.idSub,
+        idCourse: parseInt(courseId),
+        price: selectedSubscription.price,
+        typeSub: selectedSubscription.typeSub,
+        durationDays: selectedSubscription.durationDays
       })),
-      state_order: 'Pendiente', // Estado inicial
-      document: userInfo.document, // Asumiendo que 'document' es el identificador del usuario
+      state_order: 'Pendiente',
+      document: userInfo.document,
       currency: 'COP',
     };
-
+  
     try {
       // Despachar la acción para crear la orden
       const resultAction = await dispatch(createOrder(orderData));
-
-      if (createOrder.fulfilled.match(resultAction)) {
-        const createdOrder = resultAction.payload.orderCompra; // Ajusta según la respuesta de tu backend
-
+  
+      if (resultAction.type === 'ORDER_CREATE_SUCCESS') {
+        const createdOrder = resultAction.payload;
+  
         // Inicializar WompiCheckout con la orden creada
         if (!window.WompiCheckout) {
           console.error('WompiCheckout no está disponible en window.');
           return;
         }
-
+  
         const checkout = new window.WompiCheckout({
           currency: createdOrder.currency,
-          amountInCents: createdOrder.amount,
-          reference: createdOrder.orderId, // Usa orderId como referencia
-          publicKey: 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw', // Tu clave pública de Wompi
-          redirectUrl: 'https://tu-sitio.com/confirmacion-pago', // Reemplaza con tu URL real
-          // Opcionalmente, agrega información adicional del cliente
+          amountInCents: createdOrder.amount * 100, // En centavos si Wompi lo requiere
+          reference: createdOrder.orderId,
+          publicKey: 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw',
+          redirectUrl: 'https://tu-sitio.com/confirmacion-pago',
         });
-
+  
         checkout.open();
-      } else {
-        // Manejar errores al crear la orden
+      } else if (resultAction.type === 'ORDER_CREATE_FAIL') {
+        // Manejar el error de creación de la orden
         console.error('Error al crear la orden:', resultAction.payload);
-        // Opcional: mostrar una notificación al usuario
+        alert(`Error al crear la orden: ${resultAction.payload}`);
       }
     } catch (err) {
       console.error('Error durante el proceso de pago:', err);
-      // Opcional: mostrar una notificación al usuario
+      alert(`Error durante el proceso de pago: ${err.message}`);
     }
   };
+  
 
   if (loading) {
     return <div>Cargando...</div>;
@@ -119,7 +136,7 @@ const SubscriptionCourseSelection = () => {
             <label className="block text-gray-700 mb-2 text-lg font-medium">Selecciona una suscripción</label>
             <select
               id="subscription"
-              value={selectedSubscription}
+              value={selectedSubscription ? selectedSubscription.idSub : ''}
               onChange={handleSubscriptionChange}
               className="w-full border border-gray-300 rounded-md px-4 py-2"
             >
@@ -173,6 +190,7 @@ const SubscriptionCourseSelection = () => {
 };
 
 export default SubscriptionCourseSelection;
+
 
 
 

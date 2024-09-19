@@ -300,7 +300,7 @@ export const createOrder = (orderData) => async (dispatch) => {
   try {
     dispatch({ type: ORDER_CREATE_REQUEST });
 
-    const { data } = await axios.post(`${BASE_URL}/order/create/`, orderData);
+    const { data } = await axios.post(`${BASE_URL}/order/`, orderData);
 
     dispatch({
       type: ORDER_CREATE_SUCCESS,
