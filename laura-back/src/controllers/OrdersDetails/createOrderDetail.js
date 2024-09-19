@@ -79,7 +79,6 @@ module.exports = async (req, res) => {
     const maxDuration = Math.max(...subscriptions.map(sub => subscriptionMap[sub.idSub] || 0));
     const endDate = calculateEndDate(date, maxDuration);
 
-    // Crear la orden de compra
     const orderCompraData = {
       orderId: uuidv4(),
       document,
@@ -92,27 +91,7 @@ module.exports = async (req, res) => {
 
     const orderCompra = await OrderCompra.create(orderCompraData);
 
-    // Crear suscripciones
-    const subscriptionUpdates = subscriptions.map((sub) => ({
-      document: document,
-      idCourse: sub.idCourse,
-      orderCompraId: orderCompra.orderId,
-      durationDays: subscriptionMap[sub.idSub],
-      startDate: date,
-      endDate: calculateEndDate(date, subscriptionMap[sub.idSub]),
-      status: 'Active',
-      active: true,
-      price: sub.price,
-      typeSub: sub.typeSub,
-    }));
-
-    const createdSubscriptions = await Subscription.bulkCreate(subscriptionUpdates);
-
-    // Actualizar idSub en la orden
-    const firstSubscription = createdSubscriptions[0];
-    if (firstSubscription) {
-      await orderCompra.update({ idSub: firstSubscription.idSub });
-    }
+    // No necesitas crear OrderDetail, pero aquí puedes agregar lógica si es necesario.
 
     const updatedOrderCompra = await OrderCompra.findOne({
       where: { orderId: orderCompra.orderId },
