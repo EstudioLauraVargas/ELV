@@ -58,13 +58,16 @@ const initialState = {
  
 
   userLogin: {
-    userInfo: null,
+    userInfo: localStorage.getItem('userInfo') 
+               ? JSON.parse(localStorage.getItem('userInfo')) 
+               : null,
     loading: false,
     error: null,
   },
+};
 
   
-};
+
 
 
 
@@ -180,6 +183,7 @@ const rootReducer = (state = initialState, action) => {
         },
       };
     case USER_LOGIN_SUCCESS:
+      localStorage.setItem('userInfo', JSON.stringify(action.payload));
       return {
         ...state,
         userLogin: {
@@ -199,6 +203,7 @@ const rootReducer = (state = initialState, action) => {
         },
       };
     case USER_LOGOUT:
+      localStorage.removeItem('userInfo');
       return {
         ...state,
         userLogin: {

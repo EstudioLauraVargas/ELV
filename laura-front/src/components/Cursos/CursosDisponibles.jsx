@@ -24,7 +24,7 @@ const CursosDisponibles = () => {
                         En mis cursos personalizados, te enseño todos mis tips y técnicas que me han funcionado a lo largo de mi carrera y que te ayudarán a llevar tus procedimientos al nivel al que tanto has querido llegar.
                     </p>
                     <div className="buttons flex flex-col md:flex-row gap-4 mt-6 md:mt-8">
-                        <a target="_blank" href="/listaCursos">
+                        <a target="_blank" href="/tiendaCursos">
                             <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-base sm:text-lg md:text-xl uppercase py-3 md:py-4 px-6 rounded-xl">
                                 Ver Cursos
                             </button>
