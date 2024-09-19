@@ -39,7 +39,17 @@ import {
   DELETE_SUBSCRIPTION_FAILURE,
   GET_COURSE_REQUEST,
   GET_COURSE_SUCCESS,
-  GET_COURSE_FAILURE
+  GET_COURSE_FAILURE,
+
+  ORDER_CREATE_REQUEST,
+  ORDER_CREATE_SUCCESS,
+  ORDER_CREATE_FAIL,
+
+  FETCH_LATEST_ORDER_REQUEST,
+  FETCH_LATEST_ORDER_SUCCESS,
+  FETCH_LATEST_ORDER_FAILURE,
+
+  
 
 } from './actions-type';
 
@@ -285,3 +295,46 @@ export const deleteSubscription = (idSub) => async (dispatch) => {
     dispatch({ type: DELETE_SUBSCRIPTION_FAILURE, payload: error.message });
   }
 };
+
+export const createOrder = (orderData) => async (dispatch) => {
+  try {
+    dispatch({ type: ORDER_CREATE_REQUEST });
+
+    const { data } = await axios.post(`${BASE_URL}/order/create/`, orderData);
+
+    dispatch({
+      type: ORDER_CREATE_SUCCESS,
+      payload: data.data.orderCompra, // Ajusta según la respuesta de tu backend
+    });
+
+    // Retorna la acción para manejarla en el componente
+    return { type: ORDER_CREATE_SUCCESS, payload: data.data.orderCompra };
+   
+  } catch (error) {
+    dispatch({
+      type: ORDER_CREATE_FAIL,
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+    });
+    // Retorna la acción de fallo
+    return { type: ORDER_CREATE_FAIL, payload: error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message };
+  }
+};
+
+export const fetchLatestOrder = () => async (dispatch) => {
+  dispatch({ type: FETCH_LATEST_ORDER_REQUEST });
+  try {
+    const { data } = await axios.get(`${BASE_URL}/order?latest=true`);
+    dispatch({ type: FETCH_LATEST_ORDER_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: FETCH_LATEST_ORDER_FAILURE, payload: error.response.data });
+  }
+};
+
+
+
+
+
