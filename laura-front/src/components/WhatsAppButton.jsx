@@ -6,7 +6,7 @@ import style from './what.module.css'
 const WhatssapButton = () => {
   return (
     <a
-      href="https://wa.link/28unmk" 
+      href="https://api.whatsapp.com/send/?phone=573502142355&text&type=phone_number&app_absent=0" 
       className={style.whatsappButton}
       target="_blank"
       rel="noopener noreferrer"

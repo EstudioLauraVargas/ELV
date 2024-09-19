@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditarCurso from './EditarCursos'; // Asegúrate de importar el nuevo componente
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import backgroundImage from "../../lauraassets/bg1.png"
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { BASE_URL } from "../../Config";
@@ -81,7 +81,7 @@ const ListarCursos = () => {
 
   return (
     <div
-    className="min-h-screen bg-cover bg-center relative p-4 mt-4"
+    className="min-h-screen bg-cover bg-center relative p-4 "
     style={{ backgroundImage: `url(${backgroundImage})` }}
   >
       <Navbar/>

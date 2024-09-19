@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchVideos, updateCourse } from "../../Redux/Actions/actions"; 
 import axios from "axios";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import backgroundImage from "../../lauraassets/bg1.png"
 import { BASE_URL } from "../../Config";
 

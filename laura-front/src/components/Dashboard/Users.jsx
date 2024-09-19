@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../Config";
-import Navbar from './Dashboard/Navbar';
-import backgroundImage from "../lauraassets/bg1.png"
+import { BASE_URL } from "../../Config";
+import Navbar from '../Navbar';
+import backgroundImage from "../../lauraassets/bg1.png"
 
 const Users = () => {
   const [users, setUsers] = useState([]);

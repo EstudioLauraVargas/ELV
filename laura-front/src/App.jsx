@@ -7,7 +7,7 @@ import Landing from "./components/Landing/Landing";
 import Procedimientos from "./components/Procedimientos/Procedimientos";
 import Register from "./components/pages/auth/Register";
 import Cursos from "./components/Cursos/Cursos";
-import Users from "./components/Users"; 
+import Users from "./components/Dashboard/Users"; 
 import Video from "./components/services/Video"
 import Panel from "./components/Dashboard/Panel";
 import AllVideos from "./components/Cursos/AllVideos"
@@ -25,6 +25,9 @@ import CursosDisponibles from "./components/Cursos/CursosDisponibles";
 import TiendaCursos from "./components/Cursos/TiendaCursos";
 import CourseDetail from "./components/Cursos/CourseDetail";
 import SubscriptionCourseSelection from "./components/Cursos/SubscriptionCourseSelection";
+import Footer from "./components/Footer/Footer";
+
+
 function App() {
   return (
   <div>
@@ -56,6 +59,7 @@ function App() {
         <Route path="/detallePago/:idSub" element={<PaymentDetail />} />
         <Route path="/cursosDisponibles" element={<CursosDisponibles />} />
       </Routes>
+      <Footer/>
       </div>
   );
 }

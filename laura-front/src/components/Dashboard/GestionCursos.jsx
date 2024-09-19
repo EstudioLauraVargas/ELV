@@ -5,7 +5,7 @@ import { fetchVideos, createCourse } from "../../Redux/Actions/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import backgroundImage from "../../lauraassets/bg1.png";
 import { openCloudinaryWidget } from "../../cloudinaryConfig"; // Asegúrate del path
 
@@ -113,7 +113,7 @@ const GestionCursos = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center relative p-4 mt-4"
+      className="min-h-screen bg-cover bg-center relative p-4 "
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       <Navbar />

@@ -8,12 +8,11 @@ import {FaWhatsapp} from "react-icons/fa"
 const Footer = () => {
   return(
     <footer className={style.footer}>
-        <p className={style.david}>Copyrigth © 2023 Natalie Ariza</p>
+        <p className={style.david}>Copyrigth © 2024 codeAndCoffee</p>
         <div className={style.iconosPlus}>
-            <a target='_blank' className={style.link} href="https://www.facebook.com/profile.php?id=100091801837740"><RiFacebookCircleLine className={style.oneIcono}/></a>
-            <a target='_blank' className={style.link} href="https://www.instagram.com/nataliearizaodontestetica/ "><FiInstagram className={style.oneIcono}/></a>
-            <a target='_blank' className={style.link} href="https://goo.gl/maps/5AZAVcY3uA3oHwS38 "><MdOutlineLocationOn className={style.oneIcono}/></a>
-            <a target='_blank' className={style.link} href="https://wa.link/sdh5gu"><FaWhatsapp className={style.oneIcono}/></a>
+            <a target='_blank' className={style.link} href="https://www.facebook.com/lauravargas.cp/"><RiFacebookCircleLine className={style.oneIcono}/></a>
+            <a target='_blank' className={style.link} href="https://www.instagram.com/lauravargas.cpmu/ "><FiInstagram className={style.oneIcono}/></a>
+            <a target='_blank' className={style.link} href="https://api.whatsapp.com/send/?phone=573502142355&text&type=phone_number&app_absent=0"><FaWhatsapp className={style.oneIcono}/></a>
         </div>
         <p className={style.creadorDavid}><a className={style.link} target="_blank" href='https://www.codeandcoffee.tech'>Powered by CodeandCoffee</a></p>
     </footer>
