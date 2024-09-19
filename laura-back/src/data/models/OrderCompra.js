@@ -10,6 +10,10 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
+      id_Sub: {
+        type: DataTypes.INTEGER, 
+        allowNull: false,
+      },
       userId: { // Relación con User
         type: DataTypes.STRING,
         allowNull: false,
@@ -43,5 +47,4 @@ module.exports = (sequelize) => {
     }
   );
 };
-
 
