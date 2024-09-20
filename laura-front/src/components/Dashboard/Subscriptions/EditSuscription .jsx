@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSubscriptionById, updateSubscription } from "../../../Redux/Actions/actions";
-import Navbar from '../Navbar';
+import Navbar from '../../Navbar';
 import backgroundImage from "../../../lauraassets/bg1.png";
 
 function EditSubscription() {
@@ -66,7 +66,7 @@ function EditSubscription() {
   };
   return (
     <div
-    className="min-h-screen bg-cover bg-center relative p-4 mt-4"
+    className="min-h-screen bg-cover bg-center relative p-4 "
     style={{ backgroundImage: `url(${backgroundImage})` }}
   >
       <Navbar />

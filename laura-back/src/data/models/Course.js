@@ -1,7 +1,8 @@
+
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define(
+  const Course = sequelize.define(
     "Course",
     {
       idCourse: {
@@ -16,11 +17,24 @@ module.exports = (sequelize) => {
       description: {
         type: DataTypes.TEXT,
       },
-      
-      
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      imagePublicId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
-    
+    {
+      
+      timestamps: false, // Ajusta según tus necesidades
+    }
   );
+
+  return Course;
 };
+
+
 
 

@@ -4,14 +4,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditarCurso from './EditarCursos'; // Asegúrate de importar el nuevo componente
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import backgroundImage from "../../lauraassets/bg1.png"
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { BASE_URL } from "../../Config";
 
 const ListarCursos = () => {
   const [cursos, setCursos] = useState([]);
-  const [cursoSeleccionado, setCursoSeleccionado] = useState(null); // Estado para almacenar el curso a editar
+  const [cursoSeleccionado, setCursoSeleccionado] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const ListarCursos = () => {
       .get(`${BASE_URL}/cursos`)
       .then((response) => {
         if (!response.data.error) {
-          setCursos(response.data.data); // Asegúrate de acceder a la propiedad 'data'
+          setCursos(response.data.data); 
         } else {
           console.error("Error en la respuesta:", response.data.message);
         }
@@ -72,7 +72,7 @@ const ListarCursos = () => {
   };
 
   if (cursoSeleccionado) {
-    // Si hay un curso seleccionado, renderiza el componente de edición
+    
     return <EditarCurso idCourse={cursoSeleccionado} />;
   }
   const handleGoToPanel = () => {
@@ -81,7 +81,7 @@ const ListarCursos = () => {
 
   return (
     <div
-    className="min-h-screen bg-cover bg-center relative p-4 mt-4"
+    className="min-h-screen bg-cover bg-center relative p-4 "
     style={{ backgroundImage: `url(${backgroundImage})` }}
   >
       <Navbar/>

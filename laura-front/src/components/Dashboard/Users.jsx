@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../Config";
-import Navbar from './Dashboard/Navbar';
-import backgroundImage from "../lauraassets/bg1.png"
+import { BASE_URL } from "../../Config";
+import Navbar from '../Navbar';
+import backgroundImage from "../../lauraassets/bg1.png"
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -35,11 +35,11 @@ const handleGoToPanel = () => {
 
   return (
     <div
-    className="min-h-screen bg-cover bg-center relative p-4 mt-16"
+    className="min-h-screen bg-cover bg-center relative p-4 "
     style={{ backgroundImage: `url(${backgroundImage})` }}
   >
      <Navbar/>
-     <div className="flex justify-between items-center mb-4">
+     <div className="flex justify-between items-center mb-4 mt-20">
      <button
     onClick={handleGoToPanel}
     className="bg-pink-500 text-white px-4 py-2 rounded"

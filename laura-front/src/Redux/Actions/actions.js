@@ -8,6 +8,8 @@ import {
   CREATE_COURSE_REQUEST,
   CREATE_COURSE_SUCCESS,
   CREATE_COURSE_FAILURE,
+  GET_COURSES_SUCCESS, 
+  GET_COURSES_FAILURE,
   COURSE_UPDATE_REQUEST,
   COURSE_UPDATE_SUCCESS,
   COURSE_UPDATE_FAIL,
@@ -35,7 +37,19 @@ import {
   DELETE_SUBSCRIPTION_REQUEST,
   DELETE_SUBSCRIPTION_SUCCESS,
   DELETE_SUBSCRIPTION_FAILURE,
-  
+  GET_COURSE_REQUEST,
+  GET_COURSE_SUCCESS,
+  GET_COURSE_FAILURE,
+
+  ORDER_CREATE_REQUEST,
+  ORDER_CREATE_SUCCESS,
+  ORDER_CREATE_FAIL,
+
+  FETCH_LATEST_ORDER_REQUEST,
+  FETCH_LATEST_ORDER_SUCCESS,
+  FETCH_LATEST_ORDER_FAILURE,
+
+  CLEAR_ORDER_STATE
 
 } from './actions-type';
 
@@ -69,15 +83,60 @@ export const fetchVideos = () => async (dispatch) => {
 };
 
 
+// actions.js
 export const createCourse = (courseData) => async (dispatch) => {
   dispatch({ type: CREATE_COURSE_REQUEST });
   try {
     const response = await axios.post(`${BASE_URL}/cursos/add`, courseData);
     dispatch({ type: CREATE_COURSE_SUCCESS, payload: response.data });
+    return response.data; 
   } catch (error) {
-    dispatch({ type: CREATE_COURSE_FAILURE, payload: error.message });
+    dispatch({ type: CREATE_COURSE_FAILURE, payload: error.response?.data?.message || error.message });
+    throw error; 
   }
 };
+
+export const getCourses = () => {
+  return async (dispatch) => {
+      try {
+          const response = await axios.get(`${BASE_URL}/cursos`);
+          const courses = response.data; // Asegúrate de manejar el 'data' dentro de la respuesta
+          
+          dispatch({
+              type: GET_COURSES_SUCCESS,
+              payload: courses
+          });
+      } catch (error) {
+          dispatch({
+              type: GET_COURSES_FAILURE,
+              payload: error.message
+          });
+      }
+  };
+};
+
+// Acción para obtener un curso por su id
+export const getCourseById = (idCourse) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: GET_COURSE_REQUEST }); // Inicia la carga
+
+      const response = await axios.get(`${BASE_URL}/cursos/${idCourse}`);
+      const course = response.data.data; 
+
+      dispatch({
+        type: GET_COURSE_SUCCESS,
+        payload: course, // Guardamos el curso en el payload
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_COURSE_FAILURE,
+        payload: error.message, // Enviamos el mensaje de error si ocurre
+      });
+    }
+  };
+};
+
 
 export const updateCourse = (idCourse, updatedCourseData) => async (dispatch) => {
   try {
@@ -236,3 +295,50 @@ export const deleteSubscription = (idSub) => async (dispatch) => {
     dispatch({ type: DELETE_SUBSCRIPTION_FAILURE, payload: error.message });
   }
 };
+
+export const createOrder = (orderData) => async (dispatch) => {
+  try {
+    dispatch({ type: ORDER_CREATE_REQUEST });
+
+    const { data } = await axios.post(`${BASE_URL}/order/`, orderData);
+
+    dispatch({
+      type: ORDER_CREATE_SUCCESS,
+      payload: data.data.orderCompra, // Ajusta según la respuesta de tu backend
+    });
+
+    // Retorna la acción para manejarla en el componente
+    return { type: ORDER_CREATE_SUCCESS, payload: data.data.orderCompra };
+   
+  } catch (error) {
+    dispatch({
+      type: ORDER_CREATE_FAIL,
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+    });
+    // Retorna la acción de fallo
+    return { type: ORDER_CREATE_FAIL, payload: error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message };
+  }
+};
+
+export const clearOrderState = () => ({
+  type: CLEAR_ORDER_STATE,
+});
+
+export const fetchLatestOrder = () => async (dispatch) => {
+  dispatch({ type: FETCH_LATEST_ORDER_REQUEST });
+  try {
+    const { data } = await axios.get(`${BASE_URL}/order?latest=true`);
+    dispatch({ type: FETCH_LATEST_ORDER_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: FETCH_LATEST_ORDER_FAILURE, payload: error.response.data });
+  }
+};
+
+
+
+
+

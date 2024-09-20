@@ -49,44 +49,42 @@ const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, DB_DEPLOY } = require("
   sequelize.models = Object.fromEntries(capsEntries);
   
  
-  const { User, Course, Subscription, Video, Payment, OrderCompra } = sequelize.models;
+  const { User, Course, Subscription, Video, Payment, OrderCompra, CourseVideos } = sequelize.models;
 
 
 /////////////////////////////////////////RELACIONES//////////////////////////////////////
+
 
 
 // Relación User -> Subscription (uno a muchos)
 User.hasMany(Subscription, {
   foreignKey: 'document', 
 });
-
 Subscription.belongsTo(User, {
   foreignKey: 'document',
 });
-Subscription.belongsTo(Payment, { foreignKey: 'id_payment' });
-Payment.hasMany(Subscription, { foreignKey: 'id_payment' });
 
-//Relación Course -> Subscription (uno a muchos)
+// Relación Course -> Subscription (uno a muchos)
 Course.hasMany(Subscription, {
   foreignKey: 'idCourse', 
 });
 Subscription.belongsTo(Course, {
   foreignKey: 'idCourse',
 });
+
+// Relación Course -> Video (muchos a muchos)
 Course.belongsToMany(Video, {
   through: 'CourseVideos',
   foreignKey: 'idCourse',
   otherKey: 'idVideo',
 });
-
 Video.belongsToMany(Course, {
   through: 'CourseVideos',
   foreignKey: 'idVideo',
   otherKey: 'idCourse',
 });
 
-
-//Relación OrdenCompra -> User (uno a muchos)
+// Relación OrderCompra -> User (uno a muchos)
 OrderCompra.belongsTo(User, {
   foreignKey: 'document',
   allowNull: false,
@@ -94,13 +92,16 @@ OrderCompra.belongsTo(User, {
 User.hasMany(OrderCompra, {
   foreignKey: 'document',
 });
-OrderCompra.belongsTo(Subscription, {
-  foreignKey: 'idSub',    
+
+// Relación OrderCompra -> Subscription (uno a muchos)
+OrderCompra.hasMany(Subscription, {
+  foreignKey: 'orderId',
+});
+Subscription.belongsTo(OrderCompra, {
+  foreignKey: 'orderId',
 });
 
-Subscription.belongsTo(OrderCompra, {
-  foreignKey: 'idSub',
-});
+// Relación OrderCompra -> Payment (uno a uno)
 OrderCompra.hasOne(Payment, {
   foreignKey: 'orderId', 
   allowNull: false,

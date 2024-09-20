@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSubscription, updateSubscription } from '../../../Redux/Actions/actions';
 import { useParams, useNavigate } from 'react-router-dom';
-import Navbar from '../Navbar';
+import Navbar from '../../Navbar';
 import backgroundImage from "../../../lauraassets/bg1.png"
 
 const SubscriptionForm = () => {
@@ -13,7 +13,6 @@ const SubscriptionForm = () => {
   
   const [formData, setFormData] = useState({
     typeSub: '',
-    accessStartDate: '',
     durationDays: '',
     price: '',
     active: true,
@@ -53,7 +52,7 @@ const SubscriptionForm = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center relative p-4 mt-4"
+      className="min-h-screen bg-cover bg-center relative p-4 "
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       <Navbar/>
@@ -71,17 +70,7 @@ const SubscriptionForm = () => {
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Fecha de Inicio</label>
-          <input
-            type="date"
-            name="accessStartDate"
-            value={formData.accessStartDate}
-            onChange={handleChange}
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-            required
-          />
-        </div>
+       
         <div className="mb-4">
           <label className="block text-gray-700">Duración (días)</label>
           <input

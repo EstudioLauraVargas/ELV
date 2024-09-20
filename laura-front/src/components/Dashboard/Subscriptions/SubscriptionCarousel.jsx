@@ -7,13 +7,13 @@ import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import backgroundImage from "../../../lauraassets/sombras.png"
+import backgroundImage from "../../../lauraassets/sombras.png";
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 const SubscriptionCarousel = () => {
     const dispatch = useDispatch();
     const subscriptions = useSelector((state) => state.subscriptions);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(fetchSubscriptions());
@@ -33,52 +33,54 @@ const SubscriptionCarousel = () => {
           nextButton.style.borderRadius = '50%';
           prevButton.style.borderRadius = '50%';
         }
-      }, []);
+    }, []);
 
     const handleSubscriptionSelect = (subscription) => {
         navigate(`/detallePago/${subscription.idSub}`, { state: { subscription } });
     };
-  
+
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="w-full max-w-4xl p-4">
-          <h2 className="text-4xl font-bold mb-4 text-center">Suscripciones Disponibles</h2>
-          <Swiper
-            spaceBetween={20}
-            slidesPerView={1}
-            loop={true}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            pagination={{ clickable: true }}
-            navigation
-            modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper"
-          >
-            {subscriptions.map((subscription) => (
-              <SwiperSlide key={subscription.idSub} onClick={() => handleSubscriptionSelect(subscription)}>
-                <div
-                  className="relative bg-cover bg-center bg-no-repeat rounded-lg shadow-lg p-8 flex flex-col items-center justify-center cursor-pointer"
-                  style={{
-                    backgroundImage: `url(${backgroundImage})`,
-                    width: 'calc(100% + 50%)',
-                  }}
+        <div className="flex justify-center items-center min-h-screen px-4">
+            <div className="w-full max-w-4xl">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">Suscripciones Disponibles</h2>
+                <Swiper
+                    spaceBetween={20}
+                    slidesPerView={1}
+                    loop={true}
+                    autoplay={{
+                        delay: 2500,
+                        disableOnInteraction: false,
+                    }}
+                    pagination={{ clickable: true }}
+                    navigation
+                    modules={[Autoplay, Pagination, Navigation]}
+                    className="mySwiper"
                 >
-                  <div className="bg-black bg-opacity-50 rounded-lg p-16 text-center">
-                    <h3 className="text-2xl font-semibold text-white mb-2">{subscription.typeSub}</h3>
-                    <p className="text-gray-300 mb-2">{subscription.durationDays} días</p>
-                    <p className="text-white text-xl font-bold">${subscription.price.toFixed(2)}</p>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                    {subscriptions.map((subscription) => (
+                        <SwiperSlide key={subscription.idSub} onClick={() => handleSubscriptionSelect(subscription)}>
+                            <div
+                                className="relative bg-cover bg-center bg-no-repeat rounded-lg shadow-lg p-6 flex flex-col items-center justify-center cursor-pointer"
+                                style={{
+                                    backgroundImage: `url(${backgroundImage})`,
+                                    backgroundSize: 'cover', // Asegúrate de que la imagen cubra el área
+                                    width: '100%', // Ajusta el ancho al 100% del contenedor
+                                }}
+                            >
+                                <div className="bg-black bg-opacity-50 rounded-lg p-6 text-center w-full">
+                                    <h3 className="text-lg md:text-2xl font-semibold text-white mb-2">{subscription.typeSub}</h3>
+                                    <p className="text-gray-300 mb-2">{subscription.durationDays} días</p>
+                                    <p className="text-white text-lg md:text-xl font-bold">${subscription.price.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
         </div>
-      </div>
     );
 };
 
 export default SubscriptionCarousel;
+
 
 

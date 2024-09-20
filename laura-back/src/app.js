@@ -3,6 +3,7 @@ const session = require('express-session');
 const morgan = require("morgan");
 const routes = require("./routes");
 const cors = require("cors");
+const bodyParser = require('body-parser');
 const { passport, initialize } = require("./passport");
 const { JWT_SECRET_KEY } = require("./config/envs");
 const path = require('path');
@@ -22,6 +23,7 @@ app.use(
   })
 );
 
+app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('dev'));
 app.use('/', routes);

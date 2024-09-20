@@ -1,120 +1,48 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
-import { logout } from "../../Redux/Actions/actions";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import logolaura from "../../lauraassets/logolaura.png";
+import { NavLink } from "react-router-dom";
 import fondo2 from "../../lauraassets/bg2.png";
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import React from "react";
 import SubscriptionCarousel from "../Dashboard/Subscriptions/SubscriptionCarousel";
 
 const Cursos = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const userInfo = useSelector((state) => state.userLogin.userInfo);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const handleMenuToggle = () => {
-        setIsOpen(!isOpen);
-    };
-
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate("/");
-    };
-
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        centerMode: true,
-        centerPadding: '0px',
-        adaptiveHeight: true,
-    };
-
-    const renderMenuItems = () => {
-        if (!userInfo?.token) {
-            return (
-                <>
-                    <NavLink to="/login" className="block text-lg py-2">Login</NavLink>
-                    <NavLink to="/" className="block text-lg py-2">Inicio</NavLink>
-                </>
-            );
-        } else if (userInfo.role === "admin") {
-            return (
-                <>
-                    <button onClick={handleLogout} className="text-white uppercase font-bold">Logout</button>
-                    <NavLink to="/panel" className="block text-lg py-2">Panel</NavLink>
-                    <NavLink to="/" className="block text-lg py-2">Inicio</NavLink>
-                </>
-            );
-        } else if (userInfo.role === "client") {
-            return (
-                <>
-                    <button onClick={handleLogout} className="text-white uppercase font-bold">Logout</button>
-                    <NavLink to="/misCursos" className="block text-lg py-2">Mis Cursos</NavLink>
-                    <NavLink to="/" className="block text-lg py-2">Inicio</NavLink>
-                </>
-            );
-        }
-    };
-
     return (
         <div className="landing bg-black text-white">
-            {/* Navbar */}
-            <div className="navBar flex justify-between items-center p-6 fixed z-10 w-full top-0 left-0">
-                <NavLink to="/">
-                    <img src={logolaura} alt="Logo" className="h-12" />
-                </NavLink>
-                <button onClick={handleMenuToggle} className="text-white">
-                    <Bars3Icon className="h-8 w-8" />
-                </button>
-            </div>
-
-            {/* Sidebar Menu */}
-            <div className={`fixed top-0 right-0 bg-black text-white w-64 h-full transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out z-20`}>
-                <div className="p-6">
-                    {renderMenuItems()}
+            <div className="view4 relative flex flex-col md:flex-row-reverse justify-center items-center gap-8 px-4 md:px-8 pt-10 md:pt-20 w-full max-w-full">
+                
+                {/* Carousel */}
+                <div className="w-full md:w-1/2 ">
+                    <SubscriptionCarousel />
                 </div>
-            </div>
 
-            {/* Main Content */}
-            <div className="view4 relative flex flex-col md:flex-row-reverse justify-center items-center gap-16 pt-20">
-            <SubscriptionCarousel/>
-            <div className="info z-[100]">
-            
-            <h1 className="titlexd m-0 uppercase text-[4em] w-[33vw] font-bold leading-[60px] italic">
-            
+                {/* Información del curso */}
+                <div className="info z-10 text-center md:text-left w-full md:w-1/2">
+                    <h1 className="titlexd uppercase text-2xl sm:text-3xl md:text-4xl lg:text-[4em] w-full font-bold leading-tight md:leading-[60px] italic">
                         Conviértete en mejor artista de mi mano
                     </h1>
-                    <p className="subtitle w-[30vw] font-bold text-[1.4em]">
+                    <p className="subtitle font-bold text-base sm:text-lg md:text-xl lg:text-[1.4em] mt-4 md:mt-6">
                         En mis cursos personalizados, te enseño todos mis tips y técnicas que me han funcionado a lo largo de mi carrera y que te ayudarán a llevar tus procedimientos al nivel al que tanto has querido llegar.
                     </p>
-                    
-                    <div className="buttons flex gap-[10px] mt-[1%]">
-                        <a target="_blank" href="/misCursos">
-                            <button className="button bg-pink-200 text-white w-[135px] h-[35px] rounded-[30px] uppercase font-bold italic transition duration-300 shadow-lg hover:shadow-[0_0_30px_10px_#e5959579] mt-4">
+                    <div className="buttons flex flex-col md:flex-row gap-4 mt-6 md:mt-8">
+                        <a target="_blank" href="/cursosDisponibles">
+                            <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-base sm:text-lg md:text-xl uppercase py-3 md:py-4 px-6 rounded-xl">
                                 Ver Cursos
                             </button>
                         </a>
                         <NavLink to="/">
-                            <button className="button2 bg-transparent text-white w-64 h-16 rounded-full uppercase font-bold italic transition duration-300 hover:text-pink-200">
+                            <button className="bg-transparent text-white border-2 border-white hover:border-pink-500 w-full md:w-64 h-10 md:h-12 lg:h-16 rounded uppercase font-bold italic transition duration-300 hover:text-pink-200">
                                 Volver
                             </button>
                         </NavLink>
-                       
                     </div>
-                    
                 </div>
-                <div className="fondo2 absolute top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat brightness-50" style={{ backgroundImage: `url(${fondo2})` }}></div>
+
+                {/* Imagen de fondo solo visible en pantallas medianas y grandes */}
+                <div className="fondo2 absolute top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat brightness-50 hidden md:block" style={{ backgroundImage: `url(${fondo2})` }}></div>
             </div>
         </div>
     );
 };
 
 export default Cursos;
+
+
 
