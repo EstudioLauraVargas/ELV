@@ -12,7 +12,7 @@ import { openCloudinaryWidget } from "../../cloudinaryConfig"; // Asegúrate del
 const GestionCursos = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const videos = useSelector((state) => state.videos );
+  const videos = useSelector((state) => state.videos || []);
 
   const [selectedVideos, setSelectedVideos] = useState([]);
   const [courseTitle, setCourseTitle] = useState('');
