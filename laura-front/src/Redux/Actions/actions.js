@@ -60,9 +60,9 @@ export const fetchVideos = () => async (dispatch) => {
   try {
     const response = await fetch(`${BASE_URL}/videos/videos`, {
       method: 'GET',
-      // headers: {
-      //     Authorization: `Bearer ${tokens.access_token}`,
-      // },
+      headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
     });
 
     console.log('Response received:', response);
