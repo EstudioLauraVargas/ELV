@@ -75,11 +75,15 @@ const fetchAndStoreVideos = async (req, res) => {
 
     // Devolver los nuevos videos que se han guardado
     response(res, 200, { videos: shortVideos, message: 'Nuevos videos guardados.' });
-  } catch (error) {
-    console.error('Error al obtener videos de YouTube:', error.message);
+  }  catch (error) {
+    if (error.response) {
+      console.error('Error de respuesta de YouTube API:', error.response.data);
+    } else {
+      console.error('Error al obtener videos de YouTube:', error.message);
+    }
     response(res, 500, 'Error al obtener videos.');
   }
-};
+  
 
 module.exports = {
   fetchAndStoreVideos,
