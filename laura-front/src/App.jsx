@@ -26,6 +26,7 @@ import TiendaCursos from "./components/Cursos/TiendaCursos";
 import CourseDetail from "./components/Cursos/CourseDetail";
 import SubscriptionCourseSelection from "./components/Cursos/SubscriptionCourseSelection";
 import Footer from "./components/Footer/Footer";
+import PaymentConfirmation from "./components/Cursos/PaymentConfirmation";
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
         <Route path="/tiendaCursos" element={<TiendaCursos/>}/>
         <Route path="/curso/:idCourse" element={<CourseDetail />} />
         <Route path="/suscCourse" element={<SubscriptionCourseSelection/>}/>
+        <Route path="/pay" element={<PaymentConfirmation/>}/>
         <Route path="/listarSuscripciones" element={<SubscriptionList/>} />
         <Route path="/crudSubs" element={<Suscripciones/>} />
         <Route path="/crearSubs" element={<SubscriptionForm/>} />

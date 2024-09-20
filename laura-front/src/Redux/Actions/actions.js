@@ -49,7 +49,7 @@ import {
   FETCH_LATEST_ORDER_SUCCESS,
   FETCH_LATEST_ORDER_FAILURE,
 
-  
+  CLEAR_ORDER_STATE
 
 } from './actions-type';
 
@@ -323,6 +323,10 @@ export const createOrder = (orderData) => async (dispatch) => {
       : error.message };
   }
 };
+
+export const clearOrderState = () => ({
+  type: CLEAR_ORDER_STATE,
+});
 
 export const fetchLatestOrder = () => async (dispatch) => {
   dispatch({ type: FETCH_LATEST_ORDER_REQUEST });
