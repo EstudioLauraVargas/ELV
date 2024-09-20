@@ -1,3 +1,5 @@
+
+import { BASE_URL } from '../../Config';
 import  { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -11,7 +13,7 @@ const Video = () => {
   useEffect(() => {
     const fetchVideoData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/youtube/video/${id}`, {
+        const response = await axios.get(`${BASE_URL}/youtube/video/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
