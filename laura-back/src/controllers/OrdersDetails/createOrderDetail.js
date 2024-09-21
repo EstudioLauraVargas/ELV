@@ -53,10 +53,10 @@ module.exports = async (req, res) => {
       return response(res, 404, { error: `Courses with ids ${missing.join(', ')} not found `});
     }
 
-    // Generar reference y firma de integridad
-    const reference = `SO-${uuidv4()}`;
+    // Generar referencia y firma de integridad
+    const referencia = `SO-${uuidv4()}`;
     const integritySignature = generarFirmaIntegridad(
-      reference,
+      referencia,
       amount * 100,
       currency,
       secretoIntegridad
@@ -83,7 +83,6 @@ module.exports = async (req, res) => {
       orderId: uuidv4(),
       document,
       amount,
-      reference,
       state_order,
       transaction_status: 'Pendiente',
       startDate: date,
