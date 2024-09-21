@@ -87,34 +87,34 @@ const SubscriptionCourseSelection = () => {
 
   const handlePayment = async () => {
     console.log('Initiating payment process.');
-  
+
     if (!scriptLoaded || typeof window.WidgetCheckout === 'undefined') {
       console.error('WidgetCheckout no está disponible aún.');
       toast.error('Por favor, espere mientras se carga la opción de pago.');
       return;
     }
-  
+
     if (!userInfo) {
       console.log('User not logged in. Redirecting to login.');
       navigate('/login'); 
       return;
     }
-  
+
     if (!selectedSubscription) {
       console.log('No subscription selected.');
       toast.error("Por favor, selecciona una suscripción.");
       return;
     }
-  
+
     if (selectedCourses.some(courseId => !courseId)) {
       console.log('Not all courses selected.');
       toast.error("Por favor, selecciona todos los cursos.");
       return;
     }
-  
+
     const totalAmount = selectedCourses.length * selectedSubscription.price;
     console.log('Total amount calculated:', totalAmount);
-  
+
     const orderData = {
       date: new Date().toISOString().split('T')[0],
       amount: totalAmount,
@@ -124,43 +124,46 @@ const SubscriptionCourseSelection = () => {
         price: selectedSubscription.price,
         typeSub: selectedSubscription.typeSub,
         durationDays: selectedSubscription.durationDays,
+        
       })),
       state_order: 'Pendiente',
       document: userInfo.document,
       currency: 'COP',
     };
-  
+
     console.log('Order data to be dispatched:', orderData);
-  
+
     setIsProcessing(true); // Iniciar estado de procesamiento
-  
+
     try {
       const resultAction = await dispatch(createOrder(orderData));
-  
+
       console.log('Result of createOrder action:', resultAction);
-  
+
       if (resultAction.type === 'ORDER_CREATE_SUCCESS') {
         const createdOrder = resultAction.payload;
         console.log('Order created successfully:', createdOrder);
         toast.success('Orden creada exitosamente.');
-  
+
         if (typeof window.WidgetCheckout === 'undefined') {
           console.error('WidgetCheckout no está disponible en window.');
           toast.error('Error al iniciar el pago.');
           setIsProcessing(false);
           return;
         }
-  
+
         const checkout = new window.WidgetCheckout({
+          
           amountInCents: createdOrder.amount * 100,
-          reference: createdOrder.reference, // Usar 'reference' en lugar de 'orderId'
+          reference: createdOrder.reference,
           publicKey: import.meta.env.VITE_WOMPI_PUBLIC_KEY || 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw',
           redirectUrl: 'https://elv.vercel.app/pay',
-          currency: "COP",
-          signature: createdOrder.signature, // Asegúrate de que 'signature' está disponible
+          currency: "COP", // Asegúrate de reemplazar con tu URL real
+          // Agrega otros campos opcionales según sea necesario
+          signature: createdOrder.signature, // Asegúrate de obtener el signature desde tu backend
           // Puedes agregar campos opcionales como taxInCents, customerData, shippingAddress, etc.
         });
-  
+
         console.log('Opening WidgetCheckout with order:', createdOrder);
         checkout.open(function (result) {
           var transaction = result.transaction;
