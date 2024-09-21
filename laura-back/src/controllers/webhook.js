@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const { OrderCompra } = require("../../data"); // Ajusta la ruta según tu estructura de proyecto
 
-export default async (req, res) => {
+module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
