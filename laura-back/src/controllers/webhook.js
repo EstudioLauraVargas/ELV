@@ -1,17 +1,11 @@
-const express = require('express');
 const crypto = require('crypto');
-const { OrderCompra } = require("../data");
+const { OrderCompra } = require("../../data"); // Ajusta la ruta según tu estructura de proyecto
 
-const app = express();
+export default async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
 
-// Middleware para capturar el cuerpo crudo
-app.use(express.json({
-    verify: (req, res, buf) => {
-        req.rawBody = buf;
-    }
-}));
-
-module.exports = async (req, res) => {
   try {
     const signature = req.headers['wompi-signature'];
     if (!signature) {
@@ -25,9 +19,10 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: 'Server configuration error' });
     }
 
-    // Generar el hash usando el cuerpo crudo
+    // Para capturar el cuerpo crudo en Vercel, necesitas configurar la función para recibir el cuerpo como buffer
+    const bodyBuffer = await buffer(req);
     const hash = crypto.createHmac('sha256', secret)
-                       .update(req.rawBody)
+                       .update(bodyBuffer)
                        .digest('hex');
 
     if (hash !== signature) {
@@ -35,7 +30,9 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Invalid signature' });
     }
 
-    const { event, data } = req.body;
+    const body = JSON.parse(bodyBuffer.toString());
+
+    const { event, data } = body;
 
     console.log("Evento recibido:", event);
 
@@ -44,7 +41,6 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Unknown event' });
     }
 
-    // Verifica si existe la transacción y el campo de referencia
     const transaction = data.transaction;
     if (!transaction || !transaction.reference) {
       console.warn("Datos de transacción inválidos:", transaction);
@@ -53,7 +49,6 @@ module.exports = async (req, res) => {
 
     console.log("Datos de la transacción:", transaction);
 
-    // Busca la orden usando la referencia
     const orderCompra = await OrderCompra.findOne({
       where: { reference: transaction.reference }
     });
@@ -63,7 +58,6 @@ module.exports = async (req, res) => {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    // Manejar diferentes estados de transacción
     switch (transaction.status) {
       case 'APPROVED':
         orderCompra.transaction_status = 'Aprobado';
@@ -95,6 +89,20 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+// Función auxiliar para obtener el cuerpo como buffer en Vercel
+import { IncomingMessage } from 'http';
+
+async function buffer(readable) {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+
+
 
 
 
