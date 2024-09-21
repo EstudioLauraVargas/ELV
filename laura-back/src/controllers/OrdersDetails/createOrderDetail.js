@@ -54,7 +54,7 @@ module.exports = async (req, res) => {
     }
 
     // Generar referencia y firma de integridad
-    const referencia = `SO-${uuidv4()}`;
+    const referencia = `SO-${uuidv4()}`; // Genera una referencia con prefijo
     const integritySignature = generarFirmaIntegridad(
       referencia,
       amount * 100,
@@ -81,6 +81,7 @@ module.exports = async (req, res) => {
 
     const orderCompraData = {
       orderId: uuidv4(),
+      reference: referencia, // Asigna la referencia generada
       document,
       amount,
       state_order,
@@ -112,3 +113,4 @@ module.exports = async (req, res) => {
     return response(res, 500, { error: error.message });
   }
 };
+
