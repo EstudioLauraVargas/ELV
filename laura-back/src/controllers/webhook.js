@@ -47,7 +47,7 @@ module.exports = async (req, res) => {
     console.log("Tipo de evento:", event);
     console.log("Datos del evento:", data);
 
-    if (event !== 'transaction.updated') {
+    if (event !== 'transaction') {
       console.warn("Tipo de evento desconocido:", event);
       return res.status(400).json({ error: 'Unknown event type' });
     }
