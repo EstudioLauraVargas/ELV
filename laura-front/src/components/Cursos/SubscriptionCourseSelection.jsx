@@ -128,7 +128,7 @@ const SubscriptionCourseSelection = () => {
       state_order: 'Pendiente',
       document: userInfo.document,
       currency: 'COP',
-      reference: '' // Deja vacío o quita este campo si no se utiliza
+      reference: '' 
     };
     
 
@@ -162,7 +162,7 @@ const SubscriptionCourseSelection = () => {
           signature: createdOrder.signature,
         });
 
-        
+
         console.log('Opening WidgetCheckout with order:', createdOrder);
         checkout.open(function (result) {
           var transaction = result.transaction;

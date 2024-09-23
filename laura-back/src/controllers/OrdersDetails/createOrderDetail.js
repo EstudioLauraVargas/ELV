@@ -7,8 +7,8 @@ const { Op } = require("sequelize");
 
 const secretoIntegridad = "test_integrity_VMVZ36lyoQot5DsN0fBXAmp4onT5T86G";
 
-function generarFirmaIntegridad(orderId, monto, moneda, secretoIntegridad) {
-  const cadenaConcatenada = `${orderId}${monto}${moneda}${secretoIntegridad}`;
+function generarFirmaWompi(transactionId, transactionStatus, amountInCents, secretoIntegridad) {
+  const cadenaConcatenada = `${transactionId}${transactionStatus}${amountInCents}${secretoIntegridad}`;
   return crypto.createHash("sha256").update(cadenaConcatenada).digest("hex");
 }
 
