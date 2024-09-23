@@ -7,7 +7,7 @@ const { Op } = require("sequelize");
 
 const secretoIntegridad = "test_integrity_VMVZ36lyoQot5DsN0fBXAmp4onT5T86G";
 
-function  generarFirmaIntegridad(transactionId, transactionStatus, amountInCents, secretoIntegridad) {
+function generarFirmaIntegridad(orderId, monto, moneda, secretoIntegridad) {
   const cadenaConcatenada = `${orderId}${monto}${moneda}${secretoIntegridad}`;
   return crypto.createHash("sha256").update(cadenaConcatenada).digest("hex");
 }
@@ -56,7 +56,10 @@ module.exports = async (req, res) => {
     // Generar referencia y firma de integridad
     const referencia = `SO-${uuidv4()}`;
     const integritySignature = generarFirmaIntegridad(
-      ansactionId, transactionStatus, amountInCents, secretoIntegridad
+      referencia,
+      amount * 100,
+      currency,
+      secretoIntegridad
     );
 
     // Encontrar duración máxima de las suscripciones
