@@ -3,7 +3,7 @@ const response = require("../../utils/response");
 const { v4: uuidv4 } = require("uuid");
 const { generarFirmaIntegridad } = require("../../utils/signature"); // Si usas esta firma para tus propósitos internos
 const { Op } = require("sequelize");
-const crypto = require('crypto'); // Solo si es necesario
+const crypto = require('crypto'); 
 
 const secretoIntegridad = "test_integrity_VMVZ36lyoQot5DsN0fBXAmp4onT5T86G";
 
