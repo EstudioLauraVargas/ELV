@@ -3,26 +3,39 @@ const session = require('express-session');
 const morgan = require("morgan");
 const routes = require("./routes");
 const cors = require("cors");
-const bodyParser = require('body-parser');
 const { passport } = require("./passport");
 const { JWT_SECRET_KEY } = require("./config/envs");
 const path = require('path');
 
+
+
 const app = express();
 
-// Configuración de CORS
-app.use(express.json());
+app.use((req, res, next) => {
+  console.log(`Solicitud recibida: ${req.method} ${req.url}`);
+  next();
+});
+
+app.use(cors());
+app.use(morgan('dev'));
+
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf.toString();
+  }
+}));
+
 app.use(express.urlencoded({ extended: true }));
-app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use(session({
   secret: `${JWT_SECRET_KEY}`,
   resave: false,
   saveUninitialized: false,
 }));
 
-app.use(bodyParser.json());
-app.use(cors());
-app.use(morgan('dev'));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+
 app.use(passport.initialize());
 
 // Rutas de API

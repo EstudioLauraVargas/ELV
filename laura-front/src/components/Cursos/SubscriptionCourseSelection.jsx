@@ -157,7 +157,7 @@ const SubscriptionCourseSelection = () => {
           amountInCents: createdOrder.amount * 100,
           reference: createdOrder.orderId,
           publicKey: import.meta.env.VITE_WOMPI_PUBLIC_KEY || 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw',
-          redirectUrl: 'http://localhost:5173/pay',
+          redirectUrl: 'https://elv.vercel.app/pay',
           currency: "COP", // Asegúrate de reemplazar con tu URL real
           // Agrega otros campos opcionales según sea necesario
           signature: createdOrder.signature, // Asegúrate de obtener el signature desde tu backend
