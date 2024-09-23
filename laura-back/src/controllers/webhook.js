@@ -1,18 +1,19 @@
-const crypto = require('crypto');
-const { OrderCompra } = require("../data");
+const { OrderCompra } = require("../../data");
+const { generarFirmaWompi } = require("../../utils/signature");
+const response = require("../../utils/response"); // Asegúrate de que esta utilidad maneja las respuestas correctamente
 
 module.exports = async (req, res) => {
   try {
     console.log("----- Webhook Event Received -----");
     console.log("Headers:", req.headers);
-    console.log("Raw Body:", req.rawBody); // El cuerpo sin procesar de la petición
-    console.log("Parsed Body:", req.body);  // El cuerpo ya parseado de la petición
+    console.log("Raw Body:", req.rawBody);
+    console.log("Parsed Body:", req.body);
 
-    // 1. Obtener la firma de los headers
-    const signature = req.headers['x-event-checksum'];
-    if (!signature) {
-      console.warn("Falta el header 'x-event-checksum'");
-      return res.status(400).json({ error: 'Missing signature header' });
+    // 1. Obtener la firma del cuerpo
+    const signature = req.body.signature;
+    if (!signature || !signature.checksum || !signature.properties) {
+      console.warn("Falta la firma en el cuerpo del evento.");
+      return res.status(400).json({ error: 'Missing signature in event body' });
     }
 
     // 2. Obtener la clave secreta desde variables de entorno
@@ -22,55 +23,68 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: 'Server configuration error' });
     }
 
-    // 3. Verificar que req.rawBody esté disponible para calcular el hash
-    if (!req.rawBody) {
-      console.error("El cuerpo sin procesar (rawBody) no está disponible.");
-      return res.status(500).json({ error: 'Invalid request body' });
+    // 3. Extraer las propiedades especificadas para la firma
+    const properties = signature.properties;
+    const transaction = req.body.data.transaction;
+    const timestamp = req.body.timestamp;
+
+    if (!transaction) {
+      console.warn("Datos de transacción faltantes.");
+      return res.status(400).json({ error: 'Missing transaction data' });
     }
 
-    // 4. Calcular la firma utilizando HMAC-SHA256
-    const calculatedHash = crypto.createHmac('sha256', secret)
-                                 .update(req.rawBody)
-                                 .digest('hex');
+    if (!timestamp) {
+      console.warn("Timestamp faltante en el evento.");
+      return res.status(400).json({ error: 'Missing timestamp in event data' });
+    }
+
+    // 4. Generar la firma calculada
+    let calculatedHash;
+    try {
+      calculatedHash = generarFirmaWompi(transaction, properties, timestamp, secret);
+    } catch (err) {
+      console.warn("Error al generar la firma:", err.message);
+      return res.status(400).json({ error: err.message });
+    }
 
     console.log("Hash calculado:", calculatedHash);
-    console.log("Firma recibida:", signature);
+    console.log("Firma recibida:", signature.checksum);
 
-    // 5. Comparar el hash calculado con el hash recibido en el header
-    if (calculatedHash !== signature) {
-      console.warn("Firma inválida. Hash calculado:", calculatedHash, "Firma recibida:", signature);
+    // 5. Comparar el hash calculado con el hash recibido
+    if (calculatedHash !== signature.checksum) {
+      console.warn("Firma inválida. Hash calculado:", calculatedHash, "Firma recibida:", signature.checksum);
       return res.status(401).json({ error: 'Invalid signature' });
     }
 
     // 6. Procesar el evento si la firma es válida
-    const { event, data } = req.body;
+    const event = req.body.event;
     console.log("Tipo de evento:", event);
-    console.log("Datos del evento:", data);
+    console.log("Datos del evento:", req.body.data);
 
-    if (event !== 'transaction') {
+    if (event !== 'transaction.updated') {
       console.warn("Tipo de evento desconocido:", event);
       return res.status(400).json({ error: 'Unknown event type' });
     }
 
     // 7. Verificar los datos de la transacción
-    const transaction = data.transaction;
-    if (!transaction || !transaction.id) {
-      console.warn("Datos de transacción inválidos:", transaction);
+    const transactionData = req.body.data.transaction;
+    if (!transactionData || !transactionData.reference) { // Usamos 'reference' para buscar la orden
+      console.warn("Datos de transacción inválidos:", transactionData);
       return res.status(400).json({ error: 'Invalid transaction data' });
     }
 
-    // 8. Buscar la orden en la base de datos usando el ID de transacción
+    // 8. Buscar la orden en la base de datos usando el reference (orderId)
     const orderCompra = await OrderCompra.findOne({
-      where: { orderId: transaction.reference } // Cambia a 'reference' ya que ese es el ID de tu orden
+      where: { orderId: transactionData.reference } // Asegúrate de que 'reference' corresponde a 'orderId' en tu base de datos
     });
 
     if (!orderCompra) {
-      console.warn("Orden no encontrada para orderId:", transaction.reference);
+      console.warn("Orden no encontrada para reference:", transactionData.reference);
       return res.status(404).json({ error: 'Order not found' });
     }
 
     // 9. Actualizar el estado de la orden basado en el estado de la transacción
-    switch (transaction.status) {
+    switch (transactionData.status) {
       case 'APPROVED':
         orderCompra.transaction_status = 'Aprobado';
         break;
@@ -81,8 +95,8 @@ module.exports = async (req, res) => {
         orderCompra.transaction_status = 'Pendiente';
         break;
       default:
-        console.warn(`Estado de transacción desconocido: ${transaction.status}`);
-        return res.status(400).json({ error: `Unknown transaction status: ${transaction.status}` });
+        console.warn(`Estado de transacción desconocido: ${transactionData.status}`);
+        return res.status(400).json({ error: `Unknown transaction status: ${transactionData.status}` });
     }
 
     await orderCompra.save();

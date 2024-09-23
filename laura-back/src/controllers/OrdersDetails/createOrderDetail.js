@@ -1,12 +1,15 @@
-// controllers/OrdersDetails/createOrderDetail.js
 const { OrderCompra, Subscription, User, Course } = require("../../data");
 const response = require("../../utils/response");
 const { v4: uuidv4 } = require("uuid");
-const crypto = require("crypto");
+const { generarFirmaIntegridad } = require("../../utils/signature"); // Si usas esta firma para tus propósitos internos
 const { Op } = require("sequelize");
+const crypto = require('crypto'); // Solo si es necesario
 
 const secretoIntegridad = "test_integrity_VMVZ36lyoQot5DsN0fBXAmp4onT5T86G";
 
+/**
+ * Función para generar la firma de integridad.
+ */
 function generarFirmaIntegridad(orderId, monto, moneda, secretoIntegridad) {
   const cadenaConcatenada = `${orderId}${monto}${moneda}${secretoIntegridad}`;
   return crypto.createHash("sha256").update(cadenaConcatenada).digest("hex");
@@ -80,13 +83,14 @@ module.exports = async (req, res) => {
     const endDate = calculateEndDate(date, maxDuration);
 
     const orderCompraData = {
-      orderId: uuidv4(),
+      orderId: referencia, // Asegúrate de usar 'referencia' como 'orderId'
       document,
       amount,
       state_order,
       transaction_status: 'Pendiente',
       startDate: date,
       endDate: endDate,
+      integritySignature: integritySignature // Guarda la firma de integridad si es necesario
     };
 
     const orderCompra = await OrderCompra.create(orderCompraData);

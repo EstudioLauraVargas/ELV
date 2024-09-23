@@ -3,4 +3,5 @@ module.exports = {
     catchedAsync: require('./catchedAsync'),
     isAuth: require('./isAuth'),
     isAdmin: require('./authorize'),
+    
   };
