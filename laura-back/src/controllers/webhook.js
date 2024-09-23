@@ -1,6 +1,7 @@
+// controllers/webhooks/wompiWebhook.js
 const { OrderCompra } = require("../../data");
 const { generarFirmaWompi } = require("../../utils/signature");
-const response = require("../../utils/response"); // Asegúrate de que esta utilidad maneja las respuestas correctamente
+const response = require("../../utils/response");
 
 module.exports = async (req, res) => {
   try {
