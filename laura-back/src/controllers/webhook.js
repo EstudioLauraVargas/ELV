@@ -1,5 +1,5 @@
 // controllers/webhooks/wompiWebhook.js
-const { OrderCompra } = require("../../data");
+const { OrderCompra } = require("../data");
 const { generarFirmaWompi } = require("../../utils/signature");
 const response = require("../../utils/response");
 
