@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     console.log("Parsed Body:", req.body);
 
     // Obtener la firma de los headers
-    const signature = req.headers['wompi-signature'];
+    const signature = req.headers['x-event-checksum'];
     if (!signature) {
       console.warn("Falta el header 'wompi-signature'");
       return res.status(400).json({ error: 'Missing signature header' });
