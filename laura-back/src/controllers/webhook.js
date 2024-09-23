@@ -20,10 +20,11 @@ module.exports = async (req, res) => {
     // Obtener la clave secreta de Wompi desde las variables de entorno
     const secret = process.env.WOMPI_INTEGRITY_SECRET;
     if (!secret) {
+      console.log("WOMPI_INTEGRITY_SECRET:", process.env.WOMPI_INTEGRITY_SECRET);
       console.error("WOMPI_INTEGRITY_SECRET no está configurado en las variables de entorno.");
       return res.status(500).json({ error: 'Server configuration error' });
     }
-
+    console.log("Raw body:", req.rawBody);
     //Verificar la firma
     const hash = crypto.createHmac('sha256', secret)
                        .update(req.rawBody)
