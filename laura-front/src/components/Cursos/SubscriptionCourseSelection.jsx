@@ -154,12 +154,17 @@ const SubscriptionCourseSelection = () => {
         }
 
         const checkout = new window.WidgetCheckout({
+          
           amountInCents: createdOrder.amount * 100,
-          reference: createdOrder.orderId, // Asegúrate de que esto sea correcto
+          reference: createdOrder.orderId,
+          
           publicKey: import.meta.env.VITE_WOMPI_PUBLIC_KEY || 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw',
           redirectUrl: 'https://elv.vercel.app/pay',
-          currency: "COP",
-          signature: createdOrder.signature,
+          currency: "COP", // Asegúrate de reemplazar con tu URL real
+          // Agrega otros campos opcionales según sea necesario
+          signature: createdOrder.signature, // Asegúrate de obtener el signature desde tu backend
+          // Puedes agregar campos opcionales como taxInCents, customerData, shippingAddress, etc.
+         
         });
 
 
