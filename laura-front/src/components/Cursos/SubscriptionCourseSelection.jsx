@@ -124,12 +124,13 @@ const SubscriptionCourseSelection = () => {
         price: selectedSubscription.price,
         typeSub: selectedSubscription.typeSub,
         durationDays: selectedSubscription.durationDays,
-        
       })),
       state_order: 'Pendiente',
       document: userInfo.document,
       currency: 'COP',
+      reference: '' // Deja vacío o quita este campo si no se utiliza
     };
+    
 
     console.log('Order data to be dispatched:', orderData);
 
@@ -153,17 +154,15 @@ const SubscriptionCourseSelection = () => {
         }
 
         const checkout = new window.WidgetCheckout({
-          
           amountInCents: createdOrder.amount * 100,
-          reference: createdOrder.orderId,
+          reference: createdOrder.orderId, // Asegúrate de que esto sea correcto
           publicKey: import.meta.env.VITE_WOMPI_PUBLIC_KEY || 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw',
           redirectUrl: 'https://elv.vercel.app/pay',
-          currency: "COP", // Asegúrate de reemplazar con tu URL real
-          // Agrega otros campos opcionales según sea necesario
-          signature: createdOrder.signature, // Asegúrate de obtener el signature desde tu backend
-          // Puedes agregar campos opcionales como taxInCents, customerData, shippingAddress, etc.
+          currency: "COP",
+          signature: createdOrder.signature,
         });
 
+        
         console.log('Opening WidgetCheckout with order:', createdOrder);
         checkout.open(function (result) {
           var transaction = result.transaction;

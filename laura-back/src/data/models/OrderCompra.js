@@ -10,12 +10,7 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      reference: { // Nuevo campo para vincular con Wompi
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        unique: true, // Asegura que cada referencia sea única
-      },
+      
       idSub: {
         type: DataTypes.INTEGER, 
         allowNull: true,
