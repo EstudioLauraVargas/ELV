@@ -1,19 +1,11 @@
+// controllers/OrdersDetails/createOrderDetail.js
 const { OrderCompra, Subscription, User, Course } = require("../../data");
 const response = require("../../utils/response");
 const { v4: uuidv4 } = require("uuid");
-const { generarFirmaIntegridad } = require("../../utils/signature"); // Si usas esta firma para tus propósitos internos
+const { generarFirmaIntegridad } = require("../../utils/signature"); // Importar desde signature.js
 const { Op } = require("sequelize");
-const crypto = require('crypto'); 
 
-const secretoIntegridad = "test_integrity_VMVZ36lyoQot5DsN0fBXAmp4onT5T86G";
-
-/**
- * Función para generar la firma de integridad.
- */
-function generarFirmaIntegridad(orderId, monto, moneda, secretoIntegridad) {
-  const cadenaConcatenada = `${orderId}${monto}${moneda}${secretoIntegridad}`;
-  return crypto.createHash("sha256").update(cadenaConcatenada).digest("hex");
-}
+const secretoIntegridad = process.env.WOMPI_INTEGRITY_SECRET 
 
 // Función para calcular la fecha de fin (endDate) sumando días a la fecha de inicio (startDate)
 const calculateEndDate = (startDate, durationDays) => {
@@ -116,3 +108,4 @@ module.exports = async (req, res) => {
     return response(res, 500, { error: error.message });
   }
 };
+
