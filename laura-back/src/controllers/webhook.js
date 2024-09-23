@@ -46,17 +46,17 @@ module.exports = async (req, res) => {
 
     // Verifica si existe la transacción y el ID de la orden
     const transaction = data.transaction;
-    if (!transaction || !transaction.id_orderCompra) {
+    if (!transaction || !transaction.orderId) {
       console.warn("Datos de transacción inválidos:", transaction);
       return res.status(400).json({ error: 'Invalid transaction data' });
     }
     
     const orderCompra = await OrderCompra.findOne({
-      where: { integritySignature: transaction.id_orderCompra }
+      where: { integritySignature: transaction.orderId }
     });
 
     if (!orderCompra) {
-      console.warn("Orden no encontrada para id_orderCompra:", transaction.id_orderCompra);
+      console.warn("Orden no encontrada para orderId:", transaction.orderId);
       return res.status(404).json({ error: 'Order not found' });
     }
 
