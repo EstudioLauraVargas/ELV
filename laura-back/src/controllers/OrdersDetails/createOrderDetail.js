@@ -49,13 +49,14 @@ module.exports = async (req, res) => {
     }
 
     // Generar referencia y firma de integridad
-    const referencia = `SO-${uuidv4()}`;
-    const integritySignature = generarFirmaIntegridad(
-      referencia,
-      amount * 100,
-      currency,
-      secretoIntegridad
-    );
+    const referencia = uuidv4();
+const integritySignature = generarFirmaIntegridad(
+  referencia,
+  amount * 100,
+  currency,
+  secretoIntegridad
+);
+
 
     // Encontrar duración máxima de las suscripciones
     const subscriptionDetails = await Subscription.findAll({
