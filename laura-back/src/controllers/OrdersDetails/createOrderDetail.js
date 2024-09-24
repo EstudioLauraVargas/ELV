@@ -1,23 +1,22 @@
-// controllers/OrdersDetails/createOrderDetail.js
 const { OrderCompra, Subscription, User, Course } = require("../../data");
 const response = require("../../utils/response");
 const { v4: uuidv4 } = require("uuid");
-const { generarFirmaIntegridad } = require("../../utils/signature"); // Importar desde signature.js
+const { generarFirmaIntegridad } = require("../../utils/signature");
 const { Op } = require("sequelize");
 
-const secretoIntegridad = process.env.WOMPI_INTEGRITY_SECRET 
+const secretoIntegridad = process.env.WOMPI_INTEGRITY_SECRET;
 
-// Función para calcular la fecha de fin (endDate) sumando días a la fecha de inicio (startDate)
 const calculateEndDate = (startDate, durationDays) => {
   const date = new Date(startDate);
-  date.setDate(date.getDate() + durationDays); // Sumar los días de duración
-  return date.toISOString().split('T')[0]; // Devuelve solo la parte de la fecha (YYYY-MM-DD)
+  date.setDate(date.getDate() + durationDays);
+  return date.toISOString().split('T')[0];
 };
 
 module.exports = async (req, res) => {
   try {
     const { date, amount, subscriptions, state_order, document, currency } = req.body;
 
+    // Validación de los datos recibidos
     if (!date || !amount || !subscriptions || !state_order || !document || !currency) {
       return response(res, 400, { error: "Missing Ordering Data" });
     }
@@ -26,7 +25,7 @@ module.exports = async (req, res) => {
       return response(res, 400, { error: "Subscriptions must be a non-empty array" });
     }
 
-    // Encuentra al usuario
+    // Encuentra al usuario por su documento
     const user = await User.findByPk(document);
     if (!user) {
       return response(res, 404, { error: "User not found" });
@@ -45,20 +44,19 @@ module.exports = async (req, res) => {
     if (courses.length !== courseIds.length) {
       const existingCourseIds = courses.map(c => c.idCourse);
       const missing = courseIds.filter(id => !existingCourseIds.includes(id));
-      return response(res, 404, { error: `Courses with ids ${missing.join(', ')} not found `});
+      return response(res, 404, { error: `Courses with ids ${missing.join(', ')} not found` });
     }
 
     // Generar referencia y firma de integridad
     const referencia = uuidv4();
-const integritySignature = generarFirmaIntegridad(
-  referencia,
-  amount * 100,
-  currency,
-  secretoIntegridad
-);
+    const integritySignature = generarFirmaIntegridad(
+      referencia,
+      amount * 100,
+      currency,
+      secretoIntegridad
+    );
 
-
-    // Encontrar duración máxima de las suscripciones
+    // Busca los detalles de las suscripciones existentes
     const subscriptionDetails = await Subscription.findAll({
       where: {
         idSub: {
@@ -67,29 +65,43 @@ const integritySignature = generarFirmaIntegridad(
       },
     });
 
+    // Mapea las suscripciones existentes para obtener los días de duración
     const subscriptionMap = subscriptionDetails.reduce((map, sub) => {
       map[sub.idSub] = sub.durationDays;
       return map;
     }, {});
 
+    // Calcula la duración máxima de las suscripciones seleccionadas
     const maxDuration = Math.max(...subscriptions.map(sub => subscriptionMap[sub.idSub] || 0));
     const endDate = calculateEndDate(date, maxDuration);
 
+    // Crea la orden de compra
     const orderCompraData = {
-      orderId: referencia, // Asegúrate de usar 'referencia' como 'orderId'
+      orderId: referencia,
       document,
       amount,
       state_order,
       transaction_status: 'Pendiente',
       startDate: date,
       endDate: endDate,
-      integritySignature: integritySignature // Guarda la firma de integridad si es necesario
+      integritySignature: integritySignature
     };
 
     const orderCompra = await OrderCompra.create(orderCompraData);
 
-    // No necesitas crear OrderDetail, pero aquí puedes agregar lógica si es necesario.
+    // Asociar la orden con las suscripciones existentes
+    await Subscription.update(
+      { orderId: orderCompra.orderId }, // Asocia la suscripción con la orden creada
+      {
+        where: {
+          idSub: {
+            [Op.in]: subscriptions.map(sub => sub.idSub),
+          },
+        },
+      }
+    );
 
+    // Busca la orden con las suscripciones ya asociadas para devolverla en la respuesta
     const updatedOrderCompra = await OrderCompra.findOne({
       where: { orderId: orderCompra.orderId },
       include: {
@@ -109,4 +121,5 @@ const integritySignature = generarFirmaIntegridad(
     return response(res, 500, { error: error.message });
   }
 };
+
 

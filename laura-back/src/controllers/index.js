@@ -1,4 +1,5 @@
 const {catchedAsync} = require("../utils");
+const { getOrderCompra } = require("./OrdersDetails");
 
 
 
@@ -12,6 +13,7 @@ module.exports = {
     putUser:catchedAsync(require("./Users/putUser")),
     createUser:catchedAsync(require("./Users/createUser")),
     createOrderDetail:catchedAsync(require("./OrdersDetails/createOrderDetail")),
+    getOrderCompra:catchedAsync(require("./OrdersDetails/getOrderCompra")),
     getUserByDocument:catchedAsync(require("./Users/getUserByDocument")),
     deleteUser:catchedAsync(require("./Users/deleteUser")),
     getAllUser:catchedAsync(require("./Users/getAllUser")),

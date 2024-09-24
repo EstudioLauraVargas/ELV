@@ -43,12 +43,20 @@ import {
   FETCH_LATEST_ORDER_REQUEST,
   FETCH_LATEST_ORDER_SUCCESS,
   FETCH_LATEST_ORDER_FAILURE,
+  FETCH_ORDERS_REQUEST,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_FAILURE,
+  FETCH_ORDERS_BY_DOCUMENT_REQUEST,
+  FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
+  FETCH_ORDERS_BY_DOCUMENT_FAILURE
 
   
 } from "../Actions/actions-type";
 
 const initialState = {
   loading: false,
+  orders:[],
+  ordersByDocument: [],
   error: null,
   videos: [],
   courses: [],
@@ -356,6 +364,35 @@ const rootReducer = (state = initialState, action) => {
           loading: false,
           error: action.payload,
         },
+      };
+      case FETCH_ORDERS_REQUEST:
+    case FETCH_ORDERS_BY_DOCUMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    
+    case FETCH_ORDERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        orders: action.payload,
+      };
+
+    case FETCH_ORDERS_BY_DOCUMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        ordersByDocument: action.payload,
+      };
+
+    case FETCH_ORDERS_FAILURE:
+    case FETCH_ORDERS_BY_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
 

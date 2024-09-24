@@ -45,6 +45,13 @@ import {
   ORDER_CREATE_SUCCESS,
   ORDER_CREATE_FAIL,
 
+  FETCH_ORDERS_REQUEST,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_FAILURE,
+  FETCH_ORDERS_BY_DOCUMENT_REQUEST,
+  FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
+  FETCH_ORDERS_BY_DOCUMENT_FAILURE,
+
   FETCH_LATEST_ORDER_REQUEST,
   FETCH_LATEST_ORDER_SUCCESS,
   FETCH_LATEST_ORDER_FAILURE,
@@ -327,6 +334,57 @@ export const createOrder = (orderData) => async (dispatch) => {
 export const clearOrderState = () => ({
   type: CLEAR_ORDER_STATE,
 });
+
+export const fetchOrders = () => {
+  return async (dispatch) => {
+    dispatch({ type: FETCH_ORDERS_REQUEST });
+    
+    try {
+      const response = await fetch('/order');
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.message);
+      }
+
+      dispatch({ 
+        type: FETCH_ORDERS_SUCCESS, 
+        payload: data.data.orders 
+      });
+    } catch (error) {
+      dispatch({ 
+        type: FETCH_ORDERS_FAILURE, 
+        payload: error.message 
+      });
+    }
+  };
+};
+
+
+export const fetchOrdersByDocument = (document) => {
+  return async (dispatch) => {
+    dispatch({ type: FETCH_ORDERS_BY_DOCUMENT_REQUEST });
+
+    try {
+      const response = await fetch(`/order/${document}`);
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.message);
+      }
+
+      dispatch({
+        type: FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
+        payload: data.data.orders
+      });
+    } catch (error) {
+      dispatch({
+        type: FETCH_ORDERS_BY_DOCUMENT_FAILURE,
+        payload: error.message
+      });
+    }
+  };
+};
 
 export const fetchLatestOrder = () => async (dispatch) => {
   dispatch({ type: FETCH_LATEST_ORDER_REQUEST });
