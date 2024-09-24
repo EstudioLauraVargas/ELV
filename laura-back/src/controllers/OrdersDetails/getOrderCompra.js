@@ -19,13 +19,14 @@ module.exports = async (req, res) => {
     // Asegurarnos de que orders exista y sea un array
     const formattedOrders = orders.map((order) => ({
       orderId: order.orderId,
-      date: order.date,
+      document: order.document, // Agrega el documento aquí
+      startDate: order.startDate, // Asegúrate de que este campo esté en tu modelo
+      endDate: order.endDate,     // Agrega el endDate aquí
       amount: order.amount,
       state_order: order.state_order,
-      // Asegurarnos de que subscriptions exista antes de mapear
       subscriptions: order.Subscriptions?.map((sub) => ({
         idSub: sub.idSub,
-        durationDays: sub.durationDays, // o cualquier otro campo relevante
+        durationDays: sub.durationDays,
       })) || [], // Si no hay suscripciones, devolvemos un array vacío
     }));
 
@@ -35,4 +36,5 @@ module.exports = async (req, res) => {
     return response(res, 500, { error: error.message });
   }
 };
+
 

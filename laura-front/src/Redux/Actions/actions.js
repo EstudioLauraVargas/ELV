@@ -335,56 +335,52 @@ export const clearOrderState = () => ({
   type: CLEAR_ORDER_STATE,
 });
 
-export const fetchOrders = () => {
-  return async (dispatch) => {
-    dispatch({ type: FETCH_ORDERS_REQUEST });
+export const fetchOrders = () => async (dispatch) => {
+  dispatch({ type: FETCH_ORDERS_REQUEST });
+
+  try {
+    const response = await axios.get(`${BASE_URL}/order`);
+    console.log("Response data from backend:", response.data); // Verifica los datos que llegan
+
+    // Asegúrate de que la estructura de los datos sea la correcta
+    const orders = response.data.data.orders;
+
+    dispatch({ 
+      type: FETCH_ORDERS_SUCCESS, 
+      payload: orders 
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    dispatch({ 
+      type: FETCH_ORDERS_FAILURE, 
+      payload: error.message 
+    });
+  }
+};
+
+
+
+
+export const fetchOrdersByDocument = (document) => async (dispatch) => {
+  dispatch({ type: FETCH_ORDERS_BY_DOCUMENT_REQUEST });
+
+  try {
+    const response = await axios.get(`${BASE_URL}/order/${document}`);  // Usa axios y asegúrate de que la URL sea correcta
+    console.log("Response data by document from backend:", response.data);
     
-    try {
-      const response = await fetch('/order');
-      const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.message);
-      }
-
-      dispatch({ 
-        type: FETCH_ORDERS_SUCCESS, 
-        payload: data.data.orders 
-      });
-    } catch (error) {
-      dispatch({ 
-        type: FETCH_ORDERS_FAILURE, 
-        payload: error.message 
-      });
-    }
-  };
+    dispatch({
+      type: FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
+      payload: response.data.data.orders  // Extrae directamente el array de "orders"
+    });
+  } catch (error) {
+    console.error("Error fetching orders by document:", error);
+    dispatch({
+      type: FETCH_ORDERS_BY_DOCUMENT_FAILURE,
+      payload: error.message
+    });
+  }
 };
 
-
-export const fetchOrdersByDocument = (document) => {
-  return async (dispatch) => {
-    dispatch({ type: FETCH_ORDERS_BY_DOCUMENT_REQUEST });
-
-    try {
-      const response = await fetch(`/order/${document}`);
-      const data = await response.json();
-
-      if (data.error) {
-        throw new Error(data.message);
-      }
-
-      dispatch({
-        type: FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
-        payload: data.data.orders
-      });
-    } catch (error) {
-      dispatch({
-        type: FETCH_ORDERS_BY_DOCUMENT_FAILURE,
-        payload: error.message
-      });
-    }
-  };
-};
 
 export const fetchLatestOrder = () => async (dispatch) => {
   dispatch({ type: FETCH_LATEST_ORDER_REQUEST });

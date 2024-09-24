@@ -373,12 +373,14 @@ const rootReducer = (state = initialState, action) => {
         error: null,
       };
     
-    case FETCH_ORDERS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        orders: action.payload,
-      };
+      case FETCH_ORDERS_SUCCESS:
+        console.log('Action payload:', action.payload);  // Verifica qué está llegando aquí
+        return {
+          ...state,
+          loading: false,
+          orders: action.payload,  // Verifica que estás actualizando correctamente el estado "orders"
+        };
+      
 
     case FETCH_ORDERS_BY_DOCUMENT_SUCCESS:
       return {
