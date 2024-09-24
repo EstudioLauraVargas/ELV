@@ -28,6 +28,7 @@ import SubscriptionCourseSelection from "./components/Cursos/SubscriptionCourseS
 import Footer from "./components/Footer/Footer";
 import PaymentConfirmation from "./components/Cursos/PaymentConfirmation";
 import OrderList from "./components/Dashboard/OrderList";
+import MisCursos from "./components/pages/MisCursos";
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
         <Route path="/pay" element={<PaymentConfirmation/>}/>
         <Route path="/listarSuscripciones" element={<SubscriptionList/>} />
         <Route path="/crudSubs" element={<Suscripciones/>} />
+        <Route path="/misCursos" element={<MisCursos/>} />
         <Route path="/crearSubs" element={<SubscriptionForm/>} />
         <Route path="/editarSubs/:idSub" element={<EditSuscription/>} />
         <Route path="/detallePago/:idSub" element={<PaymentDetail />} />

@@ -118,24 +118,24 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
       };
-    case GET_COURSE_REQUEST:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
-    case GET_COURSE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        course: action.payload,
-      };
-    case GET_COURSE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
+      case GET_COURSE_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case GET_COURSE_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          course: action.payload, // Asegúrate de que sea un objeto, no un array
+        };
+      case GET_COURSE_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
 
     case CREATE_COURSE_REQUEST:
       return {

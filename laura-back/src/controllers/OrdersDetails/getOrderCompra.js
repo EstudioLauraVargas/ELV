@@ -1,4 +1,4 @@
-const { OrderCompra, Subscription } = require("../../data");
+const { OrderCompra, Subscription, Course } = require("../../data");
 const response = require("../../utils/response");
 
 module.exports = async (req, res) => {
@@ -12,7 +12,11 @@ module.exports = async (req, res) => {
       where: whereClause,
       include: {
         model: Subscription,
-        attributes: ["idSub", "durationDays"], // o cualquier atributo relevante de suscripción
+        attributes: ["idSub", "durationDays"], 
+        include: {
+          model: Course, 
+          attributes: ["idCourse", "title"], 
+        },
       },
     });
 
@@ -21,12 +25,18 @@ module.exports = async (req, res) => {
       orderId: order.orderId,
       document: order.document, // Agrega el documento aquí
       startDate: order.startDate, // Asegúrate de que este campo esté en tu modelo
-      endDate: order.endDate,     // Agrega el endDate aquí
+      endDate: order.endDate, // Agrega el endDate aquí
       amount: order.amount,
       state_order: order.state_order,
       subscriptions: order.Subscriptions?.map((sub) => ({
         idSub: sub.idSub,
         durationDays: sub.durationDays,
+        course: sub.Course
+          ? {
+              idCourse: sub.Course.idCourse,
+              title: sub.Course.title,
+            }
+          : null, // Asegúrate de manejar si no hay un curso asociado
       })) || [], // Si no hay suscripciones, devolvemos un array vacío
     }));
 

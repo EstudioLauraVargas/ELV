@@ -126,16 +126,20 @@ export const getCourses = () => {
 export const getCourseById = (idCourse) => {
   return async (dispatch) => {
     try {
+      console.log(`Fetching course with ID: ${idCourse}`); // Log para verificar el ID del curso
       dispatch({ type: GET_COURSE_REQUEST }); // Inicia la carga
 
       const response = await axios.get(`${BASE_URL}/cursos/${idCourse}`);
       const course = response.data.data; 
+
+      console.log('Course data fetched:', course); // Log para ver la respuesta de la API
 
       dispatch({
         type: GET_COURSE_SUCCESS,
         payload: course, // Guardamos el curso en el payload
       });
     } catch (error) {
+      console.error('Error fetching course:', error.message); // Log para capturar errores
       dispatch({
         type: GET_COURSE_FAILURE,
         payload: error.message, // Enviamos el mensaje de error si ocurre
@@ -143,6 +147,8 @@ export const getCourseById = (idCourse) => {
     }
   };
 };
+
+
 
 
 export const updateCourse = (idCourse, updatedCourseData) => async (dispatch) => {

@@ -89,9 +89,9 @@ module.exports = async (req, res) => {
 
     const orderCompra = await OrderCompra.create(orderCompraData);
 
-    // Asociar la orden con las suscripciones existentes
+    // Asociar la orden con las suscripciones existentes y los cursos seleccionados
     await Subscription.update(
-      { orderId: orderCompra.orderId }, // Asocia la suscripción con la orden creada
+      { orderId: orderCompra.orderId, idCourse: courseIds }, // Asocia la suscripción con la orden creada y los cursos
       {
         where: {
           idSub: {
