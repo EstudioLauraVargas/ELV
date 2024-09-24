@@ -1,11 +1,10 @@
 // controllers/OrdersDetails/createOrderDetail.js
 const { OrderCompra, Subscription, User, Course } = require("../../data");
 const response = require("../../utils/response");
-const { v4: uuidv4 } = require("uuid");
-const { generarFirmaIntegridad } = require("../../utils/signature"); // Importar desde signature.js
+const { generarFirmaIntegridad } = require("../../utils/signature");
 const { Op } = require("sequelize");
 
-const secretoIntegridad = process.env.WOMPI_INTEGRITY_SECRET 
+const secretoIntegridad = process.env.WOMPI_INTEGRITY_SECRET;
 
 // Función para calcular la fecha de fin (endDate) sumando días a la fecha de inicio (startDate)
 const calculateEndDate = (startDate, durationDays) => {
@@ -15,10 +14,12 @@ const calculateEndDate = (startDate, durationDays) => {
 };
 
 module.exports = async (req, res) => {
+  console.log("----- Crear Orden -----");
   try {
-    const { date, amount, subscriptions, state_order, document, currency } = req.body;
+    const { date, amount, subscriptions, state_order, document, currency, orderId } = req.body;
 
-    if (!date || !amount || !subscriptions || !state_order || !document || !currency) {
+    // Validaciones de los datos requeridos
+    if (!date || !amount || !subscriptions || !state_order || !document || !currency || !orderId) {
       return response(res, 400, { error: "Missing Ordering Data" });
     }
 
@@ -48,11 +49,16 @@ module.exports = async (req, res) => {
       return response(res, 404, { error: `Courses with ids ${missing.join(', ')} not found `});
     }
 
-    // Generar referencia y firma de integridad
-    const referencia = `SO-${uuidv4()}`;
+    // Validar que el orderId no exista ya en la base de datos
+    const existingOrder = await OrderCompra.findOne({ where: { orderId } });
+    if (existingOrder) {
+      return response(res, 400, { error: "Order ID already exists" });
+    }
+
+    // Generar firma de integridad
     const integritySignature = generarFirmaIntegridad(
-      referencia,
-      amount * 100,
+      orderId,
+      amount * 100, // Wompi maneja los montos en centavos
       currency,
       secretoIntegridad
     );
@@ -74,21 +80,25 @@ module.exports = async (req, res) => {
     const maxDuration = Math.max(...subscriptions.map(sub => subscriptionMap[sub.idSub] || 0));
     const endDate = calculateEndDate(date, maxDuration);
 
+    // Crear la orden en la base de datos
     const orderCompraData = {
-      orderId: referencia, // Asegúrate de usar 'referencia' como 'orderId'
+      orderId: orderId, // Usa el orderId que viene de Wompi
       document,
       amount,
       state_order,
       transaction_status: 'Pendiente',
       startDate: date,
       endDate: endDate,
-      integritySignature: integritySignature // Guarda la firma de integridad si es necesario
+      integritySignature: integritySignature
     };
 
     const orderCompra = await OrderCompra.create(orderCompraData);
 
-    // No necesitas crear OrderDetail, pero aquí puedes agregar lógica si es necesario.
+    // Asociar las suscripciones a la orden
+    const subscriptionIds = subscriptions.map(sub => sub.idSub);
+    await orderCompra.addSubscriptions(subscriptionIds);
 
+    // Incluir las suscripciones y cursos en la orden creada para retornar la información completa
     const updatedOrderCompra = await OrderCompra.findOne({
       where: { orderId: orderCompra.orderId },
       include: {
@@ -102,10 +112,19 @@ module.exports = async (req, res) => {
       },
     });
 
-    return response(res, 201, { orderCompra: updatedOrderCompra });
+    console.log("Orden creada:", updatedOrderCompra);
+
+    // Devolver la orden creada junto con la firma de integridad para usarla en el widget
+    return response(res, 201, {
+      orderCompra: updatedOrderCompra,
+      signature: integritySignature,
+    });
+
   } catch (error) {
     console.error("Error creating orderCompra:", error);
     return response(res, 500, { error: error.message });
   }
 };
+
+
 

@@ -61,8 +61,8 @@ export const fetchVideos = () => async (dispatch) => {
     const response = await fetch(`${BASE_URL}/videos/videos`, {
       method: 'GET',
       // headers: {
-      //       Authorization: `Bearer ${localStorage.getItem('token')}`,
-      //     },
+      //     Authorization: `Bearer ${tokens.access_token}`,
+      // },
     });
 
     console.log('Response received:', response);
@@ -204,7 +204,7 @@ export const login = (email, password) => async (dispatch) => {
 
     // Asegúrate de que la URL sea correcta
     const { data } = await axios.post(`${BASE_URL}/users/signin`, { email, password }, config);
-    
+    console.log(`${BASE_URL}/auth/signin`);
 
     // Decodifica el token para obtener el rol del usuario
     const decodedToken = jwtDecode(data.data.token); // Accede a data.data.token
