@@ -43,12 +43,20 @@ import {
   FETCH_LATEST_ORDER_REQUEST,
   FETCH_LATEST_ORDER_SUCCESS,
   FETCH_LATEST_ORDER_FAILURE,
+  FETCH_ORDERS_REQUEST,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_FAILURE,
+  FETCH_ORDERS_BY_DOCUMENT_REQUEST,
+  FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
+  FETCH_ORDERS_BY_DOCUMENT_FAILURE
 
   
 } from "../Actions/actions-type";
 
 const initialState = {
   loading: false,
+  orders:[],
+  ordersByDocument: [],
   error: null,
   videos: [],
   courses: [],
@@ -110,24 +118,24 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
       };
-    case GET_COURSE_REQUEST:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
-    case GET_COURSE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        course: action.payload,
-      };
-    case GET_COURSE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
+      case GET_COURSE_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case GET_COURSE_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          course: action.payload, // Asegúrate de que sea un objeto, no un array
+        };
+      case GET_COURSE_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
 
     case CREATE_COURSE_REQUEST:
       return {
@@ -356,6 +364,37 @@ const rootReducer = (state = initialState, action) => {
           loading: false,
           error: action.payload,
         },
+      };
+      case FETCH_ORDERS_REQUEST:
+    case FETCH_ORDERS_BY_DOCUMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    
+      case FETCH_ORDERS_SUCCESS:
+        console.log('Action payload:', action.payload);  // Verifica qué está llegando aquí
+        return {
+          ...state,
+          loading: false,
+          orders: action.payload,  // Verifica que estás actualizando correctamente el estado "orders"
+        };
+      
+
+    case FETCH_ORDERS_BY_DOCUMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        ordersByDocument: action.payload,
+      };
+
+    case FETCH_ORDERS_FAILURE:
+    case FETCH_ORDERS_BY_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
 

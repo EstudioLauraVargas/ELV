@@ -15,7 +15,7 @@ const Register = () => {
     document: '',
     documentType:'',
     phone: '',
-    role: 'visitor', 
+    role: 'client', 
     sex: '',
     birthDate:''
   });

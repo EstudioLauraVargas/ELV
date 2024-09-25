@@ -1,32 +1,43 @@
-const { OrderCompra, Subscription } = require("../../data");
+const { OrderCompra, Subscription, Course } = require("../../data");
 const response = require("../../utils/response");
 
 module.exports = async (req, res) => {
   try {
-    const { n_document } = req.params;
+    const { document } = req.params;
 
-    if (!n_document) {
-      return response(res, 400, { error: "No se proporcionó n_document." });
-    }
+    // Si no se proporciona el documento, listar todas las órdenes
+    const whereClause = document ? { document } : {};
 
     const orders = await OrderCompra.findAll({
-      where: { n_document },
+      where: whereClause,
       include: {
         model: Subscription,
-        as: "subscriptions",
-        attributes: ["id_subscription", "duration"], // o cualquier atributo relevante de suscripción
+        attributes: ["idSub", "durationDays"], 
+        include: {
+          model: Course, 
+          attributes: ["idCourse", "title"], 
+        },
       },
     });
 
+    // Asegurarnos de que orders exista y sea un array
     const formattedOrders = orders.map((order) => ({
-      id_orderCompra: order.id_orderCompra,
-      date: order.date,
+      orderId: order.orderId,
+      document: order.document, // Agrega el documento aquí
+      startDate: order.startDate, // Asegúrate de que este campo esté en tu modelo
+      endDate: order.endDate, // Agrega el endDate aquí
       amount: order.amount,
       state_order: order.state_order,
-      subscriptions: order.subscriptions.map((sub) => ({
-        id_subscription: sub.id_subscription,
-        duration: sub.duration, // o cualquier otro campo relevante
-      })),
+      subscriptions: order.Subscriptions?.map((sub) => ({
+        idSub: sub.idSub,
+        durationDays: sub.durationDays,
+        course: sub.Course
+          ? {
+              idCourse: sub.Course.idCourse,
+              title: sub.Course.title,
+            }
+          : null, // Asegúrate de manejar si no hay un curso asociado
+      })) || [], // Si no hay suscripciones, devolvemos un array vacío
     }));
 
     return response(res, 200, { orders: formattedOrders });
@@ -35,4 +46,5 @@ module.exports = async (req, res) => {
     return response(res, 500, { error: error.message });
   }
 };
+
 

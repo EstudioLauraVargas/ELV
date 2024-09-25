@@ -27,6 +27,8 @@ import CourseDetail from "./components/Cursos/CourseDetail";
 import SubscriptionCourseSelection from "./components/Cursos/SubscriptionCourseSelection";
 import Footer from "./components/Footer/Footer";
 import PaymentConfirmation from "./components/Cursos/PaymentConfirmation";
+import OrderList from "./components/Dashboard/OrderList";
+import MisCursos from "./components/pages/MisCursos";
 
 
 function App() {
@@ -48,6 +50,7 @@ function App() {
         <Route path="/videos" element={<AllVideos/>} />
         <Route path="/gestioncursos" element={<GestionCursos/>} />
         <Route path="/listarCursos" element={<ListarCursos/>} />
+        <Route path="/listarOrdenes" element={<OrderList/>} />
         <Route path="/editarCurso/:idCourse" element={<EditarCurso/>} />
         <Route path="/abmcursos" element={<ABMCursos/>} />
         <Route path="/tiendaCursos" element={<TiendaCursos/>}/>
@@ -56,6 +59,7 @@ function App() {
         <Route path="/pay" element={<PaymentConfirmation/>}/>
         <Route path="/listarSuscripciones" element={<SubscriptionList/>} />
         <Route path="/crudSubs" element={<Suscripciones/>} />
+        <Route path="/misCursos" element={<MisCursos/>} />
         <Route path="/crearSubs" element={<SubscriptionForm/>} />
         <Route path="/editarSubs/:idSub" element={<EditSuscription/>} />
         <Route path="/detallePago/:idSub" element={<PaymentDetail />} />

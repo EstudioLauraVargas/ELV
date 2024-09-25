@@ -45,6 +45,13 @@ import {
   ORDER_CREATE_SUCCESS,
   ORDER_CREATE_FAIL,
 
+  FETCH_ORDERS_REQUEST,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_FAILURE,
+  FETCH_ORDERS_BY_DOCUMENT_REQUEST,
+  FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
+  FETCH_ORDERS_BY_DOCUMENT_FAILURE,
+
   FETCH_LATEST_ORDER_REQUEST,
   FETCH_LATEST_ORDER_SUCCESS,
   FETCH_LATEST_ORDER_FAILURE,
@@ -119,16 +126,20 @@ export const getCourses = () => {
 export const getCourseById = (idCourse) => {
   return async (dispatch) => {
     try {
+      console.log(`Fetching course with ID: ${idCourse}`); // Log para verificar el ID del curso
       dispatch({ type: GET_COURSE_REQUEST }); // Inicia la carga
 
       const response = await axios.get(`${BASE_URL}/cursos/${idCourse}`);
       const course = response.data.data; 
+
+      console.log('Course data fetched:', course); // Log para ver la respuesta de la API
 
       dispatch({
         type: GET_COURSE_SUCCESS,
         payload: course, // Guardamos el curso en el payload
       });
     } catch (error) {
+      console.error('Error fetching course:', error.message); // Log para capturar errores
       dispatch({
         type: GET_COURSE_FAILURE,
         payload: error.message, // Enviamos el mensaje de error si ocurre
@@ -136,6 +147,8 @@ export const getCourseById = (idCourse) => {
     }
   };
 };
+
+
 
 
 export const updateCourse = (idCourse, updatedCourseData) => async (dispatch) => {
@@ -327,6 +340,53 @@ export const createOrder = (orderData) => async (dispatch) => {
 export const clearOrderState = () => ({
   type: CLEAR_ORDER_STATE,
 });
+
+export const fetchOrders = () => async (dispatch) => {
+  dispatch({ type: FETCH_ORDERS_REQUEST });
+
+  try {
+    const response = await axios.get(`${BASE_URL}/order`);
+    console.log("Response data from backend:", response.data); // Verifica los datos que llegan
+
+    // Asegúrate de que la estructura de los datos sea la correcta
+    const orders = response.data.data.orders;
+
+    dispatch({ 
+      type: FETCH_ORDERS_SUCCESS, 
+      payload: orders 
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    dispatch({ 
+      type: FETCH_ORDERS_FAILURE, 
+      payload: error.message 
+    });
+  }
+};
+
+
+
+
+export const fetchOrdersByDocument = (document) => async (dispatch) => {
+  dispatch({ type: FETCH_ORDERS_BY_DOCUMENT_REQUEST });
+
+  try {
+    const response = await axios.get(`${BASE_URL}/order/${document}`);  // Usa axios y asegúrate de que la URL sea correcta
+    console.log("Response data by document from backend:", response.data);
+    
+    dispatch({
+      type: FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
+      payload: response.data.data.orders  // Extrae directamente el array de "orders"
+    });
+  } catch (error) {
+    console.error("Error fetching orders by document:", error);
+    dispatch({
+      type: FETCH_ORDERS_BY_DOCUMENT_FAILURE,
+      payload: error.message
+    });
+  }
+};
+
 
 export const fetchLatestOrder = () => async (dispatch) => {
   dispatch({ type: FETCH_LATEST_ORDER_REQUEST });
