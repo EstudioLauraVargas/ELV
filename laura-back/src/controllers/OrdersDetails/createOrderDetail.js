@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const { generarFirmaIntegridad } = require("../../utils/signature");
 const { Op } = require("sequelize");
 
-const secretoIntegridad = process.env.WOMPI_INTEGRITY_SECRET;
+const secretoIntegridad = process.env.WOMPI_EVENT_KEY;
 
 const calculateEndDate = (startDate, durationDays) => {
   const date = new Date(startDate);
