@@ -24,6 +24,9 @@ function generarFirmaIntegridad(orderId, monto, moneda, secretoIntegridad) {
  * @returns {string} - La firma SHA-256 generada.
  */
 function generarFirmaWompi(transaction, properties, timestamp, secret) {
+  // Agregar un console.log para verificar las propiedades
+  console.log("Propiedades para la firma:", properties);
+
   // Extraer los valores de las propiedades especificadas
   const valores = properties.map(prop => {
     const keys = prop.split('.'); 
