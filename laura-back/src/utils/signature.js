@@ -2,15 +2,15 @@ const crypto = require('crypto');
 
 /**
  * Genera la firma de integridad para la creación de una orden.
- * @param {string} reference - Identificador de la orden.
- * @param {number} monto - Monto de la transacción (en centavos).
- * @param {string} moneda - Moneda de la transacción.
+ * @param {string} id - Identificador de la orden.
+ * @param {number} amountInCents - amountInCents de la transacción (en centavos).
+ * @param {string} currency - currency de la transacción.
  * @param {string} secretoIntegridad - El secreto de integridad para firmar la orden.
  * @returns {string} - La firma SHA-256 generada.
  */
-function generarFirmaIntegridad(reference, monto, moneda, secretoIntegridad) {
+function generarFirmaIntegridad(id, amountInCents, currency, secretoIntegridad) {
   // Concatenar los datos para la firma
-  const cadenaConcatenada = `${reference}${monto}${moneda}${secretoIntegridad}`;
+  const cadenaConcatenada = `${id}${amountInCents}${currency}${secretoIntegridad}`;
   // Generar el hash
   return crypto.createHash('sha256').update(cadenaConcatenada).digest('hex');
 }
@@ -48,4 +48,3 @@ function generarFirmaWompi(transaction, properties, timestamp, secret) {
 }
 
 module.exports = { generarFirmaIntegridad, generarFirmaWompi };
-
