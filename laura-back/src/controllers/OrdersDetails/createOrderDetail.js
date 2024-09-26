@@ -47,8 +47,6 @@ module.exports = async (req, res) => {
       return response(res, 404, { error: `Courses with ids ${missing.join(', ')} not found` });
     }
 
-
-
     // Generar referencia y firma de integridad
     const referencia = uuidv4();
     const integritySignature = generarFirmaIntegridad(
@@ -57,7 +55,6 @@ module.exports = async (req, res) => {
       currency,
       secretoIntegridad
     );
-
 
     // Busca los detalles de las suscripciones existentes
     const subscriptionDetails = await Subscription.findAll({
