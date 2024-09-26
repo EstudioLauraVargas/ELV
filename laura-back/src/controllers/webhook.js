@@ -1,4 +1,3 @@
-// controllers/webhooks/wompiWebhook.js
 const { OrderCompra } = require("../data");
 const crypto = require('crypto');
 const { generarFirmaWompi } = require("../utils/signature");
@@ -29,6 +28,8 @@ module.exports = async (req, res) => {
     const properties = signature.properties;
     const transaction = req.body.data.transaction;
     const timestamp = req.body.timestamp;
+
+    console.log("Datos de la transacción recibida:", transaction);
 
     if (!transaction) {
       console.warn("Datos de transacción faltantes.");
@@ -75,6 +76,8 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Invalid transaction data' });
     }
 
+    console.log("Reference de la transacción:", transactionData.reference);
+
     // 8. Buscar la orden en la base de datos usando el reference (orderId)
     const orderCompra = await OrderCompra.findOne({
       where: { orderId: transactionData.reference } // Asegúrate de que 'reference' corresponde a 'orderId' en tu base de datos
@@ -110,6 +113,7 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 
 
 
