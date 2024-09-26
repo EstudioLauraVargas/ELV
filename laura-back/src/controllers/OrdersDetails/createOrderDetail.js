@@ -13,6 +13,8 @@ const calculateEndDate = (startDate, durationDays) => {
 };
 
 module.exports = async (req, res) => {
+  const transaction = await sequelize.transaction(); // Inicia una transacción
+
   try {
     const { date, amount, subscriptions, state_order, document, currency } = req.body;
 
@@ -47,17 +49,6 @@ module.exports = async (req, res) => {
       return response(res, 404, { error: `Courses with ids ${missing.join(', ')} not found` });
     }
 
-    // Generar referencia y firma de integridad
-
-const referencia = uuidv4();
-const integritySignature = generarFirmaIntegridad(
-  referencia,
-  amount * 100,
-  currency,
-  secretoIntegridad
-);
-
-
 
     // Busca los detalles de las suscripciones existentes
     const subscriptionDetails = await Subscription.findAll({
@@ -78,6 +69,15 @@ const integritySignature = generarFirmaIntegridad(
     const maxDuration = Math.max(...subscriptions.map(sub => subscriptionMap[sub.idSub] || 0));
     const endDate = calculateEndDate(date, maxDuration);
 
+    // Generar referencia y firma de integridad después de validar
+    const referencia = uuidv4();
+    const integritySignature = generarFirmaIntegridad(
+      referencia,
+      amount * 100, // Asegúrate de que amount esté en centavos
+      currency,
+      secretoIntegridad
+    );
+
     // Crea la orden de compra
     const orderCompraData = {
       orderId: referencia,
@@ -87,20 +87,21 @@ const integritySignature = generarFirmaIntegridad(
       transaction_status: 'Pendiente',
       startDate: date,
       endDate: endDate,
-      integritySignature: integritySignature
+      integritySignature: integritySignature,
     };
 
-    const orderCompra = await OrderCompra.create(orderCompraData);
+    const orderCompra = await OrderCompra.create(orderCompraData, { transaction });
 
     // Asociar la orden con las suscripciones existentes y los cursos seleccionados
     await Subscription.update(
-      { orderId: orderCompra.orderId, idCourse: courseIds }, // Asocia la suscripción con la orden creada y los cursos
+      { orderId: orderCompra.orderId, idCourse: courseIds },
       {
         where: {
           idSub: {
             [Op.in]: subscriptions.map(sub => sub.idSub),
           },
         },
+        transaction, // Asegúrate de que esta operación esté dentro de la transacción
       }
     );
 
@@ -116,13 +117,18 @@ const integritySignature = generarFirmaIntegridad(
           },
         ],
       },
+      transaction, // Incluir transacción aquí también
     });
+
+    await transaction.commit(); // Commit de la transacción
 
     return response(res, 201, { orderCompra: updatedOrderCompra });
   } catch (error) {
+    await transaction.rollback(); // Rollback en caso de error
     console.error("Error creating orderCompra:", error);
     return response(res, 500, { error: error.message });
   }
 };
+
 
 
