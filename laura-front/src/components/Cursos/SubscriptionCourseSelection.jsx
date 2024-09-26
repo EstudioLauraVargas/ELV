@@ -87,34 +87,36 @@ const SubscriptionCourseSelection = () => {
 
   const handlePayment = async () => {
     console.log('Initiating payment process.');
-
+  
+    // Verifica que el widget de Wompi esté cargado
     if (!scriptLoaded || typeof window.WidgetCheckout === 'undefined') {
       console.error('WidgetCheckout no está disponible aún.');
       toast.error('Por favor, espere mientras se carga la opción de pago.');
       return;
     }
-
+  
+    // Verifica si el usuario está logueado
     if (!userInfo) {
       console.log('User not logged in. Redirecting to login.');
-      navigate('/login'); 
+      navigate('/login');
       return;
     }
-
+  
+    // Verifica que haya una suscripción seleccionada
     if (!selectedSubscription) {
-      console.log('No subscription selected.');
       toast.error("Por favor, selecciona una suscripción.");
       return;
     }
-
+  
+    // Verifica que todos los cursos estén seleccionados
     if (selectedCourses.some(courseId => !courseId)) {
-      console.log('Not all courses selected.');
       toast.error("Por favor, selecciona todos los cursos.");
       return;
     }
-
+  
+    // Calcula el monto total
     const totalAmount = selectedCourses.length * selectedSubscription.price;
-    console.log('Total amount calculated:', totalAmount);
-
+  
     const orderData = {
       date: new Date().toISOString().split('T')[0],
       amount: totalAmount,
@@ -124,64 +126,55 @@ const SubscriptionCourseSelection = () => {
         price: selectedSubscription.price,
         typeSub: selectedSubscription.typeSub,
         durationDays: selectedSubscription.durationDays,
-        
       })),
       state_order: 'Pendiente',
       document: userInfo.document,
       currency: 'COP',
     };
-
-    console.log('Order data to be dispatched:', orderData);
-
-    setIsProcessing(true); // Iniciar estado de procesamiento
-
+  
+    // Muestra el spinner de carga
+    setIsProcessing(true);
+  
     try {
+      // Crea la orden en el backend
       const resultAction = await dispatch(createOrder(orderData));
-
-      console.log('Result of createOrder action:', resultAction);
-
       if (resultAction.type === 'ORDER_CREATE_SUCCESS') {
         const createdOrder = resultAction.payload;
-        console.log('Order created successfully:', createdOrder);
         toast.success('Orden creada exitosamente.');
-
-        if (typeof window.WidgetCheckout === 'undefined') {
-          console.error('WidgetCheckout no está disponible en window.');
-          toast.error('Error al iniciar el pago.');
-          setIsProcessing(false);
-          return;
-        }
-
+  
+        // Inicializa el Widget de Wompi
         const checkout = new window.WidgetCheckout({
-          
           amountInCents: createdOrder.amount * 100,
           reference: createdOrder.orderId,
-          publicKey: import.meta.env.VITE_WOMPI_PUBLIC_KEY || 'pub_test_udFLMPgs8mDyKqs5bRCWhpwDhj2rGgFw',
+          publicKey: import.meta.env.VITE_WOMPI_PUBLIC_KEY,
           redirectUrl: 'https://elv.vercel.app/pay',
-          currency: "COP", // Asegúrate de reemplazar con tu URL real
-          // Agrega otros campos opcionales según sea necesario
-          signature: createdOrder.signature, // Asegúrate de obtener el signature desde tu backend
-          // Puedes agregar campos opcionales como taxInCents, customerData, shippingAddress, etc.
+          currency: "COP",
+          signature: createdOrder.signature, // desde el backend, si es necesario
         });
-
-        console.log('Opening WidgetCheckout with order:', createdOrder);
+  
+        // Abre el widget de pago
         checkout.open(function (result) {
-          var transaction = result.transaction;
+          const transaction = result.transaction;
           console.log("Transaction ID: ", transaction.id);
-          console.log("Transaction object: ", transaction);
-          // Puedes manejar la respuesta aquí, como actualizar el estado de la orden en tu backend
+          if (transaction.status === 'APPROVED') {
+            toast.success('Pago aprobado.');
+          } else {
+            toast.error('Error en el pago: ' + transaction.status);
+          }
         });
-      } else if (resultAction.type === 'ORDER_CREATE_FAIL') {
-        console.error('Error al crear la orden:', resultAction.payload);
-        toast.error(`Error al crear la orden: ${resultAction.payload}`);
+  
+      } else {
+        toast.error('Error al crear la orden.');
       }
     } catch (err) {
       console.error('Error durante el proceso de pago:', err);
       toast.error(`Error durante el proceso de pago: ${err.message}`);
     } finally {
-      setIsProcessing(false); // Finalizar estado de procesamiento
+      setIsProcessing(false);
     }
   };
+  
+  
 
   if (loading) {
     console.log('Loading courses and subscriptions...');
