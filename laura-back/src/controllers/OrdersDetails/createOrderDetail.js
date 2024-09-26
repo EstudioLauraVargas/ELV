@@ -52,7 +52,6 @@ module.exports = async (req, res) => {
     const integritySignature = generarFirmaIntegridad(
       referencia,
       amount * 100,
-      currency,
       secretoIntegridad
     );
 
