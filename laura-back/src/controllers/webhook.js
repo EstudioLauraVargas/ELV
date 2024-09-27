@@ -1,7 +1,6 @@
 const { OrderCompra } = require("../data");
 const crypto = require('crypto');
 const { generarFirmaWompi } = require("../utils/signature");
-const response = require("../utils/response");
 
 module.exports = async (req, res) => {
   try {
@@ -92,22 +91,26 @@ module.exports = async (req, res) => {
     switch (transactionData.status) {
       case 'APPROVED':
         orderCompra.transaction_status = 'Aprobado';
+        orderCompra.state_order = 'Activo'; // Estado de la orden activado
         break;
       case 'DECLINED':
         orderCompra.transaction_status = 'Rechazado';
+        orderCompra.state_order = 'Rechazado'; // Estado de la orden rechazada
         break;
       case 'PENDING':
         orderCompra.transaction_status = 'Pendiente';
+        orderCompra.state_order = 'Pendiente'; // Estado de la orden pendiente
         break;
       default:
         console.warn(`Estado de transacción desconocido: ${transactionData.status}`);
         return res.status(400).json({ error: `Unknown transaction status: ${transactionData.status}` });
     }
 
+    // 10. Guardar los cambios en la base de datos
     await orderCompra.save();
 
     console.log("Orden actualizada exitosamente:", orderCompra);
-    return res.status(200).json({ message: 'Order updated successfully' });
+    return res.status(200).json({ message: 'Order updated successfully', orderCompra });
   } catch (error) {
     console.error("Error manejando el webhook:", error);
     return res.status(500).json({ error: error.message });
