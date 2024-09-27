@@ -26,55 +26,36 @@ const SubscriptionCourseSelection = () => {
   // Cargar el script de Wompi usando el hook
   const { loaded: scriptLoaded, error: scriptError } = useScript('https://checkout.wompi.co/widget.js');
 
-  // Logs para depuración
-  console.log('Component mounted. Fetching courses and subscriptions.');
-
   useEffect(() => {
     dispatch(getCourses());
     dispatch(fetchSubscriptions());
-    console.log('Dispatched getCourses and fetchSubscriptions actions.');
   }, [dispatch]);
 
   useEffect(() => {
     if (error) {
-      console.error('Error loading courses or subscriptions:', error);
       toast.error(`Error: ${error}`);
     }
   }, [error]);
 
   useEffect(() => {
     if (scriptError) {
-      console.error('Error loading WompiCheckout script.');
       toast.error('Error al cargar el sistema de pago.');
     }
   }, [scriptError]);
 
-  useEffect(() => {
-    if (scriptLoaded) {
-      if (typeof window.WidgetCheckout !== 'undefined') {
-        console.log('WidgetCheckout está disponible en window.');
-      } else {
-        console.error('WidgetCheckout no está disponible en window.');
-      }
-    }
-  }, [scriptLoaded]);
-
   const handleSubscriptionChange = (e) => {
     const selectedSubId = parseInt(e.target.value);
     const selectedSub = subscriptions.find((sub) => sub.idSub === selectedSubId);
-    console.log('Selected subscription ID:', selectedSubId, 'Subscription object:', selectedSub);
 
     if (selectedSub) {
       setSelectedSubscription(selectedSub);
       const max = selectedSub.durationDays === 30 ? 1 : selectedSub.durationDays === 180 ? 2 : 3;
       setMaxCourses(max);
       setSelectedCourses(new Array(max).fill(''));
-      console.log(`Set maxCourses to ${max} based on subscription duration.`);
     } else {
       setSelectedSubscription(null);
       setMaxCourses(0);
       setSelectedCourses([]);
-      console.log('No subscription selected. Resetting course selections.');
     }
   };
 
@@ -82,41 +63,36 @@ const SubscriptionCourseSelection = () => {
     const updatedCourses = [...selectedCourses];
     updatedCourses[index] = courseId;
     setSelectedCourses(updatedCourses);
-    console.log(`Selected course at index ${index}:`, courseId);
   };
 
   const handlePayment = async () => {
-    console.log('Initiating payment process.');
-  
     // Verifica que el widget de Wompi esté cargado
     if (!scriptLoaded || typeof window.WidgetCheckout === 'undefined') {
-      console.error('WidgetCheckout no está disponible aún.');
       toast.error('Por favor, espere mientras se carga la opción de pago.');
       return;
     }
-  
+
     // Verifica si el usuario está logueado
     if (!userInfo) {
-      console.log('User not logged in. Redirecting to login.');
       navigate('/login');
       return;
     }
-  
+
     // Verifica que haya una suscripción seleccionada
     if (!selectedSubscription) {
       toast.error("Por favor, selecciona una suscripción.");
       return;
     }
-  
+
     // Verifica que todos los cursos estén seleccionados
     if (selectedCourses.some(courseId => !courseId)) {
       toast.error("Por favor, selecciona todos los cursos.");
       return;
     }
-  
+
     // Calcula el monto total
     const totalAmount = selectedCourses.length * selectedSubscription.price;
-  
+
     const orderData = {
       date: new Date().toISOString().split('T')[0],
       amount: totalAmount,
@@ -131,17 +107,16 @@ const SubscriptionCourseSelection = () => {
       document: userInfo.document,
       currency: 'COP',
     };
-  
+
     // Muestra el spinner de carga
     setIsProcessing(true);
-  
+
     try {
-      // Crea la orden en el backend
       const resultAction = await dispatch(createOrder(orderData));
       if (resultAction.type === 'ORDER_CREATE_SUCCESS') {
         const createdOrder = resultAction.payload;
         toast.success('Orden creada exitosamente.');
-  
+
         // Inicializa el Widget de Wompi
         const checkout = new window.WidgetCheckout({
           amountInCents: createdOrder.amount * 100,
@@ -149,40 +124,58 @@ const SubscriptionCourseSelection = () => {
           publicKey: import.meta.env.VITE_WOMPI_PUBLIC_KEY,
           redirectUrl: 'https://elv.vercel.app/pay',
           currency: "COP",
-          signature: createdOrder.signature, // desde el backend, si es necesario
+          signature: createdOrder.signature, 
         });
-  
+
         // Abre el widget de pago
         checkout.open(function (result) {
           const transaction = result.transaction;
-          console.log("Transaction ID: ", transaction.id);
-          if (transaction.status === 'APPROVED') {
-            toast.success('Pago aprobado.');
-          } else {
-            toast.error('Error en el pago: ' + transaction.status);
-          }
+
+          // Llamar a la función para actualizar la orden
+          updateOrderWithTransactionId(createdOrder.orderId, transaction.id, transaction.status);
         });
-  
+
       } else {
         toast.error('Error al crear la orden.');
       }
     } catch (err) {
-      console.error('Error durante el proceso de pago:', err);
       toast.error(`Error durante el proceso de pago: ${err.message}`);
     } finally {
       setIsProcessing(false);
     }
   };
-  
-  
+
+  const updateOrderWithTransactionId = async (orderId, transactionId, status) => {
+    try {
+      const response = await fetch('/api/orders/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId,
+          transactionId,
+          status,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('Orden actualizada correctamente.');
+      } else {
+        toast.error('Error al actualizar la orden: ' + data.error);
+      }
+    } catch (error) {
+      toast.error('Error en la comunicación con el servidor.');
+    }
+  };
 
   if (loading) {
-    console.log('Loading courses and subscriptions...');
     return <div>Cargando...</div>;
   }
 
   if (error) {
-    console.log('Error loading data:', error);
     return <div>Error: {error}</div>;
   }
 
