@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchVideos, removeVideo, uploadVideo } from '../../Redux/Actions/actions'; 
 import { openCloudinaryWidget } from '../../cloudinaryConfig'; // Tu función para abrir el widget
-
+import Navbar from '../Navbar';
+import backgroundImage from "../../lauraassets/bg1.png"
 import { FaTrash } from 'react-icons/fa';
 
 const VideoUploader = () => {
@@ -61,60 +62,66 @@ const VideoUploader = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 mt-10">
-      
-      <h1 className="bg-ColorMorado text-2xl font-bold font-nunito p-2 text-gray-200 mb-8 mt-28">Cargar Video</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500 font-nunito">¡Video guardado exitosamente!</p>}
+    <div
+      className="min-h-screen bg-cover bg-center p-4 relative"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+      <Navbar />
+      <div className="container mx-auto p-4 mt-28 bg-white bg-opacity-80 rounded-lg shadow-lg max-w-4xl lg:max-w-2xl md:max-w-full sm:max-w-full">
+        <h1 className="bg-ColorMorado text-2xl font-bold font-nunito p-2 text-gray-700 mb-8 text-center">Cargar Video</h1>
 
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Título</label>
-          <input 
-            type="text" 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        {success && <p className="text-green-500 font-nunito text-center">¡Video guardado exitosamente!</p>}
+
+        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 sm:px-4">
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Título</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <button
+              onClick={handleUpload}
+              className={`bg-ColorAzul hover:bg-blue-300 text-gray-600 font-bold font-nunito py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full sm:w-auto ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={loading}
+            >
+              {loading ? 'Cargando...' : 'Subir Video'}
+            </button>
+          </div>
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
-          <textarea 
-            value={description} 
-            onChange={(e) => setDescription(e.target.value)} 
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+        {/* Sección de videos cargados */}
+        <h1 className="bg-ColorMorado text-2xl font-bold font-nunito p-2 text-gray-700 mb-8 text-center">Videos Cargados</h1>
+        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 sm:px-4">
+          {videos.length === 0 ? (
+            <p className="text-gray-500 text-center">No hay videos cargados.</p>
+          ) : (
+            <ul className="space-y-4">
+              {videos.map((video) => (
+                <li key={video.idVideo} className="flex justify-between items-center border-b pb-2 font-nunito">
+                  <span className="text-gray-700 text-sm truncate w-3/4">{video.url}</span>
+                  <button onClick={() => handleDelete(video.idVideo)} className="text-red-500 hover:text-red-700">
+                    <FaTrash />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-
-        <div className="flex items-center justify-between">
-          <button
-            onClick={handleUpload}
-            className={`bg-ColorAzul hover:bg-blue-300 text-gray-600 font-bold font-nunito py-2 px-4 rounded focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={loading}
-          >
-            {loading ? 'Cargando...' : 'Subir Video'}
-          </button>
-        </div>
-      </div>
-
-      {/* Sección de videos cargados */}
-      <h1 className="bg-ColorMorado text-2xl font-bold font-nunito p-2 text-gray-200 mb-8">Videos Cargados</h1>
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        {videos.length === 0 ? (
-          <p className="text-gray-500">No hay videos cargados.</p>
-        ) : (
-          <ul className="space-y-4">
-            {videos.map(video => (
-              <li key={video.idVideo} className="flex justify-between items-center border-b pb-2 font-nunito">
-                <span className="text-gray-700">{video.url}</span>
-                <button onClick={() => handleDelete(video.idVideo)} className="text-red-500 hover:text-red-700">
-                  <FaTrash />
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
     </div>
   );
