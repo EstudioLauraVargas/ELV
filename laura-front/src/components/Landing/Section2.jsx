@@ -16,7 +16,7 @@ const Section2 = () => {
 
       {/* Contenido */}
       <div className="relative z-10 flex flex-col justify-center items-center h-full">
-        <h1 className="xl:text-7xl text-center lg:text-5xl font-bold text-white mb-4 bg-pink-200 bg-opacity-50 p-4">
+        <h1 className="xl:text-5xl text-center lg:text-5xl font-bold text-white mb-4 bg-pink-200 bg-opacity-50 p-4">
           ACERCA DE LAURA VARGAS
         </h1>
 

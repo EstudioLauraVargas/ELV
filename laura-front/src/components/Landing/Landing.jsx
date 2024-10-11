@@ -20,7 +20,7 @@ const Landing = () => {
     return  (
         <div className={style.landing}>
      
-    <div className="relative h-screen flex justify-center items-center text-white">
+    <div className="relative h-screen flex justify-start   mb-8 items-center text-white md: p-4 md: mt-8">
       {/* Imagen de fondo */}
       <div
         className="absolute inset-0 bg-no-repeat bg-center bg-cover brightness-50"
@@ -28,8 +28,8 @@ const Landing = () => {
       ></div>
 
       {/* Contenido */}
-      <div className="relative z-10 flex flex-col items-center text-center lg:text-left px-4 md:px-8 lg:px-16">
-        <p className="uppercase text-4xl md:text-5xl lg:text-[6.5em] font-bold italic leading-tight lg:leading-[100px] w-full md:w-[50vw] lg:w-[33vw] mb-4">
+      <div className="relative z-10 flex flex-col items-start   lg:text-left px-4 md:px-8 lg:px-16">
+        <p className="uppercase text-3xl md:text-4xl lg:text-[4em]  font-bold italic leading-tight lg:leading-[100px] w-full  md:w-[50vw] lg:w-[33vw] mt-16 mb-4">
           realzamos tu belleza
         </p>
         <p className="w-full md:w-[50vw] lg:w-[30vw] font-quicksand font-semibold text-lg md:text-xl lg:text-[1.7em] mb-8">
