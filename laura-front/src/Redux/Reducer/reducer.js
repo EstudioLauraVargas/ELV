@@ -21,6 +21,7 @@ import {
   UPLOAD_VIDEO_SUCCESS,
   UPLOAD_VIDEO_FAILURE,
   REMOVE_VIDEO,
+  FETCH_VIDEOS_REQUEST,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
   FETCH_SUBSCRIPTIONS_REQUEST,
@@ -98,6 +99,12 @@ const initialState = {
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_VIDEOS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
     case FETCH_VIDEOS_SUCCESS:
       return {
         ...state,
@@ -111,16 +118,23 @@ const rootReducer = (state = initialState, action) => {
         error: action.payload,
       };
       case UPLOAD_VIDEO_REQUEST:
-      return { ...state, loading: true };
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
     case UPLOAD_VIDEO_SUCCESS:
       return {
         ...state,
         loading: false,
-        videos: [...state.videos, action.payload], // Añade el nuevo video al arreglo existente
+        videos: [...state.videos, action.payload], // Agregar el nuevo video a la lista
       };
     case UPLOAD_VIDEO_FAILURE:
-      return { ...state, loading: false, error: action.payload };
-
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     // Remove video
     case REMOVE_VIDEO:
       return {
