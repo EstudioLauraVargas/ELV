@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchOrdersByDocument, getCourseById } from '../../Redux/Actions/actions';
 import ReactPlayer from 'react-player';
 import Navbar from '../Navbar';
-import backgroundImage from "../../lauraassets/bg1.png"
+import backgroundImage from "../../lauraassets/bg1.png";
 
 const MisCursos = () => {
   const dispatch = useDispatch();
@@ -13,51 +13,52 @@ const MisCursos = () => {
   const { loading, error } = useSelector((state) => state.ordersByDocument);
   const course = useSelector((state) => state.course);
 
-  // Verificar si el usuario está logueado
+  // Estado local para almacenar los IDs de los cursos que ya se han cargado
+  const [loadedCourses, setLoadedCourses] = useState(new Set());
+
   if (!userInfo) {
     return <p className="text-center text-red-500 mt-10">Por favor, inicia sesión.</p>;
   }
 
   const { document } = userInfo;
 
-  // Despachar la acción fetchOrdersByDocument
   useEffect(() => {
     if (document) {
       dispatch(fetchOrdersByDocument(document));
     }
   }, [dispatch, document]);
 
-  // Filtrar órdenes activas
   const currentDate = new Date();
   const activeOrders = orders?.filter((order) => {
     const orderEndDate = new Date(order.endDate);
     return orderEndDate >= currentDate && order.state_order === 'Pendiente';
   }) || [];
 
-  // Obtener los videos del curso en base al idCourse
   useEffect(() => {
     if (activeOrders.length > 0) {
       activeOrders.forEach((order) => {
         order.subscriptions.forEach((subscription) => {
           const { idCourse } = subscription.course;
-          dispatch(getCourseById(idCourse));
+          
+          // Si el curso aún no ha sido cargado, hacer la petición y marcarlo como cargado
+          if (!loadedCourses.has(idCourse)) {
+            dispatch(getCourseById(idCourse));
+            setLoadedCourses((prev) => new Set(prev).add(idCourse));
+          }
         });
       });
     }
-  }, [dispatch, activeOrders]);
+  }, [dispatch, activeOrders, loadedCourses]);
 
-  // Función para formatear la fecha a DD-MM-AA
   const formatDate = (dateString) => {
     const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
     return new Date(dateString).toLocaleDateString('es-ES', options);
   };
 
-  // Manejo de errores
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
   if (loading) return <p className="text-center text-blue-500 mt-10">Cargando órdenes...</p>;
   if (activeOrders.length === 0) return <p className="text-center text-gray-500 mt-10">No tienes órdenes activas.</p>;
 
-  // Mostrar cursos y videos
   return (
     <div
       className="min-h-screen bg-cover bg-center relative p-4"
@@ -85,13 +86,14 @@ const MisCursos = () => {
                         <h4 className="text-lg font-semibold mb-2">{video.title}</h4>
                         <div className="relative pb-[56.25%] h-0 overflow-hidden">
                           <ReactPlayer
-                            url={`https://www.youtube.com/embed/${video.youtube_id}?controls=1&modestbranding=1&rel=0&disablekb=1&fs=0`}
+                            url={video.url} // URL del video guardado en tu backend
                             controls
                             width="100%"
                             height="100%"
                             className="absolute top-0 left-0"
                           />
                         </div>
+                        <p className="text-gray-700 mt-2">{video.description}</p>
                       </li>
                     ))}
                   </ul>
@@ -108,6 +110,8 @@ const MisCursos = () => {
 };
 
 export default MisCursos;
+
+
 
 
 
