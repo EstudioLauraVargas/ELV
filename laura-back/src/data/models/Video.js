@@ -8,10 +8,13 @@ module.exports = (sequelize) => {
       allowNull: false,
       autoIncrement: true,
     },
-    youtube_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+
+    url: {
+        type: DataTypes.STRING,
+        allowNull: false,
+       
+      },
+
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -19,15 +22,9 @@ module.exports = (sequelize) => {
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    thumbnail: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    duration:{
-      type:DataTypes.STRING,
-      allowNull:false,
     }
+   
+  
   });
 };
 

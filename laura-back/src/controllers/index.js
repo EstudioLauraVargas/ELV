@@ -1,9 +1,6 @@
 const {catchedAsync} = require("../utils");
 const { getOrderCompra } = require("./OrdersDetails");
-
-
-
-
+const videosControllers = require("./videosControllers");
 
 
 
@@ -18,13 +15,12 @@ module.exports = {
     deleteUser:catchedAsync(require("./Users/deleteUser")),
     getAllUser:catchedAsync(require("./Users/getAllUser")),
     subsController:catchedAsync(require("./subsController")),
-    YoutubeController:catchedAsync(require("./YoutubeController")),
+    videosControllers:catchedAsync(require("./videosControllers")),
     addCourse: catchedAsync("./coursesController.addCourse"),
     updateCourse: catchedAsync("./coursesController.updateCourse"),
     deleteCourse: catchedAsync("./coursesController.deleteCourse"),
     getCourses:catchedAsync(require("./getCourses")),
     getCourseById:catchedAsync(require("./getCourseById")),
-    pruebaGetVideos:catchedAsync(require("./pruebaGetVideos")),
     createSubscription:catchedAsync(require("./Suscription/createSubscription")),
     deleteSubscription:catchedAsync(require("./Suscription/deleteSubscription")),
     getSubscriptions:catchedAsync(require("./Suscription/getSubscriptions")),

@@ -1,15 +1,12 @@
  const express = require('express');
+const { createVideo, getVideos, deleteVideo } = require('../controllers/videosControllers');
  const router = express.Router();
 
- const YouTubeController = require('../controllers/YoutubeController');
-const { pruebaGetVideos } = require('../controllers');
-
- // Ruta para obtener listas de reproducción
- //router.get('/playlists', YouTubeController.fetchPlaylists);
  
  // Ruta para obtener y almacenar videos
- router.get('/videos', YouTubeController.fetchAndStoreVideos);
- router.get('/prueba', pruebaGetVideos)
-
+ router.get('/', getVideos);
+ router.post('/', createVideo)
+ router.delete('/:idVideo', deleteVideo)
+ //router.put('/:idVideo', videosControllers)
 
 module.exports = router;

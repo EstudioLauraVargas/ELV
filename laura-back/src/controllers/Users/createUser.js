@@ -1,8 +1,8 @@
-// controllers/Users/createUser.js
-const { User } = require('../../data'); // Asegúrate de que esta ruta es correcta
+const { User } = require('../../data');
 const response = require("../../utils/response");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const moment = require('moment'); // Asegúrate de tener moment instalado
 
 module.exports = async (req, res) => {
   try {
@@ -19,6 +19,9 @@ module.exports = async (req, res) => {
         !user.role) {
       return response(res, 400, "Todos los campos son obligatorios");
     }
+
+    // Convertir la fecha de nacimiento al formato correcto (YYYY-MM-DD)
+    const formattedBirthDate = moment(user.birthDate, 'DD-MM-YYYY').format('YYYY-MM-DD');
 
     // Verificar si el email ya está registrado
     const existingEmail = await User.findOne({ where: { email: user.email } });
@@ -44,7 +47,7 @@ module.exports = async (req, res) => {
       sex: user.sex,
       email: user.email,
       password: hash, // Usa el hash en lugar de la contraseña en texto claro
-      birthDate: user.birthDate,
+      birthDate: formattedBirthDate, // Aquí usas la fecha ya convertida
       phone: user.phone,
       role: user.role
     });

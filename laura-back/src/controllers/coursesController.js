@@ -6,13 +6,7 @@ const cloudinary = require('../config/cloudinaryConfig');
 
 const addCourse = async (req, res) => {
   try {
-    const { title, description, idVideo, imageUrl, imagePublicId } = req.body;
-
-    console.log("Received request to create course with title:", title);
-    console.log("Course description:", description);
-    console.log("Video IDs to associate:", idVideo);
-    console.log("Image URL:", imageUrl);
-    console.log("Image Public ID:", imagePublicId);
+    const { title, url, description, idVideo, imageUrl, imagePublicId } = req.body;
 
     // Validación básica
     if (!title) {

@@ -17,6 +17,10 @@ import {
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGOUT,
+  UPLOAD_VIDEO_REQUEST,
+  UPLOAD_VIDEO_SUCCESS,
+  UPLOAD_VIDEO_FAILURE,
+  REMOVE_VIDEO,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
   FETCH_SUBSCRIPTIONS_REQUEST,
@@ -105,6 +109,23 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.payload,
+      };
+      case UPLOAD_VIDEO_REQUEST:
+      return { ...state, loading: true };
+    case UPLOAD_VIDEO_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        videos: [...state.videos, action.payload], // Añade el nuevo video al arreglo existente
+      };
+    case UPLOAD_VIDEO_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+    // Remove video
+    case REMOVE_VIDEO:
+      return {
+        ...state,
+        videos: state.videos.filter((video) => video.idVideo !== action.payload),
       };
 
     case GET_COURSES_SUCCESS:

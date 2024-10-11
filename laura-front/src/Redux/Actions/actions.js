@@ -20,8 +20,13 @@ import {
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGOUT,
+  UPLOAD_VIDEO_REQUEST,
+  UPLOAD_VIDEO_SUCCESS,
+  UPLOAD_VIDEO_FAILURE,
+  FETCH_VIDEOS_REQUEST ,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
+  REMOVE_VIDEO,
   FETCH_SUBSCRIPTIONS_REQUEST,
   FETCH_SUBSCRIPTIONS_SUCCESS,
   FETCH_SUBSCRIPTIONS_FAILURE,
@@ -62,33 +67,51 @@ import {
 
 
 
-
-export const fetchVideos = () => async (dispatch) => {
+export const uploadVideo = (videoData) => async (dispatch) => {
   try {
-    const response = await fetch(`${BASE_URL}/videos/videos`, {
-      method: 'GET',
-      // headers: {
-      //     Authorization: `Bearer ${tokens.access_token}`,
-      // },
-    });
+    // Opcional: Puedes despachar una acción para indicar que el upload está en progreso
+    dispatch({ type: UPLOAD_VIDEO_REQUEST });
 
-    console.log('Response received:', response);
+    const response = await axios.post(`${BASE_URL}/videos`, videoData);
 
-    if (!response.ok) {
-      // Lanza un error si la respuesta HTTP no es exitosa
-      throw new Error(`Error HTTP! Estado: ${response.status}`);
+    if (response.status === 201) {
+      const newVideo = response.data.data;
+      
+      // Despachar acción exitosa con el nuevo video
+      dispatch({ type: UPLOAD_VIDEO_SUCCESS, payload: newVideo });
     }
-
-    const data = await response.json();
-    const videos = data.data.videos; // Asegúrate de acceder correctamente al array de videos
-
-    dispatch({ type: FETCH_VIDEOS_SUCCESS, payload: videos });
   } catch (error) {
-    console.error('Error fetching videos:', error);
-    dispatch({ type: FETCH_VIDEOS_FAILURE, payload: error.message });
+    console.error("Error uploading video:", error);
+    
+    // Despachar acción de error
+    dispatch({ type: UPLOAD_VIDEO_FAILURE, payload: error.message });
   }
 };
 
+export const fetchVideos = () => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_VIDEOS_REQUEST });
+
+    const response = await axios.get(`${BASE_URL}/videos`);
+    
+    if (response.status === 200) {
+      const videos = response.data.data; // Asegúrate de que este sea el formato correcto
+      dispatch({ type: FETCH_VIDEOS_SUCCESS, payload: videos });
+    }
+  } catch (error) {
+    console.error("Error fetching videos:", error);
+    dispatch({ type: FETCH_VIDEOS_FAILURE, payload: error.message });
+  }
+};
+export const removeVideo = (idVideo) => async (dispatch) => {
+  try {
+    await axios.delete(`${BASE_URL}/videos/${idVideo}`);
+    dispatch({ type: REMOVE_VIDEO, payload: idVideo });
+  } catch (error) {
+    console.error("Error eliminando video:", error);
+    // Manejar error aquí (opcional)
+  }
+};
 
 // actions.js
 export const createCourse = (courseData) => async (dispatch) => {

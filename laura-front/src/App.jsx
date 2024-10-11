@@ -10,7 +10,7 @@ import Cursos from "./components/Cursos/Cursos";
 import Users from "./components/Dashboard/Users"; 
 import Video from "./components/services/Video"
 import Panel from "./components/Dashboard/Panel";
-import AllVideos from "./components/Cursos/AllVideos"
+
 import GestionCursos from "./components/Dashboard/GestionCursos";
 import ABMCursos from "./components/Dashboard/ABMCursos";
 import ListarCursos from "./components/Dashboard/ListarCursos";
@@ -29,6 +29,7 @@ import Footer from "./components/Footer/Footer";
 import PaymentConfirmation from "./components/Cursos/PaymentConfirmation";
 import OrderList from "./components/Dashboard/OrderList";
 import MisCursos from "./components/pages/MisCursos";
+import CargarVideos from "./components/Dashboard/CargarVideos"
 
 
 function App() {
@@ -47,9 +48,10 @@ function App() {
         <Route path="/cursos" element={<Cursos />} /> 
         <Route path="/users" element={<Users />} />
         <Route path="/panel" element={<Panel/>} />
-        <Route path="/videos" element={<AllVideos/>} />
+        <Route path="/videos" element={<CargarVideos/>} />
         <Route path="/gestioncursos" element={<GestionCursos/>} />
         <Route path="/listarCursos" element={<ListarCursos/>} />
+
         <Route path="/listarOrdenes" element={<OrderList/>} />
         <Route path="/editarCurso/:idCourse" element={<EditarCurso/>} />
         <Route path="/abmcursos" element={<ABMCursos/>} />
