@@ -65,7 +65,8 @@ const initialState = {
   error: null,
   videos: [],
   courses: [],
-  course: null,
+  
+  course: [],
   subscriptions: [],
 
   userRegister: {
@@ -159,12 +160,12 @@ const rootReducer = (state = initialState, action) => {
           loading: true,
           error: null,
         };
-      case GET_COURSE_SUCCESS:
-        return {
-          ...state,
-          loading: false,
-          course: action.payload, // Asegúrate de que sea un objeto, no un array
-        };
+        case GET_COURSE_SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            courses: [...state.courses, action.payload], // Agrega el curso al arreglo de cursos
+          };
       case GET_COURSE_FAILURE:
         return {
           ...state,

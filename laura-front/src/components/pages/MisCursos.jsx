@@ -8,12 +8,13 @@ import backgroundImage from "../../lauraassets/bg1.png";
 const MisCursos = () => {
   const dispatch = useDispatch();
 
+  // Obtener información del usuario logueado
   const { userInfo } = useSelector((state) => state.userLogin);
   const orders = useSelector((state) => state.ordersByDocument);
   const { loading, error } = useSelector((state) => state.ordersByDocument);
-  const course = useSelector((state) => state.course);
+  const courses = useSelector((state) => state.courses); // courses es un array
+  console.log("Estado del curso en Redux (courses):", courses);
 
-  // Estado local para almacenar los IDs de los cursos que ya se han cargado
   const [loadedCourses, setLoadedCourses] = useState(new Set());
 
   if (!userInfo) {
@@ -22,6 +23,7 @@ const MisCursos = () => {
 
   const { document } = userInfo;
 
+  // Fetch de las órdenes basadas en el documento del usuario
   useEffect(() => {
     if (document) {
       dispatch(fetchOrdersByDocument(document));
@@ -29,21 +31,32 @@ const MisCursos = () => {
   }, [dispatch, document]);
 
   const currentDate = new Date();
-  const activeOrders = orders?.filter((order) => {
-    const orderEndDate = new Date(order.endDate);
-    return orderEndDate >= currentDate && order.state_order === 'Pendiente';
-  }) || [];
 
+  // Verificar si orders está definido antes de filtrar
+  const activeOrders = orders?.length > 0 
+    ? orders.filter(order => {
+        const orderEndDate = new Date(order.endDate);
+        return orderEndDate >= currentDate && order.state_order === 'Pendiente';
+      }) 
+    : [];
+
+  console.log("Órdenes activas:", activeOrders);
+
+  // Cargar los cursos relacionados con las órdenes activas
   useEffect(() => {
     if (activeOrders.length > 0) {
       activeOrders.forEach((order) => {
+        console.log("Procesando orden:", order);
         order.subscriptions.forEach((subscription) => {
-          const { idCourse } = subscription.course;
-          
-          // Si el curso aún no ha sido cargado, hacer la petición y marcarlo como cargado
+          const { idCourse } = subscription.course; // Cambia courses a course
+          console.log("Procesando suscripción con idCourse:", idCourse);
+
           if (!loadedCourses.has(idCourse)) {
+            console.log("Curso no cargado, dispatch getCourseById para idCourse:", idCourse);
             dispatch(getCourseById(idCourse));
             setLoadedCourses((prev) => new Set(prev).add(idCourse));
+          } else {
+            console.log("Curso ya cargado:", idCourse);
           }
         });
       });
@@ -76,27 +89,30 @@ const MisCursos = () => {
 
             {order.subscriptions.map((subscription) => (
               <div key={subscription.idSub} className="mb-6">
-                <h3 className="text-xl font-semibold mb-2">Curso: {subscription.course.title}</h3>
+                <h3 className="text-xl font-semibold mb-2">Curso: {subscription.course.title}</h3> {/* Cambiar courses a course */}
 
-                {/* Mostrar videos del curso */}
-                {course?.Videos?.length > 0 ? (
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {course.Videos.map((video) => (
-                      <li key={video.idVideo} className="bg-gray-100 p-4 rounded-lg">
-                        <h4 className="text-lg font-semibold mb-2">{video.title}</h4>
-                        <div className="relative pb-[56.25%] h-0 overflow-hidden">
-                          <ReactPlayer
-                            url={video.url} // URL del video guardado en tu backend
-                            controls
-                            width="100%"
-                            height="100%"
-                            className="absolute top-0 left-0"
-                          />
-                        </div>
-                        <p className="text-gray-700 mt-2">{video.description}</p>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Mostrar el estado del curso y sus videos */}
+                {courses.length > 0 && courses.find(c => c.idCourse === subscription.course.idCourse)?.Videos?.length > 0 ? (
+                  <>
+                    {/* <p> Cantidad  Videos de este Curso: {courses.find(c => c.idCourse === subscription.course.idCourse).Videos.length}</p> */}
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {courses.find(c => c.idCourse === subscription.course.idCourse).Videos.map((video) => (
+                        <li key={video.idVideo} className="bg-gray-100 p-4 rounded-lg">
+                          <h4 className="text-lg font-semibold mb-2">{video.title}</h4>
+                          <div className="relative pb-[56.25%] h-0 overflow-hidden">
+                            <ReactPlayer
+                              url={video.url}
+                              controls
+                              width="100%"
+                              height="100%"
+                              className="absolute top-0 left-0"
+                            />
+                          </div>
+                          <p className="text-gray-700 mt-2">{video.description}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
                 ) : (
                   <p className="text-gray-500">No hay videos disponibles para este curso.</p>
                 )}
@@ -110,6 +126,11 @@ const MisCursos = () => {
 };
 
 export default MisCursos;
+
+
+
+
+
 
 
 

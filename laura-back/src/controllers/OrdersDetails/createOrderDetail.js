@@ -14,25 +14,35 @@ const calculateEndDate = (startDate, durationDays) => {
 
 module.exports = async (req, res) => {
   try {
+    // Log the request body to see what data is coming in
+    console.log("Request Body:", req.body);
+    
     const { date, amount, subscriptions, state_order, document, currency } = req.body;
 
     // Validación de los datos recibidos
     if (!date || !amount || !subscriptions || !state_order || !document || !currency) {
+      console.log("Validation failed. Missing data in request.");
       return response(res, 400, { error: "Missing Ordering Data" });
     }
 
     if (!Array.isArray(subscriptions) || subscriptions.length === 0) {
+      console.log("Validation failed. Subscriptions must be a non-empty array.");
       return response(res, 400, { error: "Subscriptions must be a non-empty array" });
     }
 
     // Encuentra al usuario por su documento
     const user = await User.findByPk(document);
     if (!user) {
+      console.log(`User not found for document: ${document}`);
       return response(res, 404, { error: "User not found" });
     }
 
+    console.log("User found:", user);
+
     // Encuentra los cursos asociados a las suscripciones
     const courseIds = subscriptions.map(sub => sub.idCourse);
+    console.log("Course IDs from subscriptions:", courseIds);
+
     const courses = await Course.findAll({
       where: {
         idCourse: {
@@ -44,8 +54,11 @@ module.exports = async (req, res) => {
     if (courses.length !== courseIds.length) {
       const existingCourseIds = courses.map(c => c.idCourse);
       const missing = courseIds.filter(id => !existingCourseIds.includes(id));
+      console.log("Missing courses:", missing);
       return response(res, 404, { error: `Courses with ids ${missing.join(', ')} not found` });
     }
+
+    console.log("Courses found:", courses);
 
     // Generar referencia y firma de integridad
     const referencia = uuidv4();
@@ -64,15 +77,22 @@ module.exports = async (req, res) => {
       },
     });
 
+    console.log("Subscription Details:", subscriptionDetails);
+
     // Mapea las suscripciones existentes para obtener los días de duración
     const subscriptionMap = subscriptionDetails.reduce((map, sub) => {
       map[sub.idSub] = sub.durationDays;
       return map;
     }, {});
 
+    console.log("Subscription Map:", subscriptionMap);
+
     // Calcula la duración máxima de las suscripciones seleccionadas
     const maxDuration = Math.max(...subscriptions.map(sub => subscriptionMap[sub.idSub] || 0));
+    console.log("Max Duration:", maxDuration);
+    
     const endDate = calculateEndDate(date, maxDuration);
+    console.log("End Date Calculated:", endDate);
 
     // Crea la orden de compra
     const orderCompraData = {
@@ -86,19 +106,20 @@ module.exports = async (req, res) => {
       integritySignature: integritySignature
     };
 
+    console.log("OrderCompra Data:", orderCompraData);
+
     const orderCompra = await OrderCompra.create(orderCompraData);
+    console.log("OrderCompra Created:", orderCompra);
 
     // Asociar la orden con las suscripciones existentes y los cursos seleccionados
-    await Subscription.update(
-      { orderId: orderCompra.orderId, idCourse: courseIds }, // Asocia la suscripción con la orden creada y los cursos
-      {
-        where: {
-          idSub: {
-            [Op.in]: subscriptions.map(sub => sub.idSub),
-          },
-        },
-      }
-    );
+    for (const sub of subscriptions) {
+      await Subscription.update(
+        { orderId: orderCompra.orderId, idCourse: sub.idCourse }, // Actualiza idCourse por separado
+        {
+          where: { idSub: sub.idSub },
+        }
+      );
+    }
 
     // Busca la orden con las suscripciones ya asociadas para devolverla en la respuesta
     const updatedOrderCompra = await OrderCompra.findOne({
@@ -120,6 +141,7 @@ module.exports = async (req, res) => {
     return response(res, 500, { error: error.message });
   }
 };
+
 
 
 

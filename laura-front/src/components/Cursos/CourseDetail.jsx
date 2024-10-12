@@ -10,7 +10,9 @@ const CourseDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.courses);
-  const course = useSelector((state) => state.course);
+  const course = useSelector((state) => state.courses.find(course => course.idCourse === parseInt(idCourse)));
+
+  console.log(course)
 
   useEffect(() => {
     dispatch(getCourseById(idCourse));  
@@ -41,7 +43,7 @@ const CourseDetail = () => {
         </div>
         <div className="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto text-center mt-16">
         <img
-                    src={course.imageUrl || '/default-thumbnail.jpg'}
+                    src={course.imageUrl }
                     alt={course.title}
                     className="object-cover w-full h-full"
                   />
