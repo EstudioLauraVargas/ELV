@@ -29,10 +29,10 @@ const VideoUploader = () => {
     setSuccess(false);
 
     openCloudinaryWidget(async (url) => {
-        // Asegúrate de que `url` contenga los campos correctos
-        const videoUrl = url.imageUrl; // URL del video subido
-        const videoTitle = "Tu título aquí"; // Asegúrate de proporcionar un título real
-        const videoDescription = "Tu descripción aquí"; // Asegúrate de proporcionar una descripción real
+      
+        const videoUrl = url.imageUrl; 
+        const videoTitle = title; 
+        const videoDescription = description 
 
         // Crea el objeto de video con el formato que espera el backend
         const videoData = {
