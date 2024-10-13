@@ -1,25 +1,56 @@
-const { Benefit } = require('../data'); // Asegúrate de ajustar la ruta según tu estructura de carpetas
+const { Benefit,User, Course } = require('../data'); // Asegúrate de ajustar la ruta según tu estructura de carpetas
 
 // Crear un nuevo beneficio
 const createBenefit = async (req, res) => {
-  const { userId, courseId, grantedDate, endDate } = req.body;
-  
+  const { userName, courseTitle, grantedDate, endDate } = req.body;
+
   try {
-    const newBenefit = await Benefit.create({ userId, courseId, grantedDate, endDate });
-    return res.status(201).json(newBenefit);
+    // Buscar al usuario por nombre
+    const user = await User.findOne({ where: { name: userName } });
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Buscar el curso por título
+    const course = await Course.findOne({ where: { title: courseTitle } });
+    if (!course) {
+      return res.status(404).json({ message: 'Curso no encontrado' });
+    }
+
+    // Crear el beneficio
+    const benefit = await Benefit.create({
+      userId: user.id,
+      courseId: course.id,
+      grantedDate,
+      endDate,
+    });
+
+    return res.status(201).json(benefit);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Error al crear el beneficio', error });
+    console.error('Error al crear beneficio:', error);
+    return res.status(500).json({ message: 'Error al crear beneficio', error });
   }
 };
 
 // Obtener todos los beneficios
 const getBenefits = async (req, res) => {
   try {
-    const benefits = await Benefit.findAll();
+    const benefits = await Benefit.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['name'],  // Traer solo el nombre del usuario
+        },
+        {
+          model: Course,
+          attributes: ['title'],  // Traer solo el título del curso
+        },
+      ],
+    });
+
     return res.status(200).json(benefits);
   } catch (error) {
-    console.error(error);
+    console.error('Error al obtener beneficios:', error);
     return res.status(500).json({ message: 'Error al obtener beneficios', error });
   }
 };

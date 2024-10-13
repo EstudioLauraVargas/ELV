@@ -67,6 +67,7 @@ function App() {
         <Route path="/misCursos" element={<MisCursos/>} />
         <Route path="/crearSubs" element={<SubscriptionForm/>} />
         <Route path="/editarSubs/:idSub" element={<EditSuscription/>} />
+        
         <Route path="/detallePago/:idSub" element={<PaymentDetail />} />
         <Route path="/cursosDisponibles" element={<CursosDisponibles />} />
       </Routes>
