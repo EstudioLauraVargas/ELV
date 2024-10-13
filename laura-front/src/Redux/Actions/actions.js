@@ -42,9 +42,10 @@ import {
   DELETE_SUBSCRIPTION_REQUEST,
   DELETE_SUBSCRIPTION_SUCCESS,
   DELETE_SUBSCRIPTION_FAILURE,
-  GET_COURSE_REQUEST,
-  GET_COURSE_SUCCESS,
-  GET_COURSE_FAILURE,
+
+  FETCH_COURSE_REQUEST, 
+  FETCH_COURSE_SUCCESS, 
+  FETCH_COURSE_FAILURE,
 
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
@@ -61,6 +62,22 @@ import {
   FETCH_LATEST_ORDER_SUCCESS,
   FETCH_LATEST_ORDER_FAILURE,
 
+  FETCH_BENEFITS_REQUEST,
+  FETCH_BENEFITS_SUCCESS,
+  FETCH_BENEFITS_FAILURE,
+  CREATE_BENEFIT_REQUEST,
+  CREATE_BENEFIT_SUCCESS,
+  CREATE_BENEFIT_FAILURE,
+  UPDATE_BENEFIT_REQUEST,
+  UPDATE_BENEFIT_SUCCESS,
+  UPDATE_BENEFIT_FAILURE,
+  DELETE_BENEFIT_REQUEST,
+  DELETE_BENEFIT_SUCCESS,
+  DELETE_BENEFIT_FAILURE,
+
+  FETCH_BENEFIT_BY_USER_REQUEST,  // Acción para pedir beneficios por usuario
+  FETCH_BENEFIT_BY_USER_SUCCESS,
+  FETCH_BENEFIT_BY_USER_FAILURE,
   CLEAR_ORDER_STATE
 
 } from './actions-type';
@@ -146,31 +163,21 @@ export const getCourses = () => {
 };
 
 // Acción para obtener un curso por su id
-export const getCourseById = (idCourse) => {
-  return async (dispatch) => {
-    try {
-      console.log(`Fetching course with ID: ${idCourse}`); // Log para verificar el ID del curso
-      dispatch({ type: GET_COURSE_REQUEST }); // Inicia la carga
+export const fetchCourseById = (idCourse) => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_COURSE_REQUEST });
 
-      const response = await axios.get(`${BASE_URL}/cursos/${idCourse}`);
-      const course = response.data.data; 
+    const response = await axios.get(`${BASE_URL}/cursos/${idCourse}`);
 
-      console.log('Course data fetched:', course); // Log para ver la respuesta de la API
-
-      dispatch({
-        type: GET_COURSE_SUCCESS,
-        payload: course, // Guardamos el curso en el payload
-      });
-    } catch (error) {
-      console.error('Error fetching course:', error.message); // Log para capturar errores
-      dispatch({
-        type: GET_COURSE_FAILURE,
-        payload: error.message, // Enviamos el mensaje de error si ocurre
-      });
+    if (response.status === 200) {
+      const course = response.data.data; // Asegúrate de acceder a los datos correctamente
+      dispatch({ type: FETCH_COURSE_SUCCESS, payload: course });
     }
-  };
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    dispatch({ type: FETCH_COURSE_FAILURE, payload: error.message });
+  }
 };
-
 
 
 
@@ -420,6 +427,83 @@ export const fetchLatestOrder = () => async (dispatch) => {
     dispatch({ type: FETCH_LATEST_ORDER_FAILURE, payload: error.response.data });
   }
 };
+
+export const fetchBenefits = () => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_BENEFITS_REQUEST });
+    const response = await axios.get(`${BASE_URL}/benefits`);
+    
+    if (response.status === 200) {
+      dispatch({ type: FETCH_BENEFITS_SUCCESS, payload: response.data });
+    }
+  } catch (error) {
+    console.error('Error fetching benefits:', error);
+    dispatch({ type: FETCH_BENEFITS_FAILURE, payload: error.message });
+  }
+};
+
+export const createBenefit = (benefitData) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_BENEFIT_REQUEST });
+    const response = await axios.post(`${BASE_URL}/benefits`, benefitData);
+    
+    if (response.status === 201) {
+      dispatch({ type: CREATE_BENEFIT_SUCCESS, payload: response.data });
+    }
+  } catch (error) {
+    console.error('Error creating benefit:', error);
+    dispatch({ type: CREATE_BENEFIT_FAILURE, payload: error.message });
+  }
+};
+
+export const updateBenefit = (id, benefitData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_BENEFIT_REQUEST });
+    const response = await axios.put(`${BASE_URL}/benefits/${id}`, benefitData);
+    
+    if (response.status === 200) {
+      dispatch({ type: UPDATE_BENEFIT_SUCCESS, payload: response.data });
+    }
+  } catch (error) {
+    console.error('Error updating benefit:', error);
+    dispatch({ type: UPDATE_BENEFIT_FAILURE, payload: error.message });
+  }
+};
+
+export const deleteBenefit = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_BENEFIT_REQUEST });
+    await axios.delete(`${BASE_URL}/benefits/${id}`);
+    
+    dispatch({ type: DELETE_BENEFIT_SUCCESS, payload: id });
+  } catch (error) {
+    console.error('Error deleting benefit:', error);
+    dispatch({ type: DELETE_BENEFIT_FAILURE, payload: error.message });
+  }
+};
+
+export const fetchBenefitsByUser = (userId) => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_BENEFIT_BY_USER_REQUEST }); // Cambia aquí
+
+    const { data } = await axios.get(`/benefits/user/${userId}`);
+    
+    console.log("Datos de beneficios recibidos:", data); // Para verificar la respuesta
+    
+    dispatch({
+      type: FETCH_BENEFIT_BY_USER_SUCCESS, // Cambia aquí
+      payload: data, // Asegúrate de que sea un array o el formato correcto que esperas
+    });
+  } catch (error) {
+    dispatch({
+      type: FETCH_BENEFIT_BY_USER_FAILURE, // Cambia aquí
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+};
+
 
 
 

@@ -39,9 +39,9 @@ import {
   FETCH_SUBSCRIPTION_ID_REQUEST,
   FETCH_SUBSCRIPTION_ID_SUCCESS,
   FETCH_SUBSCRIPTION_ID_FAILURE,
-  GET_COURSE_REQUEST,
-  GET_COURSE_SUCCESS,
-  GET_COURSE_FAILURE,
+  FETCH_COURSE_REQUEST,
+  FETCH_COURSE_SUCCESS,
+  FETCH_COURSE_FAILURE,
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
   ORDER_CREATE_FAIL,
@@ -53,21 +53,38 @@ import {
   FETCH_ORDERS_FAILURE,
   FETCH_ORDERS_BY_DOCUMENT_REQUEST,
   FETCH_ORDERS_BY_DOCUMENT_SUCCESS,
-  FETCH_ORDERS_BY_DOCUMENT_FAILURE
+  FETCH_ORDERS_BY_DOCUMENT_FAILURE,
 
-  
+  FETCH_BENEFITS_REQUEST,
+  FETCH_BENEFITS_SUCCESS,
+  FETCH_BENEFITS_FAILURE,
+  CREATE_BENEFIT_REQUEST,
+  CREATE_BENEFIT_SUCCESS,
+  CREATE_BENEFIT_FAILURE,
+  UPDATE_BENEFIT_REQUEST,
+  UPDATE_BENEFIT_SUCCESS,
+  UPDATE_BENEFIT_FAILURE,
+  DELETE_BENEFIT_REQUEST,
+  DELETE_BENEFIT_SUCCESS,
+  DELETE_BENEFIT_FAILURE,
+  FETCH_BENEFIT_BY_USER_REQUEST,  // Acción para pedir beneficios por usuario
+  FETCH_BENEFIT_BY_USER_SUCCESS,
+  FETCH_BENEFIT_BY_USER_FAILURE,
+
 } from "../Actions/actions-type";
 
 const initialState = {
   loading: false,
-  orders:[],
+  orders: [],
   ordersByDocument: [],
   error: null,
   videos: [],
   courses: [],
-  
+  currentCourse: {},
   course: [],
   subscriptions: [],
+  benefits: [],
+  userBenefits: [],
 
   userRegister: {
     userInfo: null,
@@ -94,8 +111,6 @@ const initialState = {
     error: null,
     data: {},
   },
-
-
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -118,7 +133,7 @@ const rootReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
-      case UPLOAD_VIDEO_REQUEST:
+    case UPLOAD_VIDEO_REQUEST:
       return {
         ...state,
         loading: true,
@@ -140,7 +155,9 @@ const rootReducer = (state = initialState, action) => {
     case REMOVE_VIDEO:
       return {
         ...state,
-        videos: state.videos.filter((video) => video.idVideo !== action.payload),
+        videos: state.videos.filter(
+          (video) => video.idVideo !== action.payload
+        ),
       };
 
     case GET_COURSES_SUCCESS:
@@ -154,24 +171,24 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
       };
-      case GET_COURSE_REQUEST:
-        return {
-          ...state,
-          loading: true,
-          error: null,
-        };
-        case GET_COURSE_SUCCESS:
-          return {
-            ...state,
-            loading: false,
-            courses: [...state.courses, action.payload], // Agrega el curso al arreglo de cursos
-          };
-      case GET_COURSE_FAILURE:
-        return {
-          ...state,
-          loading: false,
-          error: action.payload,
-        };
+    case FETCH_COURSE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_COURSE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        currentCourse: action.payload, // asegúrate de que aquí se esté pasando el curso
+      };
+    case FETCH_COURSE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
 
     case CREATE_COURSE_REQUEST:
       return {
@@ -341,7 +358,7 @@ const rootReducer = (state = initialState, action) => {
     case DELETE_SUBSCRIPTION_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
-      case ORDER_CREATE_REQUEST:
+    case ORDER_CREATE_REQUEST:
       return {
         ...state,
         order: {
@@ -373,7 +390,7 @@ const rootReducer = (state = initialState, action) => {
         },
       };
 
-      case FETCH_LATEST_ORDER_REQUEST:
+    case FETCH_LATEST_ORDER_REQUEST:
       return {
         ...state,
         latestOrder: {
@@ -401,22 +418,22 @@ const rootReducer = (state = initialState, action) => {
           error: action.payload,
         },
       };
-      case FETCH_ORDERS_REQUEST:
+
+    case FETCH_ORDERS_REQUEST:
     case FETCH_ORDERS_BY_DOCUMENT_REQUEST:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    
-      case FETCH_ORDERS_SUCCESS:
-        console.log('Action payload:', action.payload);  // Verifica qué está llegando aquí
-        return {
-          ...state,
-          loading: false,
-          orders: action.payload,  // Verifica que estás actualizando correctamente el estado "orders"
-        };
-      
+
+    case FETCH_ORDERS_SUCCESS:
+      console.log("Action payload:", action.payload); // Verifica qué está llegando aquí
+      return {
+        ...state,
+        loading: false,
+        orders: action.payload, // Verifica que estás actualizando correctamente el estado "orders"
+      };
 
     case FETCH_ORDERS_BY_DOCUMENT_SUCCESS:
       return {
@@ -433,6 +450,110 @@ const rootReducer = (state = initialState, action) => {
         error: action.payload,
       };
 
+      case FETCH_BENEFITS_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case FETCH_BENEFITS_SUCCESS:
+        return {
+          ...state,
+          benefits: action.payload,
+          loading: false,
+        };
+      case FETCH_BENEFITS_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
+      
+      //Fetch benefits by user
+      case FETCH_BENEFIT_BY_USER_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case FETCH_BENEFIT_BY_USER_SUCCESS:
+        console.log("Actualizando userBenefits con:", action.payload);
+        return {
+          ...state,
+          userBenefits: action.payload,
+          loading: false,
+        };
+      case FETCH_BENEFIT_BY_USER_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
+  
+      // Create benefit
+      case CREATE_BENEFIT_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case CREATE_BENEFIT_SUCCESS:
+        return {
+          ...state,
+          benefits: [...state.benefits, action.payload], // Agregar el nuevo beneficio al array de beneficios
+          loading: false,
+        };
+      case CREATE_BENEFIT_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
+  
+      // Update benefit
+      case UPDATE_BENEFIT_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case UPDATE_BENEFIT_SUCCESS:
+        return {
+          ...state,
+          benefits: state.benefits.map((benefit) =>
+            benefit.id === action.payload.id ? action.payload : benefit
+          ),
+          loading: false,
+        };
+      case UPDATE_BENEFIT_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
+  
+      // Delete benefit
+      case DELETE_BENEFIT_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: null,
+        };
+      case DELETE_BENEFIT_SUCCESS:
+        return {
+          ...state,
+          benefits: state.benefits.filter((benefit) => benefit.id !== action.payload),
+          loading: false,
+        };
+      case DELETE_BENEFIT_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
+  
+
+      
 
     default:
       return state;

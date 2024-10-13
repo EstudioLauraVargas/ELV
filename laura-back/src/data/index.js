@@ -49,7 +49,7 @@ const sequelize = new Sequelize(
   sequelize.models = Object.fromEntries(capsEntries);
   
  
-  const { User, Course, Subscription, Video, Payment, OrderCompra, CourseVideos } = sequelize.models;
+  const { User, Course, Subscription, Video, Payment, OrderCompra, Benefit,  CourseVideos } = sequelize.models;
 
 
 ////////////////////////RELACIONES////////////////////////
@@ -108,6 +108,22 @@ OrderCompra.hasOne(Payment, {
 });
 Payment.belongsTo(OrderCompra, {
   foreignKey: 'orderId',
+});
+
+// Relación User -> Benefit (uno a muchos)
+User.hasMany(Benefit, {
+  foreignKey: 'userId', // ID del usuario que recibe el beneficio
+});
+Benefit.belongsTo(User, {
+  foreignKey: 'userId',
+});
+
+// Relación Course -> Benefit (uno a muchos)
+Course.hasMany(Benefit, {
+  foreignKey: 'courseId', // ID del curso asociado al beneficio
+});
+Benefit.belongsTo(Course, {
+  foreignKey: 'courseId',
 });
 
 

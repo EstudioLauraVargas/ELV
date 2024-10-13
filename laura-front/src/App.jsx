@@ -13,6 +13,7 @@ import Panel from "./components/Dashboard/Panel";
 
 import GestionCursos from "./components/Dashboard/GestionCursos";
 import ABMCursos from "./components/Dashboard/ABMCursos";
+import ABMBeneficios from "./components/Dashboard/ABMBeneficios"
 import ListarCursos from "./components/Dashboard/ListarCursos";
 import SubscriptionList from "./components/Dashboard/Subscriptions/SubscriptionList";
 import SubscriptionForm from "./components/Dashboard/Subscriptions/SubscriptionForm";
@@ -43,7 +44,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/changePass" element={<ChangePassword />} />
         <Route path="/forgotPass" element={<ForgotPassword />} />
-        <Route path="/video/:id" element={<Video/>} /> {/* para listar los videos del usuario logueado*/}
+        <Route path="/video/:id" element={<Video/>} /> 
         <Route path="/procedimiento" element={<Procedimientos />} />
         <Route path="/cursos" element={<Cursos />} /> 
         <Route path="/users" element={<Users />} />
@@ -51,10 +52,12 @@ function App() {
         <Route path="/videos" element={<CargarVideos/>} />
         <Route path="/gestioncursos" element={<GestionCursos/>} />
         <Route path="/listarCursos" element={<ListarCursos/>} />
+        
 
         <Route path="/listarOrdenes" element={<OrderList/>} />
         <Route path="/editarCurso/:idCourse" element={<EditarCurso/>} />
         <Route path="/abmcursos" element={<ABMCursos/>} />
+        <Route path="/beneficios" element={<ABMBeneficios/>} />
         <Route path="/tiendaCursos" element={<TiendaCursos/>}/>
         <Route path="/curso/:idCourse" element={<CourseDetail />} />
         <Route path="/suscCourse" element={<SubscriptionCourseSelection/>}/>
