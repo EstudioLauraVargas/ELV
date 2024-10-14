@@ -49,20 +49,19 @@ const MisCursos = () => {
     }
   }, [courses.length, loading, error, navigate]);
 
-  if (loading) return <p className="text-center text-blue-500 mt-10">Cargando cursos...</p>;
-  
+  // Manejo de la lógica de visualización
+  let content;
 
-  if (courses.length === 0) {
-    return (
+  if (loading) {
+    content = <p className="text-center text-blue-500 mt-10">Cargando cursos...</p>;
+  } else if (courses.length === 0) {
+    content = (
       <div className="text-center mt-10">
         <p className="text-gray-500">Aún no tienes cursos disponibles. Redirigiendo al inicio...</p>
       </div>
     );
-  }
-
-  return (
-    <div className="min-h-screen bg-cover bg-center relative p-4 flex flex-col justify-between" style={{ backgroundImage: `url(${backgroundImage})` }}>
-      <Navbar />
+  } else {
+    content = (
       <div className="container mx-auto p-4 mt-12 flex-grow">
         <h1 className="text-3xl font-bold text-center text-white mb-6">Mis Cursos</h1>
         {courses.map((courseData) => {
@@ -92,14 +91,20 @@ const MisCursos = () => {
           );
         })}
       </div>
-      <footer className="bg-black text-white text-center py-4 mt-4">
-        <p>&copy; 2024 Todos los derechos reservados</p>
-      </footer>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-cover bg-center relative p-4 flex flex-col justify-between" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <Navbar />
+      {content}
+     
     </div>
   );
 };
 
 export default MisCursos;
+
 
 
 

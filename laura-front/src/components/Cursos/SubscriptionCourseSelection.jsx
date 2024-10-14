@@ -147,7 +147,7 @@ const SubscriptionCourseSelection = () => {
 
   const updateOrderWithTransactionId = async (orderId, transactionId, status) => {
     try {
-      const response = await fetch('/api/orders/update', {
+      const response = await fetch('/orders/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
