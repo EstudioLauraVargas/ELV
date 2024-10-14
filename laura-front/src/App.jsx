@@ -31,7 +31,7 @@ import PaymentConfirmation from "./components/Cursos/PaymentConfirmation";
 import OrderList from "./components/Dashboard/OrderList";
 import MisCursos from "./components/pages/MisCursos";
 import CargarVideos from "./components/Dashboard/CargarVideos"
-
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -44,31 +44,30 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/changePass" element={<ChangePassword />} />
         <Route path="/forgotPass" element={<ForgotPassword />} />
-        <Route path="/video/:id" element={<Video/>} /> 
+        <Route path="/video/:id" element={<PrivateRoute><Video/></PrivateRoute>} /> 
         <Route path="/procedimiento" element={<Procedimientos />} />
-        <Route path="/cursos" element={<Cursos />} /> 
-        <Route path="/users" element={<Users />} />
-        <Route path="/panel" element={<Panel/>} />
-        <Route path="/videos" element={<CargarVideos/>} />
-        <Route path="/gestioncursos" element={<GestionCursos/>} />
-        <Route path="/listarCursos" element={<ListarCursos/>} />
-        
-
-        <Route path="/listarOrdenes" element={<OrderList/>} />
-        <Route path="/editarCurso/:idCourse" element={<EditarCurso/>} />
-        <Route path="/abmcursos" element={<ABMCursos/>} />
-        <Route path="/beneficios" element={<ABMBeneficios/>} />
+        <Route path="/cursos" element={<Cursos />}/> 
+        <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
+        <Route path="/panel" element={<PrivateRoute><Panel/></PrivateRoute>} />
+        <Route path="/videos" element={<PrivateRoute><CargarVideos/></PrivateRoute>} />
+        <Route path="/gestioncursos" element={<PrivateRoute><GestionCursos/></PrivateRoute>} />
+        <Route path="/listarCursos" element={<PrivateRoute><ListarCursos/></PrivateRoute>} />
+    
+        <Route path="/listarOrdenes" element={<PrivateRoute><OrderList/></PrivateRoute>} />
+        <Route path="/editarCurso/:idCourse" element={<PrivateRoute><EditarCurso/></PrivateRoute>} />
+        <Route path="/abmcursos" element={<PrivateRoute><ABMCursos/></PrivateRoute>} />
+        <Route path="/beneficios" element={<PrivateRoute><ABMBeneficios/></PrivateRoute>} />
         <Route path="/tiendaCursos" element={<TiendaCursos/>}/>
         <Route path="/curso/:idCourse" element={<CourseDetail />} />
         <Route path="/suscCourse" element={<SubscriptionCourseSelection/>}/>
-        <Route path="/pay" element={<PaymentConfirmation/>}/>
-        <Route path="/listarSuscripciones" element={<SubscriptionList/>} />
-        <Route path="/crudSubs" element={<Suscripciones/>} />
-        <Route path="/misCursos" element={<MisCursos/>} />
-        <Route path="/crearSubs" element={<SubscriptionForm/>} />
-        <Route path="/editarSubs/:idSub" element={<EditSuscription/>} />
+        <Route path="/pay" element={<PrivateRoute><PaymentConfirmation/></PrivateRoute>}/>
+        <Route path="/listarSuscripciones" element={<PrivateRoute><SubscriptionList/></PrivateRoute>} />
+        <Route path="/crudSubs" element={<PrivateRoute><Suscripciones/></PrivateRoute>} />
+        <Route path="/misCursos" element={<PrivateRoute><MisCursos/></PrivateRoute>} />
+        <Route path="/crearSubs" element={<PrivateRoute><SubscriptionForm/></PrivateRoute>} />
+        <Route path="/editarSubs/:idSub" element={<PrivateRoute><EditSuscription/></PrivateRoute>} />
         
-        <Route path="/detallePago/:idSub" element={<PaymentDetail />} />
+        <Route path="/detallePago/:idSub" element={<PrivateRoute><PaymentDetail /></PrivateRoute>} />
         <Route path="/cursosDisponibles" element={<CursosDisponibles />} />
       </Routes>
       <Footer/>
