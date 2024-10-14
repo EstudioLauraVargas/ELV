@@ -12,7 +12,9 @@ const CursosDisponibles = () => {
                 
                 {/* Carousel */}
                 <div className="w-full md:w-1/2 ">
+                <NavLink to="/tiendaCursos">
                     <CursosCarousel />
+              </NavLink>
                 </div>
 
                 {/* Información del curso */}
