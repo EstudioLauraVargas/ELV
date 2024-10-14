@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux'; // Importa useSelector de Redux
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import ReactPlayer from 'react-player';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
-import backgroundImage from "../../lauraassets/bg1.png";
+import backgroundImage from '../../lauraassets/bg1.png';
 
 const MisCursos = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Obtener la información del usuario desde Redux
+  const navigate = useNavigate(); // Para redireccionar
   const { userInfo } = useSelector((state) => state.userLogin);
 
   // Verificar si el usuario está logueado
@@ -18,7 +18,7 @@ const MisCursos = () => {
     return <p className="text-center text-red-500 mt-10">Por favor, inicia sesión.</p>;
   }
 
-  const { document } = userInfo; // Obtener el 'document' del usuario
+  const { document } = userInfo;
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -27,40 +27,52 @@ const MisCursos = () => {
         if (response.data.error) {
           throw new Error(response.data.message);
         }
-        setCourses(response.data.data); // Establece la data de los cursos
+        setCourses(response.data.data);
       } catch (err) {
-        setError(err.message || "Error al cargar los cursos");
+        setError(err.message || 'Error al cargar los cursos');
       } finally {
         setLoading(false);
       }
     };
 
-    // Llama a la función solo si el documento existe
     fetchCourses();
   }, [document]);
 
+  useEffect(() => {
+    // Redirigir al home si no hay cursos después de 3 segundos
+    if (courses.length === 0 && !loading && !error) {
+      const timer = setTimeout(() => {
+        navigate('/');
+      }, 3000);
+
+      return () => clearTimeout(timer); // Limpiar el temporizador
+    }
+  }, [courses.length, loading, error, navigate]);
+
   if (loading) return <p className="text-center text-blue-500 mt-10">Cargando cursos...</p>;
-  if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
-  if (courses.length === 0) return <p className="text-center text-gray-500 mt-10">No tienes cursos disponibles.</p>;
+  
+
+  if (courses.length === 0) {
+    return (
+      <div className="text-center mt-10">
+        <p className="text-gray-500">Aún no tienes cursos disponibles. Redirigiendo al inicio...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-cover bg-center relative p-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <div className="min-h-screen bg-cover bg-center relative p-4 flex flex-col justify-between" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <Navbar />
-      <div className="container mx-auto p-4 mt-12">
+      <div className="container mx-auto p-4 mt-12 flex-grow">
         <h1 className="text-3xl font-bold text-center text-white mb-6">Mis Cursos</h1>
-
         {courses.map((courseData) => {
-          const { course, endDate } = courseData; // Extrae el curso y la fecha de finalización
+          const { course, endDate } = courseData;
           return (
             <div key={course.idCourse} className="mb-8 p-6 bg-white shadow-lg rounded-lg">
               <h2 className="text-2xl font-semibold mb-2">{course.title}</h2>
-
-              {/* Mostrar la fecha de finalización */}
               <p className="text-gray-600 mb-4">
                 Tienes tiempo para ver este curso hasta {new Date(endDate).toLocaleDateString()}.
               </p>
-
-              {/* Mostrar videos */}
               {course.Videos && course.Videos.length > 0 ? (
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {course.Videos.map((video) => (
@@ -80,11 +92,15 @@ const MisCursos = () => {
           );
         })}
       </div>
+      <footer className="bg-black text-white text-center py-4 mt-4">
+        <p>&copy; 2024 Todos los derechos reservados</p>
+      </footer>
     </div>
   );
 };
 
 export default MisCursos;
+
 
 
 
